@@ -12,6 +12,19 @@ func Filter(slice []string, match func(string) bool) []string {
 	return out
 }
 
+// Unique returns a filter function that returns true for an element if it is
+// the first time the function has been called with that element.
+func Unique(size int) func(string) bool {
+	seen := make(map[string]struct{}, size)
+	return func(s string) bool {
+		if _, seen := seen[s]; seen {
+			return false
+		}
+		seen[s] = struct{}{}
+		return true
+	}
+}
+
 // MatchAny returns true if match returns true for any element of slice.
 func MatchAny(slice []string, match func(string) bool) bool {
 	for _, s := range slice {

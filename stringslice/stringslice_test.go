@@ -15,6 +15,14 @@ func TestFilter(t *testing.T) {
 	assert.Equal(t, []string{"match", "match"}, got)
 }
 
+func TestUnique(t *testing.T) {
+	got := Filter(
+		[]string{"match", "no match", "match", "no match"},
+		Unique(4),
+	)
+	assert.Equal(t, []string{"match", "no match"}, got)
+}
+
 func TestMatchAny(t *testing.T) {
 	any := MatchAny(
 		[]string{"match", "no match", "match", "no match"},
