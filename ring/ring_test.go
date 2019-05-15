@@ -6,9 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
-
-
 func TestRing(t *testing.T) {
 	assert := assert.New(t)
 
