@@ -1,4 +1,4 @@
-module htdvisser.dev/exp/flagenv
+module htdvisser.dev/exp/pflagenv
 
 go 1.12
 
