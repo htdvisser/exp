@@ -1,5 +1,5 @@
 // Package flagenv helps with parsing environment into flags.
-package flagenv // import "htdvisser.dev/exp/flagenv"
+package flagenv
 
 import (
 	"flag"

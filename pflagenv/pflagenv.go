@@ -1,5 +1,5 @@
 // Package pflagenv helps with parsing environment into flags.
-package pflagenv // import "htdvisser.dev/exp/pflagenv"
+package pflagenv
 
 import (
 	"fmt"

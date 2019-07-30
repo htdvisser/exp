@@ -1,5 +1,5 @@
 // Package stringslice provides some utilities on top of []string for lazy developers.
-package stringslice // import "htdvisser.dev/exp/stringslice"
+package stringslice
 
 // MatchFunc is a function that matches elements in a string slice.
 type MatchFunc func(string) bool

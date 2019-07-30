@@ -2,7 +2,7 @@
 // most recent entries added to it.
 // The ring data structure is comparable to a ring buffer, but with only one
 // pointer for writing.
-package ring // import "htdvisser.dev/exp/ring"
+package ring
 
 // Entry is the Entry type stored in the data structure.
 // You may want to change the type from interface{} to something else if you're
