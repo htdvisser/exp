@@ -1,0 +1,17 @@
+{{ with index .Site.Data "api" (.Get "package") "services" (.Get "service") "methods" (.Get "method") -}}
+<h2>RPC <code>{{ .name }}</code>
+  <small>
+    ({{ if not .input.package }}<a href="#message:{{ .input.name }}">{{ end }}<code>{{ with .input.package }}{{ . }}.{{end}}{{ .input.name }}</code>{{ if not .input.package }}</a>{{ end }})
+    returns
+    ({{ if not .output.package }}<a href="#message:{{ .output.name }}">{{ end }}<code>{{ with .output.package }}{{ . }}.{{end}}{{ .output.name }}</code>{{ if not .output.package }}</a>{{ end }})
+  </small>
+</h2>
+{{- with .comment }}
+<p>{{ . | markdownify }}</p>
+{{- end }}
+{{- range .http }}
+<p><code>{{ .method }}</code> <code>{{ .path }}</code></p>
+{{- end }}
+{{- else -}}
+{{ errorf "method %s of service %s of package %s not found: %s" (.Get "method") (.Get "service") (.Get "package") .Position }}
+{{- end }}

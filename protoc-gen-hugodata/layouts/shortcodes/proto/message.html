@@ -1,0 +1,49 @@
+{{- with index .Site.Data "api" (.Get "package") "messages" (.Get "message") -}}
+<h2 id="message:{{ .name }}">Message <code>{{ .name }}</code></h2>
+{{- with .comment }}
+<p>{{ . | markdownify }}</p>
+{{- end }}
+<pre><code>{
+{{- range .fields }}
+  "{{ .name }}": {{ .default | jsonify }},
+{{- end }}
+}</code></pre>
+{{- range .oneofs }}
+  <p><code>{{ .name }}</code>: only one of {{ range $i, $name := .field_names }}{{ if gt $i 0 }}, {{ end }}<code>{{ $name }}</code>{{ end}} can be set.</p>
+{{- end }}
+<dl>
+{{- range .fields }}
+  <dt><code>{{ .name }}</code></dt>
+  <dd>
+    (
+    {{- if and .map_key .map_value -}}
+    map of {{ partial "proto/field-type" .map_key }} to {{ partial "proto/field-type" .map_value }}
+    {{- else if .repeated -}}
+    repeated {{ partial "proto/field-type" .repeated }}
+    {{- else -}}
+    {{- partial "proto/field-type" . -}}
+    {{- end -}}
+    )
+    {{- with .comment }}
+    <p>{{ . | markdownify }}</p>
+    {{- end }}
+    {{- with .rules }}
+    <ul>
+    {{- range $rule, $value := . }}
+      <li><code>{{ $rule }}</code>: <code>{{ $value }}</code></li>
+    {{- end }}
+    </ul>
+    {{- end }}
+    {{- if .repeated }}{{ with .repeated.rules }}
+    <ul>
+    {{- range $rule, $value := . }}
+      <li><code>{{ $rule }}</code>: <code>{{ $value }}</code></li>
+    {{- end }}
+    </ul>
+    {{- end }}{{ end }}
+  </dd>
+{{- end }}
+</dl>
+{{- else -}}
+{{ errorf "message %s of package %s not found: %s" (.Get "message") (.Get "package") .Position }}
+{{- end }}
