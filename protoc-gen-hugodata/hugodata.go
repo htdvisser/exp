@@ -35,6 +35,10 @@ func (m *HugoDataModule) Execute(targets map[string]pgs.File, packages map[strin
 	return m.Artifacts()
 }
 
+func EntityName(entity pgs.Entity) pgs.Name {
+	return pgs.Name(strings.TrimPrefix(entity.FullyQualifiedName(), "."+entity.Package().ProtoName().String()+"."))
+}
+
 func (m *HugoDataModule) generatePackage(pkg pgs.Package) {
 	var (
 		enums    yaml.MapSlice
@@ -48,7 +52,7 @@ func (m *HugoDataModule) generatePackage(pkg pgs.Package) {
 		}
 		for _, enum := range file.AllEnums() {
 			enums = append(enums, yaml.MapItem{
-				Key:   enum.Name().String(),
+				Key:   EntityName(enum).String(),
 				Value: BuildEnum(enum),
 			})
 		}
@@ -57,7 +61,7 @@ func (m *HugoDataModule) generatePackage(pkg pgs.Package) {
 				continue
 			}
 			messages = append(messages, yaml.MapItem{
-				Key:   message.Name().String(),
+				Key:   EntityName(message).String(),
 				Value: BuildMessage(message),
 			})
 		}
@@ -135,7 +139,7 @@ type Ref struct {
 func BuildRef(src pgs.Entity) Ref {
 	ref := Ref{
 		src:  src,
-		Name: src.Name(),
+		Name: EntityName(src),
 	}
 	if !src.BuildTarget() {
 		ref.Package = src.Package().ProtoName()
