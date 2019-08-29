@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"sort"
 	"strings"
@@ -218,6 +219,12 @@ func ProtoTypeString(t pgs.ProtoType) string {
 	}
 }
 
+type Bytes []byte
+
+func (b Bytes) MarshalYAML() (interface{}, error) {
+	return base64.StdEncoding.EncodeToString(b), nil
+}
+
 func ProtoTypeDefault(t pgs.ProtoType) interface{} {
 	switch t {
 	case pgs.DoubleT:
@@ -239,7 +246,7 @@ func ProtoTypeDefault(t pgs.ProtoType) interface{} {
 	case pgs.StringT:
 		return ""
 	case pgs.BytesT:
-		return []byte{}
+		return Bytes{}
 	case pgs.UInt32T:
 		return uint32(0)
 	case pgs.SFixed32:
