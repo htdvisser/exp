@@ -173,6 +173,7 @@ func BuildEnum(src pgs.Enum) Enum {
 		src:    src,
 		Entity: BuildEntity(src),
 	}
+	enum.Name = EntityName(src)
 	for _, value := range src.Values() {
 		enum.Values = append(enum.Values, BuildEnumValue(value))
 	}
@@ -387,6 +388,7 @@ func BuildMessage(src pgs.Message) Message {
 		src:    src,
 		Entity: BuildEntity(src),
 	}
+	message.Name = EntityName(src)
 	for _, field := range src.Fields() {
 		message.Fields = append(message.Fields, BuildField(field))
 	}
