@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -15,6 +16,7 @@ import (
 // Server wraps the gRPC server, gRPC-gateway and a loopback connection.
 type Server struct {
 	*grpc.Server
+	Web     *grpcweb.WrappedGrpcServer
 	Gateway *runtime.ServeMux
 	Health  *health.Server
 
@@ -51,10 +53,14 @@ func NewServer(opts ...Option) *Server {
 		grpc.StreamInterceptor(s.interceptStream),
 		grpc.StatsHandler(&statsHandler{s}),
 	)
+	grpcWebOptions := append(
+		options.grpcWebOptions,
+	)
 	runtimeServeMuxOptions := append(
 		options.runtimeServeMuxOptions,
 	)
 	s.Server = grpc.NewServer(gRPCServerOptions...)
+	s.Web = grpcweb.WrapServer(s.Server, grpcWebOptions...)
 	s.Gateway = runtime.NewServeMux(runtimeServeMuxOptions...)
 	healthpb.RegisterHealthServer(s.Server, s.Health)
 	return s

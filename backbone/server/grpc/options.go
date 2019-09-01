@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/stats"
 )
@@ -14,6 +15,7 @@ type options struct {
 	gRPCStreamInterceptors []grpc.StreamServerInterceptor
 	gRPCServerOptions      []grpc.ServerOption
 	gRPCStatsHandlers      []stats.Handler
+	grpcWebOptions         []grpcweb.Option
 	runtimeServeMuxOptions []runtime.ServeMuxOption
 }
 
@@ -39,6 +41,13 @@ func (f option) apply(opts *options) {
 func WithGRPCServerOption(serverOptions ...grpc.ServerOption) Option {
 	return option(func(o *options) {
 		o.gRPCServerOptions = append(o.gRPCServerOptions, serverOptions...)
+	})
+}
+
+// WithGRPCWebOption adds grpcWebOptions.
+func WithGRPCWebOption(grpcWebOptions ...grpcweb.Option) Option {
+	return option(func(o *options) {
+		o.grpcWebOptions = append(o.grpcWebOptions, grpcWebOptions...)
 	})
 }
 
