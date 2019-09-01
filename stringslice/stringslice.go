@@ -57,10 +57,13 @@ func Equal(t string) MatchFunc {
 type MapFunc func(string) string
 
 // Map returns a slice containing the result of mapping for each element in the slice.
-func Map(slice []string, mapping MapFunc) []string {
+func Map(slice []string, mapping ...MapFunc) []string {
 	out := make([]string, len(slice))
 	for i, s := range slice {
-		out[i] = mapping(s)
+		for _, mapping := range mapping {
+			s = mapping(s)
+		}
+		out[i] = s
 	}
 	return out
 }
