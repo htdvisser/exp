@@ -5,11 +5,14 @@ import (
 	"context"
 	"net"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 // Server wraps the HTTP server.
 type Server struct {
-	*http.ServeMux
+	ServeMux         *http.ServeMux
+	Router           *mux.Router
 	server           *http.Server
 	contextExtenders []func(context.Context) context.Context
 	middleware       []Middleware
@@ -19,13 +22,16 @@ type Server struct {
 func NewServer(opts ...Option) *Server {
 	options := &options{
 		serveMux: http.NewServeMux(),
+		router:   mux.NewRouter(),
 	}
 	options.apply(opts...)
 	s := &Server{
 		ServeMux:         options.serveMux,
+		Router:           options.router,
 		contextExtenders: options.contextExtenders,
 		middleware:       options.middleware,
 	}
+	s.ServeMux.Handle("/", s.Router)
 	s.server = &http.Server{Handler: s}
 	return s
 }

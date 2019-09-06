@@ -9,6 +9,7 @@ replace htdvisser.dev/exp/flagenv => ../flagenv
 require (
 	contrib.go.opencensus.io/exporter/prometheus v0.1.0
 	github.com/google/go-cmp v0.3.1 // indirect
+	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/websocket v1.4.1 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0
 	github.com/grpc-ecosystem/grpc-gateway v1.10.0

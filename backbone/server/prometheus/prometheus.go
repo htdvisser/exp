@@ -65,6 +65,6 @@ func Register(s *server.Server, opts ...Option) error {
 		return err
 	}
 	view.RegisterExporter(pe)
-	s.InternalHTTP.Handle("/metrics", pe)
+	s.InternalHTTP.ServeMux.Handle("/metrics", pe)
 	return nil
 }
