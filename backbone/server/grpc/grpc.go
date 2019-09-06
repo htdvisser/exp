@@ -4,6 +4,8 @@ package grpc
 import (
 	"context"
 	"net"
+	"net/http"
+	"strings"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
@@ -95,6 +97,18 @@ func (s *Server) ServeLoopback() error {
 // Serve serves the gRPC server (but not the gRPC-gateway) on lis.
 func (s *Server) Serve(lis net.Listener) error {
 	return s.Server.Serve(lis)
+}
+
+func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	contentType := r.Header.Get("Content-Type")
+	switch {
+	case strings.HasPrefix(contentType, "application/grpc-web"):
+		s.Web.ServeHTTP(w, r)
+	case strings.HasPrefix(contentType, "application/grpc"):
+		s.Server.ServeHTTP(w, r)
+	default:
+		http.NotFound(w, r)
+	}
 }
 
 // GracefulStop stops the gRPC server gracefully.
