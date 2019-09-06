@@ -15,7 +15,7 @@ import (
 
 // Server wraps the gRPC server, gRPC-gateway and a loopback connection.
 type Server struct {
-	*grpc.Server
+	Server  *grpc.Server
 	Web     *grpcweb.WrappedGrpcServer
 	Gateway *runtime.ServeMux
 	Health  *health.Server
@@ -34,7 +34,12 @@ type Server struct {
 
 // NewServer instantiates a new gRPC server with the given options.
 func NewServer(opts ...Option) *Server {
-	options := &options{}
+	options := &options{
+		runtimeServeMuxOptions: []runtime.ServeMuxOption{
+			runtime.WithProtoErrorHandler(handleProtoError),
+			runtime.WithStreamErrorHandler(handleStreamError),
+		},
+	}
 	options.apply(opts...)
 	s := &Server{
 		Health: health.NewServer(),
