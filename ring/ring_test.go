@@ -1,38 +1,69 @@
 package ring
 
 import (
+	"reflect"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestRing(t *testing.T) {
-	assert := assert.New(t)
-
 	r := New(4)
 
-	last, ok := r.Last()
-	assert.False(ok)
-	assert.Equal(zero, last)
+	for _, tt := range []struct {
+		Name       string
+		mut        func(r *Ring)
+		wantLast   Entry
+		wantLastOK bool
+		wantAll    []Entry
+	}{
+		{
+			Name:       "Initial",
+			wantLast:   zero,
+			wantLastOK: false,
+			wantAll:    []Entry{},
+		},
+		{
+			Name: "Add 1 2",
+			mut: func(r *Ring) {
+				r.Add(1)
+				r.Add(2)
+			},
+			wantLast:   Entry(2),
+			wantLastOK: true,
+			wantAll:    []Entry{1, 2},
+		},
+		{
+			Name: "Add 3 4",
+			mut: func(r *Ring) {
+				r.Add(3)
+				r.Add(4)
+			},
+			wantLast:   Entry(4),
+			wantLastOK: true,
+			wantAll:    []Entry{1, 2, 3, 4},
+		},
+		{
+			Name: "Add 5 6",
+			mut: func(r *Ring) {
+				r.Add(5)
+				r.Add(6)
+			},
+			wantLast:   Entry(6),
+			wantLastOK: true,
+			wantAll:    []Entry{3, 4, 5, 6},
+		},
+	} {
+		if tt.mut != nil {
+			tt.mut(r)
+		}
 
-	r.Add(1)
-	r.Add(2)
+		last, ok := r.Last()
+		if last != tt.wantLast || ok != tt.wantLastOK {
+			t.Errorf("t.Last() = (%v, %v), want (%v, %v)", last, ok, tt.wantLast, tt.wantLastOK)
+		}
 
-	last, ok = r.Last()
-	assert.Equal(Entry(2), last)
-	assert.Equal([]Entry{1, 2}, r.All())
-
-	r.Add(3)
-	r.Add(4)
-
-	last, ok = r.Last()
-	assert.Equal(Entry(4), last)
-	assert.Equal([]Entry{1, 2, 3, 4}, r.All())
-
-	r.Add(5)
-	r.Add(6)
-
-	last, ok = r.Last()
-	assert.Equal(Entry(6), last)
-	assert.Equal([]Entry{3, 4, 5, 6}, r.All())
+		all := r.All()
+		if !reflect.DeepEqual(all, tt.wantAll) {
+			t.Errorf("t.All() = %v, want %v", all, tt.wantAll)
+		}
+	}
 }
