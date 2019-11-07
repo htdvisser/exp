@@ -1,10 +1,9 @@
 package stringslice
 
 import (
+	"reflect"
 	"strings"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestFilter(t *testing.T) {
@@ -12,7 +11,10 @@ func TestFilter(t *testing.T) {
 		[]string{"match", "no match", "match", "no match"},
 		Equal("match"),
 	)
-	assert.Equal(t, []string{"match", "match"}, got)
+	want := []string{"match", "match"}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Filter(Equal) result is %v, want %v", got, want)
+	}
 }
 
 func TestUnique(t *testing.T) {
@@ -20,7 +22,10 @@ func TestUnique(t *testing.T) {
 		[]string{"match", "no match", "match", "no match"},
 		Unique(4),
 	)
-	assert.Equal(t, []string{"match", "no match"}, got)
+	want := []string{"match", "no match"}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Filter(Unique) result is %v, want %v", got, want)
+	}
 }
 
 func TestMatchAny(t *testing.T) {
@@ -28,13 +33,17 @@ func TestMatchAny(t *testing.T) {
 		[]string{"match", "no match", "match", "no match"},
 		Equal("match"),
 	)
-	assert.True(t, any)
+	if !any {
+		t.Errorf("MatchAny result is %v, want true", any)
+	}
 
 	none := MatchAny(
 		[]string{"no match", "no match"},
 		Equal("match"),
 	)
-	assert.False(t, none)
+	if none {
+		t.Errorf("MatchAny result is %v, want false", none)
+	}
 }
 
 func TestMatchAll(t *testing.T) {
@@ -42,24 +51,35 @@ func TestMatchAll(t *testing.T) {
 		[]string{"match", "match"},
 		Equal("match"),
 	)
-	assert.True(t, all)
+	if !all {
+		t.Errorf("MatchAll result is %v, want true", all)
+	}
 
 	some := MatchAll(
 		[]string{"match", "no match", "match", "no match"},
 		Equal("match"),
 	)
-	assert.False(t, some)
+	if some {
+		t.Errorf("MatchAll result is %v, want false", some)
+	}
 }
 
 func TestMap(t *testing.T) {
-	res := Map(
+	got := Map(
 		[]string{"foo", "bar", "baz"},
 		strings.ToUpper,
 	)
-	assert.Equal(t, []string{"FOO", "BAR", "BAZ"}, res)
+	want := []string{"FOO", "BAR", "BAZ"}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Map result is %v, want %v", got, want)
+	}
 }
 
 func TestMapFuncs(t *testing.T) {
-	assert.Equal(t, "foobar", AddPrefix("foo")("bar"))
-	assert.Equal(t, "foobar", AddSuffix("bar")("foo"))
+	if got := AddPrefix("foo")("bar"); got != "foobar" {
+		t.Errorf(`AddPrefix("foo")("bar") = %q, want "foobar"`, got)
+	}
+	if got := AddSuffix("bar")("foo"); got != "foobar" {
+		t.Errorf(`AddSuffix("bar")("foo") = %q, want "foobar"`, got)
+	}
 }
