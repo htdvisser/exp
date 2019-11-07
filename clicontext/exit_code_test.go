@@ -3,8 +3,6 @@ package clicontext
 import (
 	"context"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestExitCode(t *testing.T) {
@@ -12,30 +10,38 @@ func TestExitCode(t *testing.T) {
 
 	t.Run("Background Context", func(t *testing.T) {
 		code, ok := GetExitCode(bgCtx)
-		assert.False(t, ok)
-		assert.Zero(t, code)
+		if ok || code != 0 {
+			t.Errorf("GetExitCode(ctx) = (%v, %v), want (%v, %v)", code, ok, 0, false)
+		}
 
 		ok = SetExitCode(bgCtx, 1)
-		assert.False(t, ok)
+		if ok {
+			t.Errorf("SetExitCode(ctx, 1) = %v, want %v", ok, false)
+		}
 
 		code, ok = GetExitCode(bgCtx)
-		assert.False(t, ok)
-		assert.Zero(t, code)
+		if ok || code != 0 {
+			t.Errorf("GetExitCode(ctx) after SetExitCode(ctx) = (%v, %v), want (%v, %v)", code, ok, 0, false)
+		}
 	})
 
 	t.Run("Nil Destination", func(t *testing.T) {
 		ctx := WithExitCode(bgCtx, nil)
 
 		code, ok := GetExitCode(ctx)
-		assert.True(t, ok)
-		assert.Equal(t, 0, code)
+		if !ok || code != 0 {
+			t.Errorf("GetExitCode(ctx) = (%v, %v), want (%v, %v)", code, ok, 0, true)
+		}
 
 		ok = SetExitCode(ctx, 1)
-		assert.True(t, ok)
+		if !ok {
+			t.Errorf("SetExitCode(ctx, 1) = %v, want %v", ok, true)
+		}
 
 		code, ok = GetExitCode(ctx)
-		assert.True(t, ok)
-		assert.Equal(t, 1, code)
+		if !ok || code != 1 {
+			t.Errorf("GetExitCode(ctx) = (%v, %v), want (%v, %v)", code, ok, 1, true)
+		}
 	})
 
 	t.Run("With Destination", func(t *testing.T) {
@@ -44,8 +50,17 @@ func TestExitCode(t *testing.T) {
 		ctx := WithExitCode(bgCtx, &code)
 
 		ok := SetExitCode(ctx, 1)
-		assert.True(t, ok)
+		if !ok {
+			t.Errorf("SetExitCode(ctx, 1) = %v, want %v", ok, true)
+		}
 
-		assert.Equal(t, 1, code)
+		if code != 1 {
+			t.Errorf("code after SetExitCode = %v, want %v", code, 1)
+		}
+
+		code, ok = GetExitCode(ctx)
+		if !ok || code != 1 {
+			t.Errorf("GetExitCode(ctx) = (%v, %v), want (%v, %v)", code, ok, 1, true)
+		}
 	})
 }
