@@ -1,55 +1,88 @@
 package pflagenv
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/spf13/pflag"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestParser(t *testing.T) {
-	p := NewParser(Prefixes("TEST_", ""), ReplaceWithUnderscore("-", "+"))
-
-	env := map[string]string{}
-	p.lookupEnv = func(key string) (string, bool) {
-		val, ok := env[key]
-		return val, ok
+	emptyFlagSet := func() *pflag.FlagSet {
+		return pflag.NewFlagSet("test", pflag.ContinueOnError)
 	}
 
-	flagSet := pflag.NewFlagSet("test", pflag.ContinueOnError)
-	err := p.ParseEnv(flagSet)
-	assert.NoError(t, err)
+	t.Run("Empty", func(t *testing.T) {
+		p := NewParser(Prefixes("TEST_", ""), ReplaceWithUnderscore("-", "+"))
+		err := p.ParseEnv(emptyFlagSet())
+		if err != nil {
+			t.Errorf("p.ParseEnv with empty FlagSet = %v, want nil", err)
+		}
+	})
 
-	out := flagSet.String("flag", "default flag value", "usage")
-
-	err = p.ParseEnv(flagSet)
-	assert.NoError(t, err)
-	assert.Equal(t, "default flag value", *out)
-
-	env = map[string]string{
-		"TEST_FLAG": "test flag value",
+	flagSet := func() *pflag.FlagSet {
+		flagSet := emptyFlagSet()
+		flagSet.String("flag", "default flag value", "usage")
+		return flagSet
 	}
 
-	err = p.ParseEnv(flagSet)
-	assert.NoError(t, err)
-	assert.Equal(t, "test flag value", *out)
+	for _, tt := range []struct {
+		Name    string
+		env     map[string]string
+		flagSet func() *pflag.FlagSet
+		want    string
+	}{
+		{
+			Name:    "Empty Env",
+			env:     map[string]string{},
+			flagSet: flagSet,
+			want:    "default flag value",
+		},
+		{
+			Name: "Prefixed Env",
+			env: map[string]string{
+				"TEST_FLAG": "test flag value",
+			},
+			flagSet: flagSet,
+			want:    "test flag value",
+		},
+		{
+			Name: "Non-Prefixed Env",
+			env: map[string]string{
+				"FLAG": "flag value",
+			},
+			flagSet: flagSet,
+			want:    "flag value",
+		},
+		{
+			Name: "Priority Env",
+			env: map[string]string{
+				"TEST_FLAG": "test flag value",
+				"FLAG":      "flag value",
+			},
+			flagSet: flagSet,
+			want:    "flag value",
+		},
+	} {
+		t.Run(tt.Name, func(t *testing.T) {
+			p := NewParser(Prefixes("TEST_", ""), ReplaceWithUnderscore("-", "+"))
+			p.lookupEnv = func(key string) (string, bool) {
+				val, ok := tt.env[key]
+				return val, ok
+			}
 
-	env = map[string]string{
-		"FLAG": "flag value",
+			flagSet := tt.flagSet()
+
+			err := p.ParseEnv(flagSet)
+			if err != nil {
+				t.Errorf("p.ParseEnv with env (%v) = %v, want nil", tt.env, err)
+			}
+
+			if got := flagSet.Lookup("flag").Value.String(); got != tt.want {
+				t.Errorf("output of flag %q = %q, want %q", "flag", got, tt.want)
+			}
+		})
 	}
-
-	err = p.ParseEnv(flagSet)
-	assert.NoError(t, err)
-	assert.Equal(t, "flag value", *out)
-
-	env = map[string]string{
-		"TEST_FLAG": "test flag value",
-		"FLAG":      "flag value",
-	}
-
-	err = p.ParseEnv(flagSet)
-	assert.NoError(t, err)
-	assert.Equal(t, "flag value", *out)
 }
 
 func TestParserError(t *testing.T) {
@@ -68,6 +101,10 @@ func TestParserError(t *testing.T) {
 	flagSet.Int("other", 0, "usage")
 
 	err := p.ParseEnv(flagSet)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "flagenv: invalid environment")
+	if err == nil {
+		t.Errorf("p.ParseEnv with (%v) = nil, want error", env)
+	}
+	if !strings.Contains(err.Error(), "flagenv: invalid environment") {
+		t.Errorf("error %q did not contain %q", err, "flagenv: invalid environment")
+	}
 }
