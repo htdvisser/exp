@@ -13,26 +13,6 @@ import (
 	"htdvisser.dev/exp/backbone/server/internal/channelz"
 )
 
-type options struct {
-}
-
-func (o *options) apply(opts ...Option) {
-	for _, opt := range opts {
-		opt.apply(o)
-	}
-}
-
-// Option is an option for the server.
-type Option interface {
-	apply(*options)
-}
-
-type option func(*options)
-
-func (f option) apply(opts *options) {
-	f(opts)
-}
-
 // Config is the required configuration for the server.
 type Config struct {
 	ListenHTTP         string
@@ -57,14 +37,18 @@ type Server struct {
 
 // New instantiates a new server that uses the config and options.
 func New(config Config, opts ...Option) *Server {
-	options := &options{}
+	options := &options{
+		InternalHTTPOptions: []http.Option{
+			http.WithServeMux(stdhttp.DefaultServeMux),
+		},
+	}
 	options.apply(opts...)
 	s := &Server{
 		config:       config,
-		GRPC:         grpc.NewServer(),
-		HTTP:         http.NewServer(),
-		InternalGRPC: grpc.NewServer(),
-		InternalHTTP: http.NewServer(http.WithServeMux(stdhttp.DefaultServeMux)),
+		GRPC:         grpc.NewServer(options.GRPCOptions...),
+		HTTP:         http.NewServer(options.HTTPOptions...),
+		InternalGRPC: grpc.NewServer(options.InternalGRPCOptions...),
+		InternalHTTP: http.NewServer(options.InternalHTTPOptions...),
 	}
 	channelz.Register(s.InternalGRPC)
 	return s
