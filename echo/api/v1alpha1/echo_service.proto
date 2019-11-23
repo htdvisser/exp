@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package htdvisser.echo.v1alpha1;
+
+import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option go_package = "htdvisser.dev/exp/echo/api/v1alpha1;echo";
+
+// The request message for EchoService.Echo.
+message EchoRequest {
+  // The message that needs to be echoed.
+  string message = 1 [
+    (validate.rules).string = {
+      min_bytes: 1, max_bytes: 32
+    },
+    (grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {
+      min_length: 1, max_length: 32
+    }
+  ];
+}
+
+// The response message for EchoService.Echo.
+message EchoResponse {
+  string message = 1;
+}
+
+service EchoService {
+  rpc Echo(EchoRequest) returns (EchoResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/echo"
+      body: "*"
+    };
+  }
+}
