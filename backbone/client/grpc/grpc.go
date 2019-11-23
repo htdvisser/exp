@@ -25,6 +25,11 @@ func DialOptionsFromContext(ctx context.Context) []grpc.DialOption {
 	return nil
 }
 
+// DialContext calls grpc.DialContext and includes the DialOptions in the context.
+func DialContext(ctx context.Context, target string, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
+	return grpc.DialContext(ctx, target, append(DialOptionsFromContext(ctx), opts...)...)
+}
+
 type callOptionsContextKeyType struct{}
 
 var callOptionsContextKey callOptionsContextKeyType
