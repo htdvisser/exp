@@ -18,7 +18,9 @@ func NewContextWithDialOptions(parent context.Context, dialOptions ...grpc.DialO
 // DialOptionsFromContext returns the DialOptions from the context if present. Otherwise it returns nil.
 func DialOptionsFromContext(ctx context.Context) []grpc.DialOption {
 	if dialOptions, ok := ctx.Value(dialOptionsContextKey).([]grpc.DialOption); ok {
-		return dialOptions
+		options := make([]grpc.DialOption, len(dialOptions))
+		copy(options, dialOptions)
+		return options
 	}
 	return nil
 }
