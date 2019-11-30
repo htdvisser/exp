@@ -55,6 +55,14 @@ func WithIsPublicEndpoint(isPublicEndpoint bool) Option {
 	})
 }
 
+func contextExtender(ctx context.Context) context.Context {
+	ctx = grpcclient.NewContextWithDialOptions(ctx, grpc.WithStatsHandler(&ocgrpc.ClientHandler{}))
+	ctx = httpclient.NewContextWithRoundTripper(ctx, &ochttp.Transport{
+		Base: httpclient.RoundTripperFromContext(ctx),
+	})
+	return ctx
+}
+
 // Register adds opencensus metrics and tracing to the server.
 func Register(s *server.Server, opts ...Option) error {
 	options := &options{
@@ -64,13 +72,8 @@ func Register(s *server.Server, opts ...Option) error {
 	s.GRPC.AddStatsHandler(&ocgrpc.ServerHandler{
 		IsPublicEndpoint: options.isPublicEndpoint,
 	})
-	s.HTTP.AddContextExtender(func(ctx context.Context) context.Context {
-		ctx = grpcclient.NewContextWithDialOptions(ctx, grpc.WithStatsHandler(&ocgrpc.ClientHandler{}))
-		ctx = httpclient.NewContextWithRoundTripper(ctx, &ochttp.Transport{
-			Base: httpclient.RoundTripperFromContext(ctx),
-		})
-		return ctx
-	})
+	s.GRPC.AddContextExtender(contextExtender)
+	s.HTTP.AddContextExtender(contextExtender)
 	s.HTTP.AddMiddleware(func(next http.Handler) http.Handler {
 		return &ochttp.Handler{
 			Handler:          next,
