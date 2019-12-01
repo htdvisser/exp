@@ -21,14 +21,11 @@ require (
 	github.com/lyft/protoc-gen-star v0.4.12 // indirect
 	github.com/mdempsky/unconvert v0.0.0-20190921185256-3ecd357795af
 	github.com/prometheus/procfs v0.0.7 // indirect
-	github.com/spf13/afero v1.2.2 // indirect
 	go.opencensus.io v0.22.2 // indirect
 	golang.org/x/net v0.0.0-20191119073136-fc4aabc6c914 // indirect
-	golang.org/x/sys v0.0.0-20191120155948-bd437916bb0e // indirect
 	golang.org/x/tools v0.0.0-20191122232904-2a6ccf25d769 // indirect
 	google.golang.org/genproto v0.0.0-20191115221424-83cc0476cb11
 	google.golang.org/grpc v1.25.1
-	gopkg.in/yaml.v2 v2.2.7 // indirect
 	htdvisser.dev/exp/backbone v0.0.0-20191108224210-fce53b940d78
 	htdvisser.dev/exp/clicontext v0.0.0-20191108224210-fce53b940d78
 	htdvisser.dev/exp/flagenv v0.0.0-20191108224210-fce53b940d78
