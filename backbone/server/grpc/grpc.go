@@ -41,7 +41,10 @@ func NewServer(opts ...Option) *Server {
 			runtime.WithProtoErrorHandler(handleProtoError),
 			runtime.WithStreamErrorHandler(handleStreamError),
 		},
+		runtimeIncomingHeaders: make(runtimeHeaders),
+		runtimeOutgoingHeaders: make(runtimeHeaders),
 	}
+	options.runtimeIncomingHeaders.add(defaultRequestHeaders...)
 	options.apply(opts...)
 	s := &Server{
 		Health: health.NewServer(),
@@ -65,6 +68,8 @@ func NewServer(opts ...Option) *Server {
 	)
 	runtimeServeMuxOptions := append(
 		options.runtimeServeMuxOptions,
+		runtime.WithIncomingHeaderMatcher(options.runtimeIncomingHeaders.match),
+		runtime.WithOutgoingHeaderMatcher(options.runtimeOutgoingHeaders.match),
 	)
 	s.Server = grpc.NewServer(gRPCServerOptions...)
 	s.Web = grpcweb.WrapServer(s.Server, grpcWebOptions...)

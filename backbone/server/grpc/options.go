@@ -17,6 +17,8 @@ type options struct {
 	gRPCStatsHandlers      []stats.Handler
 	grpcWebOptions         []grpcweb.Option
 	runtimeServeMuxOptions []runtime.ServeMuxOption
+	runtimeIncomingHeaders runtimeHeaders
+	runtimeOutgoingHeaders runtimeHeaders
 }
 
 func (o *options) apply(opts ...Option) {
@@ -34,6 +36,20 @@ type option func(*options)
 
 func (f option) apply(opts *options) {
 	f(opts)
+}
+
+// WithForwardIncomingHeaders makes the gRPC gateway forward the given request headers.
+func WithForwardIncomingHeaders(headers ...string) Option {
+	return option(func(o *options) {
+		o.runtimeIncomingHeaders.add(headers...)
+	})
+}
+
+// WithForwardOutgoingHeaders makes the gRPC gateway forward the given response headers.
+func WithForwardOutgoingHeaders(headers ...string) Option {
+	return option(func(o *options) {
+		o.runtimeOutgoingHeaders.add(headers...)
+	})
 }
 
 // WithGRPCServerOption adds serverOptions. The options UnaryInterceptor,
