@@ -36,6 +36,7 @@ type Server struct {
 	InternalHTTP *http.Server
 
 	tcpServers []tcpServer
+	udpServers []udpServer
 
 	runGroup   *errgroup.Group
 	runContext context.Context
@@ -86,6 +87,27 @@ func (s *Server) RegisterTCPServer(name, address string, server interface {
 	return nil
 }
 
+// RegisterUDPServer registers the named UDP server on address.
+func (s *Server) RegisterUDPServer(name, address string, server interface {
+	Serve(conn net.PacketConn) error
+	GracefulStop() error
+}) error {
+	addr, err := net.ResolveUDPAddr("udp", address)
+	if err != nil {
+		return err
+	}
+	address = addr.String()
+	for _, registered := range s.udpServers {
+		if address == registered.address {
+			return fmt.Errorf("could not register %q server: %w",
+				name, fmt.Errorf("%q already registered on %q",
+					registered.name, address))
+		}
+	}
+	s.udpServers = append(s.udpServers, udpServer{name: name, address: address, server: server})
+	return nil
+}
+
 // Run runs the server until the Done channel of ctx is closed.
 func (s *Server) Run(ctx context.Context) (err error) {
 	if s.runGroup != nil {
@@ -103,6 +125,9 @@ func (s *Server) Run(ctx context.Context) (err error) {
 	if err = s.runTCPServers(ctx); err != nil {
 		return err
 	}
+	if err = s.runUDPServers(ctx); err != nil {
+		return err
+	}
 	<-s.runContext.Done()
 	return s.runContext.Err()
 }
@@ -110,6 +135,15 @@ func (s *Server) Run(ctx context.Context) (err error) {
 func (s *Server) runTCPServers(ctx context.Context) error {
 	for _, tcpServer := range s.tcpServers {
 		if err := s.runTCPServer(ctx, tcpServer.name, tcpServer.address, tcpServer.server); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *Server) runUDPServers(ctx context.Context) error {
+	for _, udpServer := range s.udpServers {
+		if err := s.runUDPServer(ctx, udpServer.name, udpServer.address, udpServer.server); err != nil {
 			return err
 		}
 	}
@@ -143,6 +177,41 @@ func (s *Server) runTCPServer(ctx context.Context, name, address string, server 
 			return err
 		}
 		log.Printf("Serving %s on %s...", name, lis.Addr().String())
+		s.runGroup.Go(func() error {
+			return server.Serve(lis)
+		})
+	}
+	return nil
+}
+
+type udpServer struct {
+	name    string
+	address string
+	server  interface {
+		Serve(conn net.PacketConn) error
+		GracefulStop() error
+	}
+}
+
+// runUDPServer runs a named UDP server on the given address.
+func (s *Server) runUDPServer(ctx context.Context, name, address string, server interface {
+	Serve(conn net.PacketConn) error
+	GracefulStop() error
+}) error {
+	go func() {
+		<-ctx.Done()
+		s.runGroup.Go(func() error {
+			log.Printf("Gracefully stopping %s server...", name)
+			server.GracefulStop()
+			return nil
+		})
+	}()
+	if address != "" {
+		lis, err := net.ListenPacket("udp", address)
+		if err != nil {
+			return err
+		}
+		log.Printf("Serving %s on %s...", name, lis.LocalAddr().String())
 		s.runGroup.Go(func() error {
 			return server.Serve(lis)
 		})
