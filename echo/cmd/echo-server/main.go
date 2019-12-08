@@ -32,6 +32,7 @@ func init() {
 	flag.StringVar(&config.server.ListenGRPC, "grpc.listen", ":9090", "Listen address for the gRPC server")
 	flag.StringVar(&config.server.ListenInternalHTTP, "internal.http.listen", "localhost:18080", "Listen address for the internal HTTP server")
 	flag.StringVar(&config.server.ListenInternalGRPC, "internal.grpc.listen", "localhost:19090", "Listen address for the internal gRPC server")
+	flag.StringVar(&config.echo.Prefix, "prefix", "<echo>: ", "Prefix for the echo")
 	flag.StringVar(&config.echo.ListenTCP, "tcp.listen", ":7070", "Listen address for the TCP server")
 	flag.DurationVar(&config.echo.TCPTimeout, "tcp.timeout", time.Minute, "Connection timeout for the TCP server")
 	flag.StringVar(&config.echo.ListenUDP, "udp.listen", ":7070", "Listen address for the UDP server")

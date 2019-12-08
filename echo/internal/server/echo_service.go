@@ -18,6 +18,7 @@ type Config struct {
 	ListenTCP  string
 	TCPTimeout time.Duration
 	ListenUDP  string
+	Prefix     string
 }
 
 func NewEchoService(config Config) *EchoService {
@@ -27,6 +28,17 @@ func NewEchoService(config Config) *EchoService {
 type EchoService struct {
 	config Config
 	echo.UnimplementedEchoServiceServer
+}
+
+func (es *EchoService) echoBytes(in []byte) []byte {
+	if es.config.Prefix == "" {
+		return in
+	}
+	prefix := []byte(es.config.Prefix)
+	out := make([]byte, 0, len(prefix)+len(in))
+	out = append(out, prefix...)
+	out = append(out, in...)
+	return out
 }
 
 func (es *EchoService) Register(ctx context.Context, bbs *server.Server) {
@@ -41,7 +53,7 @@ func (es *EchoService) Echo(ctx context.Context, req *echo.EchoRequest) (*echo.E
 		return nil, status.Errorf(codes.InvalidArgument, "invalid request: %s", err)
 	}
 	return &echo.EchoResponse{
-		Message: req.Message,
+		Message: es.config.Prefix + req.Message,
 	}, nil
 }
 
@@ -54,12 +66,15 @@ func (es *EchoService) HandleStream(ctx context.Context, conn net.Conn) error {
 			return err
 		}
 		conn.SetWriteDeadline(time.Now().Add(es.config.TCPTimeout))
-		if _, err = conn.Write(msg); err != nil {
+		if _, err = conn.Write(es.echoBytes(msg)); err != nil {
 			return err
 		}
 	}
 }
 
 func (es *EchoService) HandlePacket(ctx context.Context, msg []byte, addr net.Addr, reply func([]byte) error) error {
-	return reply(msg)
+	if es.config.Prefix != "" {
+		return reply(append(append([]byte{}, []byte(es.config.Prefix)...), msg...))
+	}
+	return reply(es.echoBytes(msg))
 }
