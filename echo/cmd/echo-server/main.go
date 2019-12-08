@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gogo/gateway"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -23,6 +24,7 @@ import (
 
 var config struct {
 	server bbserver.Config
+	echo   server.Config
 }
 
 func init() {
@@ -30,6 +32,9 @@ func init() {
 	flag.StringVar(&config.server.ListenGRPC, "grpc.listen", ":9090", "Listen address for the gRPC server")
 	flag.StringVar(&config.server.ListenInternalHTTP, "internal.http.listen", "localhost:18080", "Listen address for the internal HTTP server")
 	flag.StringVar(&config.server.ListenInternalGRPC, "internal.grpc.listen", "localhost:19090", "Listen address for the internal gRPC server")
+	flag.StringVar(&config.echo.ListenTCP, "tcp.listen", ":7070", "Listen address for the TCP server")
+	flag.DurationVar(&config.echo.TCPTimeout, "tcp.timeout", time.Minute, "Connection timeout for the TCP server")
+	flag.StringVar(&config.echo.ListenUDP, "udp.listen", ":7070", "Listen address for the UDP server")
 }
 
 func main() {
@@ -71,7 +76,7 @@ func main() {
 	reflection.Register(backbone)
 	recovery.Register(backbone)
 
-	echoService := server.NewEchoService()
+	echoService := server.NewEchoService(config.echo)
 	echoService.Register(ctx, backbone)
 
 	if err := backbone.Run(ctx); err != nil {
