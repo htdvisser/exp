@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	stdhttp "net/http"
@@ -34,6 +35,8 @@ type Server struct {
 	InternalGRPC *grpc.Server
 	InternalHTTP *http.Server
 
+	tcpServers []tcpServer
+
 	runGroup   *errgroup.Group
 	runContext context.Context
 }
@@ -55,7 +58,32 @@ func New(config Config, opts ...Option) *Server {
 		InternalHTTP:  http.NewServer(options.InternalHTTPOptions...),
 	}
 	channelz.Register(s.InternalGRPC)
+	s.RegisterTCPServer("gRPC", s.config.ListenGRPC, s.GRPC)
+	s.RegisterTCPServer("internal gRPC", s.config.ListenInternalGRPC, s.InternalGRPC)
+	s.RegisterTCPServer("HTTP", s.config.ListenHTTP, s.HTTP)
+	s.RegisterTCPServer("internal HTTP", s.config.ListenInternalHTTP, s.InternalHTTP)
 	return s
+}
+
+// RegisterTCPServer registers the named TCP server on address.
+func (s *Server) RegisterTCPServer(name, address string, server interface {
+	Serve(lis net.Listener) error
+	GracefulStop() error
+}) error {
+	addr, err := net.ResolveTCPAddr("tcp", address)
+	if err != nil {
+		return err
+	}
+	address = addr.String()
+	for _, registered := range s.tcpServers {
+		if address == registered.address {
+			return fmt.Errorf("could not register %q server: %w",
+				name, fmt.Errorf("%q already registered on %q",
+					registered.name, address))
+		}
+	}
+	s.tcpServers = append(s.tcpServers, tcpServer{name: name, address: address, server: server})
+	return nil
 }
 
 // Run runs the server until the Done channel of ctx is closed.
@@ -70,19 +98,34 @@ func (s *Server) Run(ctx context.Context) (err error) {
 			err = gErr
 		}
 	}()
-
-	s.runServer(ctx, "gRPC", s.config.ListenGRPC, s.GRPC)
 	s.runGroup.Go(s.GRPC.ServeLoopback)
-	s.runServer(ctx, "internal gRPC", s.config.ListenInternalGRPC, s.InternalGRPC)
 	s.runGroup.Go(s.InternalGRPC.ServeLoopback)
-	s.runServer(ctx, "HTTP", s.config.ListenHTTP, s.HTTP)
-	s.runServer(ctx, "internal HTTP", s.config.ListenInternalHTTP, s.InternalHTTP)
-
+	if err = s.runTCPServers(ctx); err != nil {
+		return err
+	}
 	<-s.runContext.Done()
 	return s.runContext.Err()
 }
 
-func (s *Server) runServer(ctx context.Context, name, address string, server interface {
+func (s *Server) runTCPServers(ctx context.Context) error {
+	for _, tcpServer := range s.tcpServers {
+		if err := s.runTCPServer(ctx, tcpServer.name, tcpServer.address, tcpServer.server); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+type tcpServer struct {
+	name    string
+	address string
+	server  interface {
+		Serve(lis net.Listener) error
+		GracefulStop() error
+	}
+}
+
+func (s *Server) runTCPServer(ctx context.Context, name, address string, server interface {
 	Serve(lis net.Listener) error
 	GracefulStop() error
 }) error {
