@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: htdvisser-echo
+  labels:
+    app: htdvisser-echo
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '18080'
+spec:
+  ports:
+  - protocol: TCP
+    port: 7070
+    name: tcp
+  - protocol: UDP
+    port: 7070
+    name: udp
+  - protocol: TCP
+    port: 8080
+    name: http
+  - protocol: TCP
+    port: 9090
+    name: grpc
+  - protocol: TCP
+    port: 18080
+    name: internal-http
+  - protocol: TCP
+    port: 19090
+    name: internal-grpc
+  selector:
+    app: htdvisser-echo

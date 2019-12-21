@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: htdvisser-echo-v1alpha1
+  labels:
+    app: htdvisser-echo
+    version: v1alpha1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: htdvisser-echo
+      version: v1alpha1
+  template:
+    metadata:
+      labels:
+        app: htdvisser-echo
+        version: v1alpha1
+    spec:
+      containers:
+      - name: htdvisser-echo
+        image: docker.io/htdvisser/echo-server:latest
+        imagePullPolicy: Always
+        ports:
+        - protocol: TCP
+          containerPort: 7070
+          name: tcp
+        - protocol: UDP
+          containerPort: 7070
+          name: udp
+        - protocol: TCP
+          containerPort: 8080
+          name: http
+        - protocol: TCP
+          containerPort: 9090
+          name: grpc
+        - protocol: TCP
+          containerPort: 18080
+          name: internal-http
+        - protocol: TCP
+          containerPort: 19090
+          name: internal-grpc
