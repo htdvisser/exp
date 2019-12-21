@@ -1,3 +1,3 @@
 module htdvisser.dev/exp/ring
 
-go 1.12
+go 1.13
