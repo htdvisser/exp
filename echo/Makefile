@@ -74,8 +74,8 @@ istio-clean:
 .PHONY: deploy
 
 deploy:
-	kubectl apply -f deploy/1-service.yaml
-	kubectl apply -f deploy/2-deployment-v1alpha1.yaml
+	kubectl apply -f deploy/1-deployment-v1alpha1.yaml
+	kubectl apply -f deploy/2-service.yaml
 	kubectl apply -f deploy/3-gateway.yaml
 	kubectl apply -f deploy/4-virtual-service.yaml
 
@@ -84,5 +84,5 @@ deploy:
 undeploy:
 	kubectl delete -f deploy/4-virtual-service.yaml
 	kubectl delete -f deploy/3-gateway.yaml
-	kubectl delete -f deploy/2-deployment-v1alpha1.yaml
-	kubectl delete -f deploy/1-service.yaml
+	kubectl delete -f deploy/2-service.yaml
+	kubectl delete -f deploy/1-deployment-v1alpha1.yaml
