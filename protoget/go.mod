@@ -1,12 +1,8 @@
 module htdvisser.dev/exp/protoget
 
-go 1.12
-
-replace htdvisser.dev/exp/clicontext => ../clicontext
-
-replace htdvisser.dev/exp/flagenv => ../flagenv
+go 1.13
 
 require (
-	htdvisser.dev/exp/clicontext v0.0.0-20190828181845-1947ca297e5a
-	htdvisser.dev/exp/flagenv v0.0.0-20190828181845-1947ca297e5a
+	htdvisser.dev/exp/clicontext v0.0.0-20191208180355-231e02bfe473
+	htdvisser.dev/exp/flagenv v0.0.0-20191208180355-231e02bfe473
 )
