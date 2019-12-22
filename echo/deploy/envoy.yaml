@@ -1,0 +1,149 @@
+admin:
+  access_log_path: /tmp/admin_access.log
+  address:
+    socket_address: { address: 0.0.0.0, port_value: 9901 }
+
+overload_manager:
+  refresh_interval: 0.25s
+  resource_monitors:
+  - name: envoy.resource_monitors.fixed_heap
+    config:
+      max_heap_size_bytes: 2147483648 # 2 GiB
+  actions:
+  - name: envoy.overload_actions.shrink_heap
+    triggers:
+    - name: envoy.resource_monitors.fixed_heap
+      threshold:
+        value: 0.95
+  - name: envoy.overload_actions.stop_accepting_requests
+    triggers:
+    - name: envoy.resource_monitors.fixed_heap
+      threshold:
+        value: 0.98
+
+static_resources:
+  listeners:
+  # The HTTP listener on port 80
+  - name: http
+    address:
+      socket_address: { protocol: TCP, address: 0.0.0.0, port_value: 80 }
+    per_connection_buffer_limit_bytes: 32768 # 32 KiB
+    filter_chains:
+    - filters:
+      - name: envoy.http_connection_manager
+        typed_config:
+          "@type": type.googleapis.com/envoy.config.filter.network.http_connection_manager.v2.HttpConnectionManager
+          stat_prefix: ingress_http
+          codec_type: AUTO
+          use_remote_address: true
+          xff_num_trusted_hops: 0
+          common_http_protocol_options:
+            idle_timeout: 3600s
+          http2_protocol_options:
+            max_concurrent_streams: 100
+            initial_stream_window_size: 65536 # 64 KiB
+            initial_connection_window_size: 1048576 # 1 MiB
+          stream_idle_timeout: 300s
+          request_timeout: 300s
+          route_config:
+            name: ingress_route_http
+            virtual_hosts:
+            - name: echo
+              domains: ["*"]
+              routes:
+              - name: echo-grpc
+                match:
+                  prefix: /htdvisser.echo.v1alpha1.EchoService/
+                route:
+                  cluster: service_echo_grpc
+                  idle_timeout: 15s
+              - name: echo-http
+                match:
+                  prefix: /echo/api/v1alpha1/
+                route:
+                  cluster: service_echo_http
+                  prefix_rewrite: /api/v1alpha1/
+                  idle_timeout: 15s
+          http_filters:
+          - name: envoy.router
+  # The TCP listener on port 7070
+  - name: tcp
+    address:
+      socket_address: { protocol: TCP, address: 0.0.0.0, port_value: 7070 }
+    per_connection_buffer_limit_bytes: 32768 # 32 KiB
+    filter_chains:
+    - filters:
+      - name: envoy.tcp_proxy
+        typed_config:
+          '@type': type.googleapis.com/envoy.config.filter.network.tcp_proxy.v2.TcpProxy
+          stat_prefix: ingress_tcp
+          cluster: service_echo_tcp
+          idle_timeout: 3600s
+  # The UDP listener on port 7070
+  - name: udp
+    address:
+      socket_address: { protocol: UDP, address: 0.0.0.0, port_value: 7070 }
+    listener_filters:
+      name: envoy.filters.udp_listener.udp_proxy
+      typed_config:
+        '@type': type.googleapis.com/envoy.config.filter.udp.udp_proxy.v2alpha.UdpProxyConfig
+        stat_prefix: ingress_udp
+        cluster: service_echo_udp
+        idle_timeout: 60s
+
+  clusters:
+  # The TCP Echo Service
+  - name: service_echo_tcp
+    connect_timeout: 0.25s
+    per_connection_buffer_limit_bytes: 32768 # 32 KiB
+    type: STRICT_DNS
+    lb_policy: ROUND_ROBIN
+    load_assignment:
+      cluster_name: service_echo_tcp
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address: { protocol: TCP, address: echo, port_value: 7070 }
+  # The UDP Echo Service
+  - name: service_echo_udp
+    connect_timeout: 0.25s
+    per_connection_buffer_limit_bytes: 32768 # 32 KiB
+    type: STRICT_DNS
+    lb_policy: ROUND_ROBIN
+    load_assignment:
+      cluster_name: service_echo_udp
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address: { protocol: UDP, address: echo, port_value: 7070 }
+  # The gRPC Echo Service
+  - name: service_echo_grpc
+    connect_timeout: 0.25s
+    per_connection_buffer_limit_bytes: 32768 # 32 KiB
+    type: STRICT_DNS
+    lb_policy: ROUND_ROBIN
+    load_assignment:
+      cluster_name: service_echo_grpc
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address: { protocol: TCP, address: echo, port_value: 9090 }
+    http2_protocol_options:
+      initial_stream_window_size: 65536 # 64 KiB
+      initial_connection_window_size: 1048576 # 1 MiB
+  # The HTTP Echo Service
+  - name: service_echo_http
+    connect_timeout: 0.25s
+    per_connection_buffer_limit_bytes: 32768 # 32 KiB
+    type: STRICT_DNS
+    lb_policy: ROUND_ROBIN
+    load_assignment:
+      cluster_name: service_echo_http
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address: { protocol: TCP, address: echo, port_value: 8080 }

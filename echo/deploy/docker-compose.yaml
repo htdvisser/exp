@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  envoy:
+    deploy:
+      replicas: 1
+    image: docker.io/envoyproxy/envoy-dev
+    ports:
+    - "80:80"
+    - "7070:7070"
+    - "7070:7070/udp"
+    - "9901:9901"
+    configs:
+    - source: envoy
+      target: /etc/envoy/envoy.yaml
+  echo:
+    deploy:
+      replicas: 4
+    image: docker.io/htdvisser/echo-server:latest
+
+configs:
+  envoy:
+    file: ./envoy.yaml
