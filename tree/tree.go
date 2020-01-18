@@ -176,6 +176,9 @@ func (t *Tree) Walk(prefix Path, f WalkFunc) error {
 	return node.walk(f)
 }
 
+// WalkFunc is called by Walk.
+type WalkFunc func(p Path, val interface{}) error
+
 // PathValue represents a value stored at a certain path in the tree.
 type PathValue struct {
 	Path  Path
@@ -191,6 +194,3 @@ func (t *Tree) All(prefix Path) []PathValue {
 	})
 	return res
 }
-
-// WalkFunc is called by Walk.
-type WalkFunc func(p Path, val interface{}) error
