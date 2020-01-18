@@ -86,6 +86,11 @@ func TestTree(t *testing.T) {
 		{Path{"a", "b", "c"}, 2},
 	})
 
+	clone := tree.Clone()
+	if !reflect.DeepEqual(clone.All(nil), tree.All(nil)) {
+		t.Error("tree.Clone().All() != tree.All()")
+	}
+
 	expectDelete(Path{"a", "b"}, 1, true)
 	expectDelete(Path{"a", "b", "c"}, 2, true)
 }

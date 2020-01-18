@@ -105,6 +105,23 @@ func (n *node) walk(fn WalkFunc) error {
 	return nil
 }
 
+func (n *node) clone() *node {
+	clone := &node{path: n.path}
+	if len(n.edges) > 0 {
+		clone.edges = make([]*edge, len(n.edges))
+		for i, e := range n.edges {
+			clone.edges[i] = &edge{
+				element: e.element,
+				node:    e.node.clone(),
+			}
+		}
+	}
+	if n.leaf != nil {
+		clone.leaf = &leaf{val: n.leaf.val}
+	}
+	return clone
+}
+
 type edge struct {
 	element string
 	node    *node
@@ -193,4 +210,9 @@ func (t *Tree) All(prefix Path) []PathValue {
 		return nil
 	})
 	return res
+}
+
+// Clone returns a clone of the tree.
+func (t *Tree) Clone() *Tree {
+	return &Tree{root: t.root.clone()}
 }
