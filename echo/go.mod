@@ -23,6 +23,7 @@ require (
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334 // indirect
 	github.com/lyft/protoc-gen-star v0.4.14 // indirect
 	github.com/mdempsky/unconvert v0.0.0-20190921185256-3ecd357795af
+	github.com/pires/go-proxyproto v0.0.0-20200213100827-833e5d06d8f0
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/tools v0.0.0-20191220234730-f13409bbebaf // indirect
 	google.golang.org/genproto v0.0.0-20191220175831-5c49e3ecc1c1

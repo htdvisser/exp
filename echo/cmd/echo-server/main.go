@@ -35,6 +35,8 @@ func init() {
 	pflag.StringVar(&config.server.ListenInternalGRPC, "internal.grpc.listen", "localhost:19090", "Listen address for the internal gRPC server")
 	pflag.StringVar(&config.echo.Prefix, "prefix", "<echo>: ", "Prefix for the echo")
 	pflag.StringVar(&config.echo.ListenTCP, "tcp.listen", ":7070", "Listen address for the TCP server")
+	pflag.BoolVar(&config.echo.TCPProxy, "tcp.proxy", false, "Support PROXY protocol on the TCP server")
+	pflag.StringSliceVar(&config.echo.TCPProxyAllowedIPs, "tcp.proxy.allowed-ips", nil, "Optional list of IPs/CIDRs from which PROXY headers are read")
 	pflag.DurationVar(&config.echo.TCPTimeout, "tcp.timeout", time.Minute, "Connection timeout for the TCP server")
 	pflag.StringVar(&config.echo.ListenUDP, "udp.listen", ":7070", "Listen address for the UDP server")
 }
@@ -78,7 +80,11 @@ func main() {
 	reflection.Register(backbone)
 	recovery.Register(backbone)
 
-	echoService := server.NewEchoService(config.echo)
+	echoService, err := server.NewEchoService(config.echo)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
 	echoService.Register(ctx, backbone)
 
 	if err := backbone.Run(ctx); err != nil {

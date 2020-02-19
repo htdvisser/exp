@@ -6,6 +6,7 @@ import (
 	"net"
 	"time"
 
+	"github.com/pires/go-proxyproto"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"htdvisser.dev/exp/backbone/server"
@@ -17,12 +18,28 @@ import (
 type Config struct {
 	ListenTCP  string
 	TCPTimeout time.Duration
+	TCPProxy           bool
+	TCPProxyAllowedIPs []string
+	tcpServerOptions   []stream.Option
 	ListenUDP  string
 	Prefix     string
 }
 
-func NewEchoService(config Config) *EchoService {
-	return &EchoService{config: config}
+func NewEchoService(config Config) (*EchoService, error) {
+	if config.TCPProxy {
+		var (
+			policy proxyproto.PolicyFunc
+			err    error
+		)
+		if len(config.TCPProxyAllowedIPs) > 0 {
+			policy, err = proxyproto.LaxWhiteListPolicy(config.TCPProxyAllowedIPs)
+			if err != nil {
+				return nil, err
+			}
+		}
+		config.tcpServerOptions = append(config.tcpServerOptions, stream.WithProxyProtocol(policy))
+	}
+	return &EchoService{config: config}, nil
 }
 
 type EchoService struct {
@@ -44,7 +61,7 @@ func (es *EchoService) echoBytes(in []byte) []byte {
 func (es *EchoService) Register(ctx context.Context, bbs *server.Server) {
 	echo.RegisterEchoServiceServer(bbs.GRPC.Server, es)
 	echo.RegisterEchoServiceHandler(ctx, bbs.GRPC.Gateway, bbs.GRPC.LoopbackConn())
-	bbs.RegisterTCPServer("Echo-TCP", es.config.ListenTCP, stream.NewServer(es))
+	bbs.RegisterTCPServer("Echo-TCP", es.config.ListenTCP, stream.NewServer(es, es.config.tcpServerOptions...))
 	bbs.RegisterUDPServer("Echo-UDP", es.config.ListenUDP, packet.NewServer(es))
 }
 
