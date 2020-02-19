@@ -23,11 +23,13 @@ require (
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334 // indirect
 	github.com/lyft/protoc-gen-star v0.4.14 // indirect
 	github.com/mdempsky/unconvert v0.0.0-20190921185256-3ecd357795af
+	github.com/spf13/pflag v1.0.5
 	golang.org/x/tools v0.0.0-20191220234730-f13409bbebaf // indirect
 	google.golang.org/genproto v0.0.0-20191220175831-5c49e3ecc1c1
 	google.golang.org/grpc v1.26.0
 	htdvisser.dev/exp/backbone v0.0.0-20191221112745-2bfdd273c983
 	htdvisser.dev/exp/clicontext v0.0.0-20191221112745-2bfdd273c983
 	htdvisser.dev/exp/flagenv v0.0.0-20191221112745-2bfdd273c983
+	htdvisser.dev/exp/pflagenv v0.0.0-20200210170633-61b6379ea10f
 	mvdan.cc/gofumpt v0.0.0-20191220113447-b896b372089f
 )

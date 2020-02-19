@@ -10,6 +10,7 @@ import (
 
 	"github.com/gogo/gateway"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/pflag"
 	bbserver "htdvisser.dev/exp/backbone/server"
 	"htdvisser.dev/exp/backbone/server/grpc"
 	"htdvisser.dev/exp/backbone/server/jaeger"
@@ -19,7 +20,7 @@ import (
 	"htdvisser.dev/exp/backbone/server/reflection"
 	"htdvisser.dev/exp/clicontext"
 	"htdvisser.dev/exp/echo/internal/server"
-	"htdvisser.dev/exp/flagenv"
+	"htdvisser.dev/exp/pflagenv"
 )
 
 var config struct {
@@ -28,27 +29,27 @@ var config struct {
 }
 
 func init() {
-	flag.StringVar(&config.server.ListenHTTP, "http.listen", ":8080", "Listen address for the HTTP server")
-	flag.StringVar(&config.server.ListenGRPC, "grpc.listen", ":9090", "Listen address for the gRPC server")
-	flag.StringVar(&config.server.ListenInternalHTTP, "internal.http.listen", "localhost:18080", "Listen address for the internal HTTP server")
-	flag.StringVar(&config.server.ListenInternalGRPC, "internal.grpc.listen", "localhost:19090", "Listen address for the internal gRPC server")
-	flag.StringVar(&config.echo.Prefix, "prefix", "<echo>: ", "Prefix for the echo")
-	flag.StringVar(&config.echo.ListenTCP, "tcp.listen", ":7070", "Listen address for the TCP server")
-	flag.DurationVar(&config.echo.TCPTimeout, "tcp.timeout", time.Minute, "Connection timeout for the TCP server")
-	flag.StringVar(&config.echo.ListenUDP, "udp.listen", ":7070", "Listen address for the UDP server")
+	pflag.StringVar(&config.server.ListenHTTP, "http.listen", ":8080", "Listen address for the HTTP server")
+	pflag.StringVar(&config.server.ListenGRPC, "grpc.listen", ":9090", "Listen address for the gRPC server")
+	pflag.StringVar(&config.server.ListenInternalHTTP, "internal.http.listen", "localhost:18080", "Listen address for the internal HTTP server")
+	pflag.StringVar(&config.server.ListenInternalGRPC, "internal.grpc.listen", "localhost:19090", "Listen address for the internal gRPC server")
+	pflag.StringVar(&config.echo.Prefix, "prefix", "<echo>: ", "Prefix for the echo")
+	pflag.StringVar(&config.echo.ListenTCP, "tcp.listen", ":7070", "Listen address for the TCP server")
+	pflag.DurationVar(&config.echo.TCPTimeout, "tcp.timeout", time.Minute, "Connection timeout for the TCP server")
+	pflag.StringVar(&config.echo.ListenUDP, "udp.listen", ":7070", "Listen address for the UDP server")
 }
 
 func main() {
 	ctx, exit := clicontext.WithInterruptAndExit(context.Background())
 	defer exit()
 
-	if err := flagenv.NewParser(flagenv.Prefixes("echo_")).ParseEnv(flag.CommandLine); err != nil {
-		fmt.Fprintln(flag.CommandLine.Output(), err)
+	if err := pflagenv.NewParser(pflagenv.Prefixes("echo_")).ParseEnv(pflag.CommandLine); err != nil {
+		fmt.Fprintln(pflag.CommandLine.Output(), err)
 		flag.Usage()
 		os.Exit(2)
 	}
 
-	flag.Parse()
+	pflag.Parse()
 
 	jsonpb := &gateway.JSONPb{
 		EmitDefaults: true,
