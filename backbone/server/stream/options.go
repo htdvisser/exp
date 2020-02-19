@@ -1,7 +1,11 @@
 package stream
 
+import "github.com/pires/go-proxyproto"
+
 type options struct {
-	middleware []Middleware
+	middleware    []Middleware
+	proxyProtocol bool
+	proxyPolicy   proxyproto.PolicyFunc
 }
 
 func (o *options) apply(opts ...Option) {

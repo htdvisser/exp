@@ -19,6 +19,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.1.0
 	github.com/grpc-ecosystem/grpc-gateway v1.12.1
 	github.com/improbable-eng/grpc-web v0.12.0
+	github.com/pires/go-proxyproto v0.0.0-20200213100827-833e5d06d8f0
 	github.com/prometheus/client_golang v1.3.0
 	github.com/rs/cors v1.7.0 // indirect
 	go.opencensus.io v0.22.2

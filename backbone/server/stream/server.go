@@ -6,6 +6,8 @@ import (
 	"net"
 	"sync"
 	"time"
+
+	"github.com/pires/go-proxyproto"
 )
 
 // Server implements a TCP stream server.
@@ -19,6 +21,9 @@ type Server struct {
 
 	mu        sync.Mutex
 	listeners map[net.Listener]struct{}
+
+	proxyProtocol bool
+	proxyPolicy   proxyproto.PolicyFunc
 }
 
 // NewServer instantiates a new stream server with the given options.
@@ -26,9 +31,11 @@ func NewServer(handler Handler, opts ...Option) *Server {
 	options := &options{}
 	options.apply(opts...)
 	return &Server{
-		middleware: options.middleware,
-		handler:    handler,
-		listeners:  make(map[net.Listener]struct{}),
+		middleware:    options.middleware,
+		handler:       handler,
+		listeners:     make(map[net.Listener]struct{}),
+		proxyProtocol: options.proxyProtocol,
+		proxyPolicy:   options.proxyPolicy,
 	}
 }
 
@@ -83,6 +90,13 @@ func (s *Server) Serve(lis net.Listener) error {
 			connCtx = s.extendContextWithRemoteAddr(connCtx, conn.RemoteAddr())
 			if connCtx == nil {
 				panic("extendContextWithRemoteAddr returned a nil context")
+			}
+		}
+		if s.proxyProtocol {
+			conn, err = s.withProxy(conn)
+			if err != nil {
+				conn.Close()
+				return err
 			}
 		}
 		go func(ctx context.Context) {
