@@ -46,7 +46,7 @@ func main() {
 	defer exit()
 
 	if err := pflagenv.NewParser(pflagenv.Prefixes("echo_")).ParseEnv(pflag.CommandLine); err != nil {
-		fmt.Fprintln(pflag.CommandLine.Output(), err)
+		fmt.Fprintln(os.Stderr, err)
 		flag.Usage()
 		os.Exit(2)
 	}
