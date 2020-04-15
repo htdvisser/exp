@@ -1,0 +1,50 @@
+{
+  "folders": [
+    {
+      "path": "b32"
+    },
+    {
+      "path": "b64"
+    },
+    {
+      "path": "backbone"
+    },
+    {
+      "path": "clicontext"
+    },
+    {
+      "path": "echo"
+    },
+    {
+      "path": "fieldpath"
+    },
+    {
+      "path": "flagenv"
+    },
+    {
+      "path": "hex"
+    },
+    {
+      "path": "pflagenv"
+    },
+    {
+      "path": "protoc-gen-hugodata"
+    },
+    {
+      "path": "protoget"
+    },
+    {
+      "path": "ring"
+    },
+    {
+      "path": "stringslice"
+    },
+    {
+      "path": "tree"
+    },
+    {
+      "path": "waitcontext"
+    },
+  ],
+  "settings": {}
+}
