@@ -40,6 +40,9 @@
       "path": "stringslice"
     },
     {
+      "path": "sum"
+    },
+    {
       "path": "tree"
     },
     {
