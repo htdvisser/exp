@@ -25,8 +25,8 @@ func TestWithInterrupt(t *testing.T) {
 	select {
 	case <-ctx.Done():
 		code, ok := GetExitCode(ctx)
-		if !ok || code != 158 {
-			t.Errorf("GetExitCode(ctx) = (%v, %v), want (%v, %v)", code, ok, 158, true)
+		if !ok || code != int(syscall.SIGUSR1)+128 {
+			t.Errorf("GetExitCode(ctx) = (%v, %v), want (%v, %v)", code, ok, int(syscall.SIGUSR1)+128, true)
 		}
 	case <-time.After(100 * time.Millisecond):
 		t.Error("signal not received")
