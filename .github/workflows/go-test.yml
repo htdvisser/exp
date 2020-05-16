@@ -1,0 +1,23 @@
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: ["^1.14"] # TODO: Add "tip" when actions/setup-go supports it
+    name: Test on Go ${{ matrix.go }}
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v2
+      - name: Go Setup
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+      - name: Go Coverage
+        run: make coverage.html
+      - name: Upload Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage.*
