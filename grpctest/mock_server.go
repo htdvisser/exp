@@ -81,10 +81,7 @@ func (ms *MockServer) ConnectTestClient(ctx context.Context) (*grpc.ClientConn, 
 	if ms.lis == nil {
 		return nil, nil, fmt.Errorf("mock server needs to be started before connecting test clients")
 	}
-	opts := make([]grpc.DialOption, len(ms.dialOptions), len(ms.dialOptions)+1)
-	copy(opts, ms.dialOptions)
-	opts = append(opts, grpc.WithInsecure())
-	clientConn, err := grpc.Dial(ms.lis.Addr().String(), opts...)
+	clientConn, err := grpc.Dial(ms.lis.Addr().String(), ms.dialOptions...)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to dial to mock server on %q: %w", ms.lis.Addr(), err)
 	}
