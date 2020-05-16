@@ -22,6 +22,9 @@
       "path": "flagenv"
     },
     {
+      "path": "grpctest"
+    },
+    {
       "path": "hex"
     },
     {
