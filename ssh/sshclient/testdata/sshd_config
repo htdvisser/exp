@@ -1,0 +1,9 @@
+AuthorizedKeysFile .ssh/authorized_keys
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+LogLevel DEBUG3
+PasswordAuthentication yes
+PermitRootLogin yes
+Port 22
+PubkeyAuthentication yes

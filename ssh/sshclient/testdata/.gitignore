@@ -1,0 +1,4 @@
+/id_*
+/ssh_host_*
+/known_hosts
+/authorized_keys

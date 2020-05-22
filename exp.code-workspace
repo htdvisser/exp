@@ -40,6 +40,9 @@
       "path": "ring"
     },
     {
+      "path": "ssh"
+    },
+    {
       "path": "stringslice"
     },
     {
