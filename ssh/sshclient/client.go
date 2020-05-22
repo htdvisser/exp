@@ -1,4 +1,4 @@
-// Package sshclient
+// Package sshclient provides configuration structs for constructing SSH clients.
 package sshclient
 
 import (
