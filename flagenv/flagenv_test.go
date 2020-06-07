@@ -27,6 +27,7 @@ func TestParser(t *testing.T) {
 
 	for _, tt := range []struct {
 		Name    string
+		Options []ParserOption
 		env     map[string]string
 		flagSet func() *flag.FlagSet
 		want    string
@@ -54,6 +55,20 @@ func TestParser(t *testing.T) {
 			want:    "flag value",
 		},
 		{
+			Name: "Filtered Env",
+			Options: []ParserOption{Filter(func(key string) bool {
+				if key == "flag" {
+					return false
+				}
+				return true
+			})},
+			env: map[string]string{
+				"FLAG": "flag value",
+			},
+			flagSet: flagSet,
+			want:    "default flag value",
+		},
+		{
 			Name: "Priority Env",
 			env: map[string]string{
 				"TEST_FLAG": "test flag value",
@@ -64,7 +79,9 @@ func TestParser(t *testing.T) {
 		},
 	} {
 		t.Run(tt.Name, func(t *testing.T) {
-			p := NewParser(Prefixes("TEST_", ""), ReplaceWithUnderscore("-", "+"))
+			p := NewParser(append([]ParserOption{
+				Prefixes("TEST_", ""), ReplaceWithUnderscore("-", "+"),
+			}, tt.Options...)...)
 			p.lookupEnv = func(key string) (string, bool) {
 				val, ok := tt.env[key]
 				return val, ok

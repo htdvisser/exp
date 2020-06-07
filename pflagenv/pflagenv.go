@@ -11,6 +11,7 @@ import (
 
 // Parser parses environment into flags.
 type Parser struct {
+	filter    func(key string) bool
 	lookupEnv func(key string) (string, bool)
 	prefixes  []string
 	replacer  *strings.Replacer
@@ -21,7 +22,12 @@ var (
 	defaultPrefixes = []string{""}
 )
 
+func defaultFilter(_ string) bool { return true }
+
 func (p *Parser) setDefaults() {
+	if p.filter == nil {
+		p.filter = defaultFilter
+	}
 	if p.lookupEnv == nil {
 		p.lookupEnv = os.LookupEnv
 	}
@@ -48,6 +54,14 @@ func buildReplacer(chars ...string) *strings.Replacer {
 		oldnew = append(oldnew, char, "_")
 	}
 	return strings.NewReplacer(oldnew...)
+}
+
+// Filter returns a ParserOption that makes the Parser only consider flags for
+// which the given filter func returns true.
+func Filter(filter func(key string) bool) ParserOption {
+	return parserOptionFunc(func(p *Parser) {
+		p.filter = filter
+	})
 }
 
 // ReplaceWithUnderscore returns a ParserOption that makes the Parser replace
@@ -115,6 +129,9 @@ func (p *Parser) ParseEnv(flagSet *pflag.FlagSet) error {
 	p.setDefaults()
 	var errors []error
 	flagSet.VisitAll(func(flag *pflag.Flag) {
+		if !p.filter(flag.Name) {
+			return
+		}
 		if err := p.parseEnv(flag); err != nil {
 			errors = append(errors, err)
 		}
