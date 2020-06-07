@@ -28,6 +28,9 @@
       "path": "hex"
     },
     {
+      "path": "nats"
+    },
+    {
       "path": "pflagenv"
     },
     {
