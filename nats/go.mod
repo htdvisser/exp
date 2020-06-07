@@ -18,6 +18,6 @@ require (
 	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9 // indirect
 	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a
 	google.golang.org/protobuf v1.24.0 // indirect
-	htdvisser.dev/exp/clicontext v0.0.0-20200522135503-6daabdfc50fa
-	htdvisser.dev/exp/pflagenv v0.0.0-20200522135503-6daabdfc50fa
+	htdvisser.dev/exp/clicontext v0.0.0-20200607105234-c508f6cecbac
+	htdvisser.dev/exp/pflagenv v0.0.0-20200607105234-c508f6cecbac
 )
