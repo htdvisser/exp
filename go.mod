@@ -20,6 +20,8 @@ replace htdvisser.dev/exp/grpctest => ./grpctest
 
 replace htdvisser.dev/exp/hex => ./hex
 
+replace htdvisser.dev/exp/nats => ./nats
+
 replace htdvisser.dev/exp/pflagenv => ./pflagenv
 
 replace htdvisser.dev/exp/protoc-gen-hugodata => ./protoc-gen-hugodata
@@ -27,6 +29,8 @@ replace htdvisser.dev/exp/protoc-gen-hugodata => ./protoc-gen-hugodata
 replace htdvisser.dev/exp/protoget => ./protoget
 
 replace htdvisser.dev/exp/ring => ./ring
+
+replace htdvisser.dev/exp/ssh => ./ssh
 
 replace htdvisser.dev/exp/stringslice => ./stringslice
 
