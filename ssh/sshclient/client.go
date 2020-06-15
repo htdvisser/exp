@@ -4,13 +4,14 @@ package sshclient
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"net"
 	"os"
 	"time"
 
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/knownhosts"
+	hssh "htdvisser.dev/exp/ssh"
+	"htdvisser.dev/exp/ssh/aws"
 )
 
 func stringFallback(s, fallback string) string {
@@ -81,38 +82,12 @@ func (BannerConfig) build() (ssh.BannerCallback, error) {
 	return nil, nil
 }
 
-// PrivateKeyConfig is the configuration of an SSH private key.
-type PrivateKeyConfig struct {
-	File       string `json:"file" yaml:"file"`
-	Passphrase string `json:"passphrase" yaml:"passphrase"`
-}
-
-// Validate validates the configuration and returns an error if it is not valid.
-func (c PrivateKeyConfig) Validate() error {
-	if c.File == "" {
-		return fmt.Errorf("missing private key file in PrivateKeyConfig")
-	}
-	return nil
-}
-
-func (c PrivateKeyConfig) build() (ssh.Signer, error) {
-	pemBytes, err := ioutil.ReadFile(c.File)
-	if err != nil {
-		return nil, fmt.Errorf("private key %q could not be read: %w", c.File, err)
-	}
-	signer, err := ssh.ParsePrivateKey(pemBytes)
-	if err != nil {
-		return nil, fmt.Errorf("private key %q could not be parsed: %w", c.File, err)
-	}
-	return signer, nil
-}
-
 // AuthMethodConfig is the configuration for the authentication method.
 type AuthMethodConfig struct {
-	Method      string             `json:"method" yaml:"method"`
-	Password    string             `json:"password" yaml:"password"`
-	PrivateKeys []PrivateKeyConfig `json:"private_keys" yaml:"private_keys"`
-	AWSKMS      AWSKMSConfig       `json:"aws_kms" yaml:"aws_kms"`
+	Method      string                  `json:"method" yaml:"method"`
+	Password    string                  `json:"password" yaml:"password"`
+	PrivateKeys []hssh.PrivateKeyConfig `json:"private_keys" yaml:"private_keys"`
+	AWSKMS      aws.KMSConfig           `json:"aws_kms" yaml:"aws_kms"`
 	// TODO: Support GCP Cloud HSM.
 }
 
@@ -155,7 +130,7 @@ func (c AuthMethodConfig) build() (ssh.AuthMethod, error) {
 				err     error
 			)
 			for i, pkc := range c.PrivateKeys {
-				signers[i], err = pkc.build()
+				signers[i], err = pkc.Build()
 				if err != nil {
 					return nil, fmt.Errorf("failed to build signer for private key %d: %w", i, err)
 				}
@@ -164,7 +139,7 @@ func (c AuthMethodConfig) build() (ssh.AuthMethod, error) {
 		}), nil
 	case "aws_kms":
 		return ssh.PublicKeysCallback(func() ([]ssh.Signer, error) {
-			signer, err := c.AWSKMS.build()
+			signer, err := c.AWSKMS.Build()
 			if err != nil {
 				return nil, fmt.Errorf("failed to build AWS KMS signer: %w", err)
 			}

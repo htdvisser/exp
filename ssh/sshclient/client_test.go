@@ -5,6 +5,9 @@ import (
 	"net"
 	"os"
 	"testing"
+
+	hssh "htdvisser.dev/exp/ssh"
+	"htdvisser.dev/exp/ssh/aws"
 )
 
 func buildConnectConfig() ConnectConfig {
@@ -69,7 +72,7 @@ func TestDial(t *testing.T) {
 				c.AuthMethods = []AuthMethodConfig{
 					{
 						Method: "private_keys",
-						PrivateKeys: []PrivateKeyConfig{
+						PrivateKeys: []hssh.PrivateKeyConfig{
 							{File: "testdata/id_" + keyType},
 						},
 					},
@@ -100,7 +103,7 @@ func TestDial(t *testing.T) {
 		c.AuthMethods = []AuthMethodConfig{
 			{
 				Method: "aws_kms",
-				AWSKMS: AWSKMSConfig{
+				AWSKMS: aws.KMSConfig{
 					Region:          awsRegion,
 					AccessKeyID:     awsAccessKeyID,
 					SecretAccessKey: awsSecretAccessKey,
@@ -117,5 +120,4 @@ func TestDial(t *testing.T) {
 		}
 		defer cli.Close()
 	})
-
 }

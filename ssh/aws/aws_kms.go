@@ -1,4 +1,5 @@
-package sshclient
+// Package aws provides an ssh.Signer on top of AWS KMS.
+package aws
 
 import (
 	"crypto"
@@ -16,8 +17,8 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-// AWSKMSConfig is the configuration for authentication with a keypair stored in AWS KMS.
-type AWSKMSConfig struct {
+// KMSConfig is the configuration for authentication with a keypair stored in AWS KMS.
+type KMSConfig struct {
 	Region          string `json:"region" yaml:"region"`
 	AccessKeyID     string `json:"access_key_id,omitempty" yaml:"access_key_id,omitempty"`
 	SecretAccessKey string `json:"secret_access_key,omitempty" yaml:"secret_access_key,omitempty"`
@@ -27,14 +28,24 @@ type AWSKMSConfig struct {
 }
 
 // Validate validates the configuration and returns an error if it is not valid.
-func (c AWSKMSConfig) Validate() error {
+func (c KMSConfig) Validate() error {
 	if c.KeyID == "" {
 		return fmt.Errorf("missing key id in AWSKMSConfig")
 	}
 	return nil
 }
 
-func (c AWSKMSConfig) build() (ssh.Signer, error) {
+type typedPublicKey struct {
+	ssh.PublicKey
+	keyType string
+}
+
+func (pk typedPublicKey) Type() string {
+	return pk.keyType
+}
+
+// Build builds an ssh.Signer from the configuration.
+func (c KMSConfig) Build() (ssh.Signer, error) {
 	awsConfig := aws.NewConfig().WithCredentials(
 		credentials.NewSharedCredentials("", ""),
 	)
@@ -88,61 +99,56 @@ func (c AWSKMSConfig) build() (ssh.Signer, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert public key to SSH public key: %w", err)
 	}
-	return &awsSigner{pubKey: sshPK, client: client, keyID: c.KeyID}, nil
+	s := &signer{pubKey: sshPK, client: client, keyID: c.KeyID}
+	if s.pubKey.Type() == ssh.KeyAlgoRSA {
+		s.pubKey = typedPublicKey{PublicKey: sshPK, keyType: ssh.SigAlgoRSASHA2256}
+	}
+	return s, nil
 }
 
-type awsSigner struct {
+type signer struct {
 	pubKey ssh.PublicKey
 	client *kms.KMS
 	keyID  string
 }
 
-func (s *awsSigner) PublicKey() ssh.PublicKey {
+func (s *signer) PublicKey() ssh.PublicKey {
 	return s.pubKey
 }
 
-func (s *awsSigner) Sign(rand io.Reader, data []byte) (*ssh.Signature, error) {
+func (s *signer) Sign(rand io.Reader, data []byte) (*ssh.Signature, error) {
 	return s.SignWithAlgorithm(rand, data, "")
 }
 
-func (s *awsSigner) SignWithAlgorithm(_ io.Reader, data []byte, algorithm string) (*ssh.Signature, error) {
+func (s *signer) SignWithAlgorithm(_ io.Reader, data []byte, algorithm string) (*ssh.Signature, error) {
+	pubKeyType := s.pubKey.Type()
+	if algorithm == "" {
+		algorithm = pubKeyType
+		if algorithm == ssh.SigAlgoRSA {
+			algorithm = ssh.SigAlgoRSASHA2512
+		}
+	} else if algorithm != s.pubKey.Type() {
+		return nil, fmt.Errorf("unsupported signature algorithm %q for key of type %q", algorithm, pubKeyType)
+	}
 	var (
 		hashFunc         crypto.Hash
 		signingAlgorithm string
 	)
-	pubKeyType := s.pubKey.Type()
-	if pubKeyType == ssh.KeyAlgoRSA {
-		if algorithm == "" {
-			// Use the default of golang.org/x/crypto/ssh ("ssh-rsa").
-			// TODO: Use ssh.SigAlgoRSASHA2256 when possible.
-			algorithm = ssh.SigAlgoRSA
-		}
-		switch algorithm {
-		case ssh.SigAlgoRSA:
-			return nil, fmt.Errorf("signature algorithm %q is not supported by AWS KMS", algorithm)
-		case ssh.SigAlgoRSASHA2256:
-			hashFunc, signingAlgorithm = crypto.SHA256, kms.SigningAlgorithmSpecRsassaPkcs1V15Sha256
-		case ssh.SigAlgoRSASHA2512:
-			hashFunc, signingAlgorithm = crypto.SHA512, kms.SigningAlgorithmSpecRsassaPkcs1V15Sha512
-		default:
-			return nil, fmt.Errorf("unsupported signature algorithm %q", algorithm)
-		}
-	} else {
-		if algorithm == "" {
-			algorithm = pubKeyType
-		} else if algorithm != s.pubKey.Type() {
-			return nil, fmt.Errorf("unsupported signature algorithm %q for key of type %q", algorithm, pubKeyType)
-		}
-		switch pubKeyType {
-		case ssh.KeyAlgoECDSA256:
-			hashFunc, signingAlgorithm = crypto.SHA256, kms.SigningAlgorithmSpecEcdsaSha256
-		case ssh.KeyAlgoECDSA384:
-			hashFunc, signingAlgorithm = crypto.SHA384, kms.SigningAlgorithmSpecEcdsaSha384
-		case ssh.KeyAlgoECDSA521:
-			hashFunc, signingAlgorithm = crypto.SHA512, kms.SigningAlgorithmSpecEcdsaSha512
-		default:
-			return nil, fmt.Errorf("unsupported key type %q", pubKeyType)
-		}
+	switch algorithm {
+	case ssh.SigAlgoRSA:
+		return nil, fmt.Errorf("signature algorithm %q is not supported by AWS KMS", algorithm)
+	case ssh.SigAlgoRSASHA2256:
+		hashFunc, signingAlgorithm = crypto.SHA256, kms.SigningAlgorithmSpecRsassaPkcs1V15Sha256
+	case ssh.SigAlgoRSASHA2512:
+		hashFunc, signingAlgorithm = crypto.SHA512, kms.SigningAlgorithmSpecRsassaPkcs1V15Sha512
+	case ssh.KeyAlgoECDSA256:
+		hashFunc, signingAlgorithm = crypto.SHA256, kms.SigningAlgorithmSpecEcdsaSha256
+	case ssh.KeyAlgoECDSA384:
+		hashFunc, signingAlgorithm = crypto.SHA384, kms.SigningAlgorithmSpecEcdsaSha384
+	case ssh.KeyAlgoECDSA521:
+		hashFunc, signingAlgorithm = crypto.SHA512, kms.SigningAlgorithmSpecEcdsaSha512
+	default:
+		return nil, fmt.Errorf("unsupported signature algorithm %q", algorithm)
 	}
 
 	h := hashFunc.New()
