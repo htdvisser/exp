@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"unicode"
 
 	"github.com/envoyproxy/protoc-gen-validate/validate"
 	pgs "github.com/lyft/protoc-gen-star"
@@ -121,11 +122,32 @@ type Entity struct {
 	Comment string   `yaml:"comment,omitempty"`
 }
 
+func cleanComments(comments string) string {
+	commentLines := strings.Split(comments, "\n")
+	hasLeadingSpace := true
+	for _, line := range commentLines {
+		if line == "" {
+			continue
+		}
+		if !strings.HasPrefix(line, " ") {
+			hasLeadingSpace = false
+			break
+		}
+	}
+	if !hasLeadingSpace {
+		return strings.TrimRightFunc(comments, unicode.IsSpace)
+	}
+	for i, line := range commentLines {
+		commentLines[i] = strings.TrimPrefix(line, " ")
+	}
+	return strings.TrimRightFunc(strings.Join(commentLines, "\n"), unicode.IsSpace)
+}
+
 func BuildEntity(src pgs.Entity) Entity {
 	entity := Entity{
 		src:     src,
 		Name:    src.Name(),
-		Comment: src.SourceCodeInfo().LeadingComments(),
+		Comment: cleanComments(src.SourceCodeInfo().LeadingComments()),
 	}
 	return entity
 }
