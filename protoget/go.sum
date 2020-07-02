@@ -1,4 +1,4 @@
-htdvisser.dev/exp/clicontext v0.0.0-20191208180355-231e02bfe473 h1:t+mX1pZVlUR/plJgEiK19ykGMc4nuhSp6y4eoEErbZc=
-htdvisser.dev/exp/clicontext v0.0.0-20191208180355-231e02bfe473/go.mod h1:ENk5Zc9tuQJ2QBPCdMg4XSHFuUwnDV1cEdOnva8z5MM=
-htdvisser.dev/exp/flagenv v0.0.0-20191208180355-231e02bfe473 h1:rf8v0coBxVHsWYnkl4jISLsFm8KK/lYQy027P5Vjb7A=
-htdvisser.dev/exp/flagenv v0.0.0-20191208180355-231e02bfe473/go.mod h1:kU0yTkZVPVhVgfbzJTf6XRN+MDG15og2em8lRfOIEMg=
+htdvisser.dev/exp/clicontext v0.0.0-20200615192925-ba29cadbec9f h1:jdP33Cry1gBV0vqdirKNx+IHSCLxGCVl4vYfPa6xfrQ=
+htdvisser.dev/exp/clicontext v0.0.0-20200615192925-ba29cadbec9f/go.mod h1:ENk5Zc9tuQJ2QBPCdMg4XSHFuUwnDV1cEdOnva8z5MM=
+htdvisser.dev/exp/flagenv v0.0.0-20200615192925-ba29cadbec9f h1:rWMFg2aBVePgNOXudvdS8u6ko+C6QsiZ0pgZZLr8rWQ=
+htdvisser.dev/exp/flagenv v0.0.0-20200615192925-ba29cadbec9f/go.mod h1:kU0yTkZVPVhVgfbzJTf6XRN+MDG15og2em8lRfOIEMg=
