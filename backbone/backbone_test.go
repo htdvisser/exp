@@ -7,8 +7,6 @@ import (
 	"os"
 
 	"htdvisser.dev/exp/backbone/server"
-	"htdvisser.dev/exp/backbone/server/opencensus"
-	"htdvisser.dev/exp/backbone/server/prometheus"
 	"htdvisser.dev/exp/backbone/server/recovery"
 	"htdvisser.dev/exp/backbone/server/reflection"
 	"htdvisser.dev/exp/clicontext"
@@ -40,8 +38,6 @@ func Example() {
 
 	server := server.New(config.server)
 
-	opencensus.Register(server)
-	prometheus.Register(server)
 	reflection.Register(server)
 	recovery.Register(server)
 
