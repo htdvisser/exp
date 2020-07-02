@@ -13,9 +13,6 @@ import (
 	"github.com/spf13/pflag"
 	bbserver "htdvisser.dev/exp/backbone/server"
 	"htdvisser.dev/exp/backbone/server/grpc"
-	"htdvisser.dev/exp/backbone/server/jaeger"
-	"htdvisser.dev/exp/backbone/server/opentelemetry"
-	"htdvisser.dev/exp/backbone/server/prometheus"
 	"htdvisser.dev/exp/backbone/server/recovery"
 	"htdvisser.dev/exp/backbone/server/reflection"
 	"htdvisser.dev/exp/clicontext"
@@ -70,13 +67,6 @@ func main() {
 
 	backbone.HTTP.ServeMux.Handle("/api/", http.StripPrefix("/api", backbone.GRPC.Gateway))
 
-	je, err := jaeger.NewExporter()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return
-	}
-	opentelemetry.Register(backbone, opentelemetry.WithSyncer(je))
-	prometheus.Register(backbone)
 	reflection.Register(backbone)
 	recovery.Register(backbone)
 

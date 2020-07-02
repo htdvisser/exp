@@ -4,9 +4,6 @@ metadata:
   name: htdvisser-echo
   labels:
     app: htdvisser-echo
-  annotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '18080'
 spec:
   ports:
   - protocol: TCP
