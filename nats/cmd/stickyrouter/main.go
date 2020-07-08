@@ -22,11 +22,11 @@ import (
 	"github.com/spf13/pflag"
 	"golang.org/x/sync/errgroup"
 	"htdvisser.dev/exp/clicontext"
-	"htdvisser.dev/exp/nats/internal/nats"
-	"htdvisser.dev/exp/nats/internal/redis"
+	"htdvisser.dev/exp/nats"
 	"htdvisser.dev/exp/nats/internal/stickyrouter"
-	"htdvisser.dev/exp/nats/internal/tls"
 	"htdvisser.dev/exp/pflagenv"
+	"htdvisser.dev/exp/redis"
+	"htdvisser.dev/exp/tls"
 )
 
 const bin = "stickyrouter"
