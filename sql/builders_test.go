@@ -88,17 +88,17 @@ func TestBuildInsert(t *testing.T) {
 		{
 			name:   "one column",
 			fields: []string{"id"},
-			expect: `("id") VALUES (?)`,
+			expect: `("id") VALUES ($1)`,
 		},
 		{
 			name:   "two columns",
 			fields: []string{"id", "name"},
-			expect: `("id", "name") VALUES (?, ?)`,
+			expect: `("id", "name") VALUES ($1, $2)`,
 		},
 		{
 			name:   "three columns",
 			fields: []string{"id", "name", "date"},
-			expect: `("id", "name", "date") VALUES (?, ?, ?)`,
+			expect: `("id", "name", "date") VALUES ($1, $2, $3)`,
 		},
 	}
 	for _, tc := range tt {
@@ -124,17 +124,17 @@ func TestBuildUpdate(t *testing.T) {
 		{
 			name:   "one column",
 			fields: []string{"id"},
-			expect: `"id" = ?`,
+			expect: `"id" = $1`,
 		},
 		{
 			name:   "two columns",
 			fields: []string{"id", "name"},
-			expect: `"id" = ?, "name" = ?`,
+			expect: `"id" = $1, "name" = $2`,
 		},
 		{
 			name:   "three columns",
 			fields: []string{"id", "name", "date"},
-			expect: `"id" = ?, "name" = ?, "date" = ?`,
+			expect: `"id" = $1, "name" = $2, "date" = $3`,
 		},
 	}
 	for _, tc := range tt {

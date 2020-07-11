@@ -1,6 +1,9 @@
 package sql
 
-import "strings"
+import (
+	"strconv"
+	"strings"
+)
 
 // BuildSelect builds part of a select statement for the given columns.
 // The table and columns are expected to be safe. DO NOT pass those directly from user input.
@@ -9,8 +12,8 @@ func BuildSelect(table string, columns ...string) string {
 		return ""
 	}
 	n := 2 * (len(columns) - 1) // Separators
-	for i := 0; i < len(columns); i++ {
-		n += 2 + len(columns[i]) // "column"
+	for i := range columns {
+		n += len(columns[i]) + 2 // "column"
 		if table != "" {
 			n += len(table) + 1
 		}
@@ -43,8 +46,14 @@ func BuildInsert(columns ...string) string {
 	}
 	n := 12                         // () VALUES ()
 	n += 2 * 2 * (len(columns) - 1) // Separators on both sides
-	for i := 0; i < len(columns); i++ {
-		n += 2 + len(columns[i]) + 1 // "column" on one side, ? on the other
+	for i := range columns {
+		n += len(columns[i]) + 4 // "column" on one side, $i on the other
+		if i+1 >= 10 {
+			n++
+		}
+		if i+1 >= 100 {
+			n++
+		}
 	}
 	var b strings.Builder
 	b.Grow(n)
@@ -54,9 +63,10 @@ func BuildInsert(columns ...string) string {
 		b.WriteString(`", "`)
 		b.WriteString(s)
 	}
-	b.WriteString(`") VALUES (?`)
-	for i := 0; i < len(columns)-1; i++ {
-		b.WriteString(", ?")
+	b.WriteString(`") VALUES ($1`)
+	for i := range columns[1:] {
+		b.WriteString(", $")
+		b.WriteString(strconv.Itoa(i + 2))
 	}
 	b.WriteByte(')')
 	return b.String()
@@ -70,17 +80,24 @@ func BuildUpdate(columns ...string) string {
 	}
 	n := 2 * (len(columns) - 1) // Separators
 	for i := 0; i < len(columns); i++ {
-		n += 2 + len(columns[i]) + 4 // "column" = ?
+		n += len(columns[i]) + 7 // "column" = $i
+		if i+1 >= 10 {
+			n++
+		}
+		if i+1 >= 100 {
+			n++
+		}
 	}
 	var b strings.Builder
 	b.Grow(n)
 	b.WriteString(`"`)
 	b.WriteString(columns[0])
-	b.WriteString(`" = ?`)
-	for _, s := range columns[1:] {
+	b.WriteString(`" = $1`)
+	for i, s := range columns[1:] {
 		b.WriteString(`, "`)
 		b.WriteString(s)
-		b.WriteString(`" = ?`)
+		b.WriteString(`" = $`)
+		b.WriteString(strconv.Itoa(i + 2))
 	}
 	return b.String()
 }
