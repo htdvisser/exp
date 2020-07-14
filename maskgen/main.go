@@ -22,6 +22,7 @@ var (
 	flags   = pflag.NewFlagSet("maskgen", pflag.ContinueOnError)
 	pkg     = flags.String("pkg", "", "Package name")
 	tagName = flags.String("tag-name", "field", "Name of the struct tag to extract the field name from")
+	setter  = flags.String("setter", "Set", "Name of the method to set fields from another struct")
 	out     = flags.StringP("out", "o", "", "Output file (default is STDOUT)")
 )
 
@@ -76,6 +77,7 @@ func Main(ctx context.Context, args ...string) (err error) {
 	data := Data{
 		Options: Options{
 			PackageName: *pkg,
+			Setter:      *setter,
 		},
 		Package: lpkgs[0],
 	}

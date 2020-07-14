@@ -8,6 +8,7 @@ import (
 
 type Options struct {
 	PackageName string
+	Setter      string
 }
 
 type Field struct {
@@ -89,6 +90,20 @@ func (m {{ .Name }}FieldMask) Fields() []string {
 	{{- end }}
 	return fields
 }
+
+{{- if $.Setter }}
+
+func (dst *{{ .Name }}) Set(src *{{ .Name }}, mask {{ .Name }}FieldMask) {
+	if src == nil {
+		src = &{{ .Name }}{}
+	}
+	{{- range .Fields }}
+	if mask.{{ .Name }} {
+		dst.{{ .Name }} = src.{{ .Name }}
+	}
+	{{- end }}
+}
+{{- end }}
 
 {{- end }}
 `))
