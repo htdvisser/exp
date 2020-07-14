@@ -2,8 +2,10 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"go/format"
 	"go/types"
 	"io"
 	"os"
@@ -12,16 +14,22 @@ import (
 	"github.com/spf13/pflag"
 	"golang.org/x/tools/go/packages"
 	"htdvisser.dev/exp/clicontext"
+	"htdvisser.dev/exp/stringslice"
 )
 
-const usage = `scangen [package] [types...]`
+const usage = `sqlgen [options] [package] [types...]`
 
 var (
-	flags      = pflag.NewFlagSet("scangen", pflag.ContinueOnError)
-	tagName    = flags.String("tag-name", "db", "Name of the struct tag to extract the field name from")
-	methodName = flags.String("method-name", "Values", "Name of the method to generate")
-	pointers   = flags.Bool("pointers", true, "Generate pointers to fields")
-	out        = flags.StringP("out", "o", "", "Output file (default is STDOUT)")
+	flags           = pflag.NewFlagSet("sqlgen", pflag.ContinueOnError)
+	tagName         = flags.String("tag-name", "json", "Name of the struct tag to extract the field name from")
+	fieldMaskSuffix = flags.String("fieldmask-suffix", "FieldMask", "Suffix of the struct that is the field mask")
+	pkg             = flags.String("pkg", "", "Package name")
+	models          = flags.Bool("models", true, "Generate models")
+	settersTo       = flags.String("setters-to", "SetTo", "Name of the method that sets fields to the source struct")
+	settersFrom     = flags.String("setters-from", "SetFrom", "Name of the method that sets fields from the source struct")
+	pointers        = flags.String("pointers", "Pointers", "Name of the method that returns pointers")
+	values          = flags.String("values", "Values", "Name of the method that returns values")
+	out             = flags.StringP("out", "o", "", "Output file (default is STDOUT)")
 )
 
 func main() {
@@ -74,10 +82,17 @@ func Main(ctx context.Context, args ...string) (err error) {
 
 	data := Data{
 		Options: Options{
-			MethodName: *methodName,
-			Pointers:   *pointers,
+			PackageName: *pkg,
+			Models:      *models,
+			SettersTo:   *settersTo,
+			SettersFrom: *settersFrom,
+			Pointers:    *pointers,
+			Values:      *values,
 		},
 		Package: lpkgs[0],
+		Imports: []string{
+			lpkgs[0].PkgPath,
+		},
 	}
 
 	scope := lpkgs[0].Types.Scope()
@@ -98,7 +113,20 @@ func Main(ctx context.Context, args ...string) (err error) {
 			)
 		}
 
-		typeData := Type{Name: typeName}
+		fieldMaskObj := scope.Lookup(typeName + *fieldMaskSuffix)
+		if fieldMaskObj == nil {
+			return fmt.Errorf(
+				"could not find type %q in package %q",
+				typeName, data.Package.Name,
+			)
+		}
+
+		typeData := Type{
+			Name:              obj.Name(),
+			FullName:          obj.Pkg().Name() + "." + obj.Name(),
+			FieldMaskName:     fieldMaskObj.Name(),
+			FieldMaskFullName: fieldMaskObj.Pkg().Name() + "." + fieldMaskObj.Name(),
+		}
 
 		for i := 0; i < structObj.NumFields(); i++ {
 			field := structObj.Field(i)
@@ -115,6 +143,47 @@ func Main(ctx context.Context, args ...string) (err error) {
 
 			fieldData := Field{Name: field.Name()}
 
+			fieldType := field.Type()
+			if ptr, ok := fieldType.(*types.Pointer); ok {
+				fieldData.Type = "*"
+				fieldType = ptr.Elem()
+			}
+			switch fieldType := fieldType.(type) {
+			case *types.Basic:
+				fieldData.Type += fieldType.String()
+			case *types.Named:
+				data.Imports = append(data.Imports, fieldType.Obj().Pkg().Path())
+				fieldData.Type += fieldType.Obj().Pkg().Name() + "." + fieldType.Obj().Name()
+			default:
+				fieldData.Type = fmt.Sprintf("%#v", fieldType)
+			}
+			switch fieldData.Type {
+			case "*bool":
+				data.Imports = append(data.Imports, "database/sql")
+				fieldData.Type = "sql.NullBool"
+				fieldData.NullType = "Bool"
+			case "*float64":
+				data.Imports = append(data.Imports, "database/sql")
+				fieldData.Type = "sql.NullFloat64"
+				fieldData.NullType = "Float64"
+			case "*int32":
+				data.Imports = append(data.Imports, "database/sql")
+				fieldData.Type = "sql.NullInt32"
+				fieldData.NullType = "Int32"
+			case "*int64":
+				data.Imports = append(data.Imports, "database/sql")
+				fieldData.Type = "sql.NullInt64"
+				fieldData.NullType = "Int64"
+			case "*string":
+				data.Imports = append(data.Imports, "database/sql")
+				fieldData.Type = "sql.NullString"
+				fieldData.NullType = "String"
+			case "*time.Time":
+				data.Imports = append(data.Imports, "database/sql")
+				fieldData.Type = "sql.NullTime"
+				fieldData.NullType = "Time"
+			}
+
 			if tag, err := tags.Get(*tagName); err == nil {
 				if tag.Name == "-" {
 					continue
@@ -126,6 +195,18 @@ func Main(ctx context.Context, args ...string) (err error) {
 		}
 
 		data.Types = append(data.Types, typeData)
+	}
+
+	data.Imports = stringslice.Filter(data.Imports, stringslice.Unique(len(data.Imports)))
+
+	var buf bytes.Buffer
+	if err = fileTemplate.Execute(&buf, data); err != nil {
+		return err
+	}
+
+	source, err := format.Source(buf.Bytes())
+	if err != nil {
+		return err
 	}
 
 	var w io.Writer = os.Stdout
@@ -142,5 +223,6 @@ func Main(ctx context.Context, args ...string) (err error) {
 		w = f
 	}
 
-	return fileTemplate.Execute(w, data)
+	_, err = w.Write(source)
+	return err
 }
