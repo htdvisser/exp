@@ -45,7 +45,7 @@ type {{ .Name }}FieldMask struct {
 	{{- end}}
 }
 
-func (m *{{ .Name }}FieldMask) set(selected bool, fields ...string) ( error) {
+func (m *{{ .Name }}FieldMask) set(selected bool, fields ...string) error {
 	for _, field := range fields {
 		switch field {
 		{{- range .Fields }}
@@ -59,14 +59,30 @@ func (m *{{ .Name }}FieldMask) set(selected bool, fields ...string) ( error) {
 	return nil
 }
 
+func (m *{{ .Name }}FieldMask) setAll(selected bool) {
+	{{- range .Fields }}
+	m.{{ .Name }} = selected
+	{{- end }}
+}
+
 // Select selects the given fields in the field mask.
-func (m *{{ .Name }}FieldMask) Select(fields ...string) ( error) {
+func (m *{{ .Name }}FieldMask) Select(fields ...string) error {
 	return m.set(true, fields...)
 }
 
+// SelectAll selects all fields in the field mask.
+func (m *{{ .Name }}FieldMask) SelectAll() {
+	m.setAll(true)
+}
+
 // Unselect unselects the given fields in the field mask.
-func (m *{{ .Name }}FieldMask) Unselect(fields ...string) ( error) {
+func (m *{{ .Name }}FieldMask) Unselect(fields ...string) error {
 	return m.set(false, fields...)
+}
+
+// UnselectAll unselects all fields in the field mask.
+func (m *{{ .Name }}FieldMask) UnselectAll() {
+	m.setAll(false)
 }
 
 // Len returns the number of selected fields.
