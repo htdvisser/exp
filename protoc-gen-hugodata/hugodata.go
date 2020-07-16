@@ -144,10 +144,14 @@ func cleanComments(comments string) string {
 }
 
 func BuildEntity(src pgs.Entity) Entity {
+	comments := src.SourceCodeInfo().LeadingComments()
+	if comments == "" {
+		comments = src.SourceCodeInfo().TrailingComments()
+	}
 	entity := Entity{
 		src:     src,
 		Name:    src.Name(),
-		Comment: cleanComments(src.SourceCodeInfo().LeadingComments()),
+		Comment: cleanComments(comments),
 	}
 	return entity
 }
