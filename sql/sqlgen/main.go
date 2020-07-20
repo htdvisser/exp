@@ -30,6 +30,7 @@ var (
 	modelSuffix     = flags.String("model-suffix", "", "Suffix of the model to generate")
 	setterTo        = flags.String("setter-to", "SetTo", "Name of the method that sets fields to the source struct")
 	setterFrom      = flags.String("setter-from", "SetFrom", "Name of the method that sets fields from the source struct")
+	columns         = flags.String("columns", "Columns", "Name of the method that returns columns")
 	pointers        = flags.String("pointers", "Pointers", "Name of the method that returns pointers")
 	values          = flags.String("values", "Values", "Name of the method that returns values")
 	crud            = flags.Bool("crud", true, "Generate CRUD functions")
@@ -92,6 +93,7 @@ func Main(ctx context.Context, args ...string) (err error) {
 			ModelSuffix: *modelSuffix,
 			SetterTo:    *setterTo,
 			SetterFrom:  *setterFrom,
+			Columns:     *columns,
 			Pointers:    *pointers,
 			Values:      *values,
 			CRUD:        *crud,

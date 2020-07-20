@@ -33,6 +33,7 @@ type Field struct {
 	Name     string
 	Tag      string
 	Type     Type
+	Ref      *Field
 	NullType *NullType
 }
 
@@ -134,6 +135,42 @@ func BuildStructType(pkg *packages.Package, typeName string) (StructType, error)
 			field.Type.Name = fieldType.String()
 		case *types.Named:
 			field.Type.SetTo(fieldType.Obj())
+			if tag, err := tags.Get("ref"); err == nil && tag.Name != "-" {
+				structObj := fieldType.Underlying().(*types.Struct)
+				for i := 0; i < structObj.NumFields(); i++ {
+					fieldObj := structObj.Field(i)
+					if !fieldObj.Exported() || fieldObj.Name() != tag.Name {
+						continue
+					}
+					field.Ref = &Field{
+						Name: fieldObj.Name(),
+					}
+					tags, err := structtag.Parse(structObj.Tag(i))
+					if err != nil {
+						return StructType{}, fmt.Errorf(
+							"invalid struct tag on field %q of type %q: %w",
+							fieldObj.Name(), typeName, err,
+						)
+					}
+					if tag, err := tags.Get(*tagName); err == nil {
+						if tag.Name == "-" {
+							continue
+						}
+						field.Ref.Tag = tag.Name
+					}
+					fieldType := fieldObj.Type()
+					if ptr, ok := fieldType.(*types.Pointer); ok {
+						field.Ref.Type.Pointer = true
+						fieldType = ptr.Elem()
+					}
+					switch fieldType := fieldType.(type) {
+					case *types.Basic:
+						field.Ref.Type.Name = fieldType.String()
+					case *types.Named:
+						field.Ref.Type.SetTo(fieldType.Obj())
+					}
+				}
+			}
 		default:
 			return StructType{}, fmt.Errorf("field of unsupported type %q", fieldType)
 		}
