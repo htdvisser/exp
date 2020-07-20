@@ -48,7 +48,7 @@ import (
 // {{ .EntityType.Name }}{{ $.ModelSuffix }} is the generated model for {{ .EntityType.FullName }}.
 type {{ .EntityType.Name }}{{ $.ModelSuffix }} struct {
 	{{- range .EntityType.Fields }}
-	{{ .Name }}{{ with .Ref }}{{ .Name }}{{ end }} {{ if .NullType }}{{ .NullType.FullName }}{{ else if .Ref }}{{ .Ref.Type.FullName }}{{ else }}{{ .Type.FullName }}{{ end }}
+	{{ .Name }}{{ with .Ref }}{{ .Name }}{{ end }} {{ if .NullType }}{{ .NullType.FullName }}{{ else if .Ref }}{{ .Ref.Type.FullName }}{{ else }}{{ if .Type.Array }}[]{{ end }}{{ .Type.FullName }}{{ end }}
 	{{- end }}
 }
 
@@ -143,7 +143,13 @@ func (m *{{ .EntityType.Name }}{{ $.ModelSuffix }}) {{ $.Pointers }}(mask {{ .Fi
 	}
 	{{- else }}
 	if mask.{{ .Name }} {
-		pointers = append(pointers, &m.{{ .Name }})
+		pointers = append(pointers,
+		{{- if .Type.Array -}}
+		{{ .Type.Name }}Array(&m.{{ .Name }})
+		{{- else -}}
+		&m.{{ .Name }}
+		{{- end -}}
+		)
 	}
 	{{- end }}
 	{{- end }}
@@ -164,7 +170,13 @@ func (m *{{ .EntityType.Name }}{{ $.ModelSuffix }}) {{ $.Values }}(mask {{ .Fiel
 	}
 	{{- else }}
 	if mask.{{ .Name }} {
-		values = append(values, m.{{ .Name }})
+		values = append(values,
+		{{- if .Type.Array -}}
+		{{ .Type.Name }}Array(&m.{{ .Name }})
+		{{- else -}}
+		m.{{ .Name }}
+		{{- end -}}
+		)
 	}
 	{{- end }}
 	{{- end }}

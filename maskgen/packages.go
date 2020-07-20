@@ -123,6 +123,12 @@ func BuildStructType(pkg *packages.Package, typeName string) (StructType, error)
 		switch fieldType := fieldType.(type) {
 		case *types.Basic:
 			field.Type.Name = fieldType.String()
+		case *types.Slice:
+			if _, ok := fieldType.Elem().(*types.Basic); ok {
+				field.Type.Name = fieldType.String()
+			} else {
+				return StructType{}, fmt.Errorf("field of unsupported type %q", fieldType)
+			}
 		case *types.Named:
 			field.Type.SetTo(fieldType.Obj())
 		default:

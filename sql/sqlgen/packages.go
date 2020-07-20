@@ -13,6 +13,7 @@ type Type struct {
 	PackagePath string
 	Package     string
 	Pointer     bool
+	Array       bool
 	Name        string
 }
 
@@ -133,6 +134,13 @@ func BuildStructType(pkg *packages.Package, typeName string) (StructType, error)
 		switch fieldType := fieldType.(type) {
 		case *types.Basic:
 			field.Type.Name = fieldType.String()
+		case *types.Slice:
+			if elem, ok := fieldType.Elem().(*types.Basic); ok {
+				field.Type.Array = true
+				field.Type.Name = elem.String()
+			} else {
+				return StructType{}, fmt.Errorf("field of unsupported type %q", fieldType)
+			}
 		case *types.Named:
 			field.Type.SetTo(fieldType.Obj())
 			if tag, err := tags.Get("ref"); err == nil && tag.Name != "-" {
