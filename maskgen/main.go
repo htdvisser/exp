@@ -6,14 +6,14 @@ import (
 	"context"
 	"fmt"
 	"go/format"
-	"go/types"
 	"io"
 	"os"
+	"sort"
 
-	"github.com/fatih/structtag"
 	"github.com/spf13/pflag"
 	"golang.org/x/tools/go/packages"
 	"htdvisser.dev/exp/clicontext"
+	"htdvisser.dev/exp/stringslice"
 )
 
 const usage = `maskgen [options] [package] [types...]`
@@ -79,67 +79,33 @@ func Main(ctx context.Context, args ...string) (err error) {
 			PackageName: *pkg,
 			Setter:      *setter,
 		},
-		Package: lpkgs[0],
 	}
 
-	scope := lpkgs[0].Types.Scope()
+	if data.Options.PackageName == "" {
+		data.Options.PackageName = lpkgs[0].Name
+	}
 
 	for _, typeName := range args[1:] {
-		obj := scope.Lookup(typeName)
-		if obj == nil {
-			return fmt.Errorf(
-				"could not find type %q in package %q",
-				typeName, data.Package.Name,
-			)
+		structType, err := BuildStructType(lpkgs[0], typeName)
+		if err != nil {
+			return err
 		}
-		structObj, ok := obj.Type().Underlying().(*types.Struct)
-		if !ok {
-			return fmt.Errorf(
-				"type %q is not a struct",
-				typeName,
-			)
-		}
-
-		typeData := Type{
-			FullName: obj.Pkg().Name() + "." + obj.Name(),
-			Name:     typeName,
-		}
-
-		for i := 0; i < structObj.NumFields(); i++ {
-			field := structObj.Field(i)
-			if !field.Exported() {
-				continue
-			}
-			tags, err := structtag.Parse(structObj.Tag(i))
-			if err != nil {
-				return fmt.Errorf(
-					"invalid struct tag on field %q of type %q: %w",
-					field.Name(), typeName, err,
-				)
-			}
-			fieldData := Field{
-				Name:  field.Name(),
-				Field: field.Name(),
-			}
-			if tag, err := tags.Get(*tagName); err == nil {
-				if tag.Name == "-" {
-					continue
-				}
-				fieldData.Field = tag.Name
-			}
-
-			typeData.Fields = append(typeData.Fields, fieldData)
-		}
-
-		data.Types = append(data.Types, typeData)
+		data.Types = append(data.Types, structType)
 	}
+
+	uniq := stringslice.Unique(len(data.Imports))
+	uniq(data.Options.PackageName)
+	data.Imports = stringslice.Filter(data.Imports, uniq)
+	sort.Strings(data.Imports)
 
 	var buf bytes.Buffer
 	if err = fileTemplate.Execute(&buf, data); err != nil {
 		return err
 	}
 
-	source, err := format.Source(buf.Bytes())
+	source := buf.Bytes()
+
+	source, err = format.Source(source)
 	if err != nil {
 		return err
 	}
