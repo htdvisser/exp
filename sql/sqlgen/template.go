@@ -292,7 +292,7 @@ func update{{ .EntityType.Name }}(ctx context.Context, db hsql.DB, e *{{ .Entity
 	fields, values := ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask), model.Values(mask)
 	query := fmt.Sprintf(
 		"UPDATE \"{{ $.Table }}\" SET %s WHERE \"{{ .IDField.Tag }}\" = $%d",
-		hsql.BuildUpdate(fields...), len(fields),
+		hsql.BuildUpdate(fields...), len(fields)+1,
 	)
 	_, err := db.ExecContext(ctx, query, append(values, e.{{ .IDField.Name }})...)
 	return err
