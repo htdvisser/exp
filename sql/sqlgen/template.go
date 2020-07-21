@@ -247,10 +247,15 @@ func get{{ .EntityType.Name }}By{{ .IDField.Name }}(ctx context.Context, db hsql
 
 func get{{ $.Plural }}By{{ .IDField.Name }}(ctx context.Context, db hsql.DB, {{ .IDField.Tag }}s []{{ .IDField.Type.FullName }}, mask {{ .FieldMaskType.FullName }}) ([]*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
-		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"{{ .IDField.Tag }}\" IN ($1)",
+		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"{{ .IDField.Tag }}\" IN (%s)",
 		hsql.BuildSelect("", ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
+		hsql.BuildPlaceholders(1, len({{ .IDField.Tag }}s)),
 	)
-	rows, err := db.QueryContext(ctx, query, {{ .IDField.Tag }}s)
+	args := make([]interface{}, len({{ .IDField.Tag }}s))
+	for i, {{ .IDField.Tag }} := range {{ .IDField.Tag }}s {
+		args[i] = {{ .IDField.Tag }}
+	}
+	rows, err := db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
