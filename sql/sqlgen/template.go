@@ -60,7 +60,7 @@ type {{ .EntityType.Name }}{{ $.ModelSuffix }} struct {
 func (m *{{ .EntityType.Name }}{{ $.ModelSuffix }}) {{ $.SetterTo }}(e *{{ .EntityType.FullName }}, mask {{ .FieldMaskType.FullName }}) {
 	{{- range .EntityType.Fields }}
 	{{- if .Ref }}
-	if mask.{{ .Name }}.{{ .Ref.Name }} {
+	if mask.{{ .Name }} != nil && mask.{{ .Name }}.{{ .Ref.Name }} {
 		e.{{ .Name }} = &{{ .Type.FullName }}{
 			{{ .Ref.Name }}: m.{{ .Name }}{{ .Ref.Name }},
 		}
@@ -89,7 +89,7 @@ func (m *{{ .EntityType.Name }}{{ $.ModelSuffix }}) {{ $.SetterTo }}(e *{{ .Enti
 func (m *{{ .EntityType.Name }}{{ $.ModelSuffix }}) {{ $.SetterFrom }}(e *{{ .EntityType.FullName }}, mask {{ .FieldMaskType.FullName }}) {
 	{{- range .EntityType.Fields }}
 	{{- if .Ref }}
-	if mask.{{ .Name }}.{{ .Ref.Name }} {
+	if mask.{{ .Name }} != nil && mask.{{ .Name }}.{{ .Ref.Name }} {
 		m.{{ .Name }}{{ .Ref.Name }} = e.{{ .Name }}.{{ .Ref.Name }}
 	}
 	{{- else }}
@@ -117,7 +117,7 @@ func (m *{{ .EntityType.Name }}{{ $.ModelSuffix }}) {{ $.Columns }}(mask {{ .Fie
 	columns := make([]string, 0, mask.Len())
 	{{- range .EntityType.Fields }}
 	{{- if .Ref }}
-	if mask.{{ .Name }}.{{ .Ref.Name }} {
+	if mask.{{ .Name }} != nil && mask.{{ .Name }}.{{ .Ref.Name }} {
 		columns = append(columns, "{{ .Tag }}_{{ .Ref.Tag }}")
 	}
 	{{- else }}
@@ -138,7 +138,7 @@ func (m *{{ .EntityType.Name }}{{ $.ModelSuffix }}) {{ $.Pointers }}(mask {{ .Fi
 	pointers := make([]interface{}, 0, mask.Len())
 	{{- range .EntityType.Fields }}
 	{{- if .Ref }}
-	if mask.{{ .Name }}.{{ .Ref.Name }} {
+	if mask.{{ .Name }} != nil && mask.{{ .Name }}.{{ .Ref.Name }} {
 		pointers = append(pointers, &m.{{ .Name }}{{ .Ref.Name }})
 	}
 	{{- else }}
@@ -165,7 +165,7 @@ func (m *{{ .EntityType.Name }}{{ $.ModelSuffix }}) {{ $.Values }}(mask {{ .Fiel
 	values := make([]interface{}, 0, mask.Len())
 	{{- range .EntityType.Fields }}
 	{{- if .Ref }}
-	if mask.{{ .Name }}.{{ .Ref.Name }} {
+	if mask.{{ .Name }} != nil && mask.{{ .Name }}.{{ .Ref.Name }} {
 		values = append(values, m.{{ .Name }}{{ .Ref.Name }})
 	}
 	{{- else }}
