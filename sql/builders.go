@@ -101,3 +101,30 @@ func BuildUpdate(columns ...string) string {
 	}
 	return b.String()
 }
+
+// BuildPlaceholders builds placeholders
+func BuildPlaceholders(start, end int) string {
+	var n int
+	for i := start; i <= end; i++ {
+		if i > start {
+			n += 2
+		}
+		n += 2
+		if i >= 10 {
+			n++
+		}
+		if i >= 100 {
+			n++
+		}
+	}
+	var b strings.Builder
+	b.Grow(n)
+	for i := start; i < end+1; i++ {
+		if i > start {
+			b.WriteString(", ")
+		}
+		b.WriteString(`$`)
+		b.WriteString(strconv.Itoa(i))
+	}
+	return b.String()
+}

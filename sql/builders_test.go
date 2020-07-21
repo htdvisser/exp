@@ -145,3 +145,36 @@ func TestBuildUpdate(t *testing.T) {
 		})
 	}
 }
+
+func TestBuildPlaceholders(t *testing.T) {
+	tt := []struct {
+		name   string
+		start  int
+		end    int
+		expect string
+	}{
+		{
+			name:   "zero",
+			expect: "$0",
+		},
+		{
+			name:   "1 2 3",
+			start:  1,
+			end:    3,
+			expect: `$1, $2, $3`,
+		},
+		{
+			name:   "99 100 101",
+			start:  99,
+			end:    101,
+			expect: `$99, $100, $101`,
+		},
+	}
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := BuildPlaceholders(tc.start, tc.end); got != tc.expect {
+				t.Errorf("Expected %q, got %q", tc.expect, got)
+			}
+		})
+	}
+}
