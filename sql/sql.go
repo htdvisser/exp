@@ -6,11 +6,17 @@ import (
 	"database/sql"
 )
 
-// DB is a minimal interface around *sql.DB.
+// DB is a minimal interface that is implemented by both *sql.DB and *sql.Tx.
 type DB interface {
 	ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
 	PrepareContext(ctx context.Context, query string) (*sql.Stmt, error)
 	QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error)
+}
+
+// TxDB extends DB with transactions..
+type TxDB interface {
+	DB
+	BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error)
 }
 
 // Row is a minimal interface around *sql.Row.
