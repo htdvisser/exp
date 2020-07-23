@@ -38,6 +38,14 @@ func BuildSelect(table string, columns ...string) string {
 	return b.String()
 }
 
+func arglen(i int) (n int) {
+	n = 1
+	for e := i; e >= 10; e /= 10 {
+		n++
+	}
+	return n
+}
+
 // BuildInsert builds part of an insert statement for the given columns.
 // The columns are expected to be safe. DO NOT pass those directly from user input.
 func BuildInsert(columns ...string) string {
@@ -47,13 +55,7 @@ func BuildInsert(columns ...string) string {
 	n := 12                         // () VALUES ()
 	n += 2 * 2 * (len(columns) - 1) // Separators on both sides
 	for i := range columns {
-		n += len(columns[i]) + 4 // "column" on one side, $i on the other
-		if i+1 >= 10 {
-			n++
-		}
-		if i+1 >= 100 {
-			n++
-		}
+		n += len(columns[i]) + 3 + arglen(i+1) // "column" on one side, $i on the other
 	}
 	var b strings.Builder
 	b.Grow(n)
@@ -80,13 +82,7 @@ func BuildUpdate(columns ...string) string {
 	}
 	n := 2 * (len(columns) - 1) // Separators
 	for i := 0; i < len(columns); i++ {
-		n += len(columns[i]) + 7 // "column" = $i
-		if i+1 >= 10 {
-			n++
-		}
-		if i+1 >= 100 {
-			n++
-		}
+		n += len(columns[i]) + 6 + arglen(i+1) // "column" = $i
 	}
 	var b strings.Builder
 	b.Grow(n)
@@ -109,13 +105,7 @@ func BuildPlaceholders(start, end int) string {
 		if i > start {
 			n += 2
 		}
-		n += 2
-		if i >= 10 {
-			n++
-		}
-		if i >= 100 {
-			n++
-		}
+		n += 1 + arglen(i)
 	}
 	var b strings.Builder
 	b.Grow(n)
