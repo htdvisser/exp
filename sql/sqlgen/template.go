@@ -230,11 +230,16 @@ func create{{ .EntityType.Name }}(ctx context.Context, db hsql.DB, e *{{ .Entity
 }
 
 func get{{ .EntityType.Name }}By{{ .IDField.Name }}(ctx context.Context, db hsql.DB, {{ .IDField.Tag }} {{ .IDField.Type.FullName }}, mask {{ .FieldMaskType.FullName }}) (*{{ .EntityType.FullName }}, error) {
+	return get{{ .EntityType.Name }}Where(ctx, db, "{{ .IDField.Tag }}", {{ .IDField.Tag }}, mask)
+}
+
+func get{{ .EntityType.Name }}Where(ctx context.Context, db hsql.DB, column string, value interface{}, mask {{ .FieldMaskType.FullName }}) (*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
-		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"{{ .IDField.Tag }}\" = $1",
+		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"%s\" = $1 LIMIT 1",
 		hsql.BuildSelect("", ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
+		column,
 	)
-	rows, err := db.QueryContext(ctx, query, {{ .IDField.Tag }})
+	rows, err := db.QueryContext(ctx, query, value)
 	if err != nil {
 		return nil, err
 	}
@@ -279,12 +284,45 @@ func count{{ $.Plural }}(ctx context.Context, db hsql.DB) (uint64, error) {
 	return count, nil
 }
 
+func count{{ $.Plural }}Where(ctx context.Context, db hsql.DB, column string, value interface{}) (uint64, error) {
+	query := fmt.Sprintf(
+		"SELECT COUNT(*) FROM \"{{ $.Table }}\" WHERE \"%s\" = $1",
+		column,
+	)
+	rows, err := db.QueryContext(ctx, query, value)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+	if !rows.Next() {
+		return 0, sql.ErrNoRows
+	}
+	var count uint64
+	if err = rows.Scan(&count); err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 func list{{ $.Plural }}(ctx context.Context, db hsql.DB, mask {{ .FieldMaskType.FullName }}, orderBy string, limit, offset uint) ([]*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
 		"SELECT %s FROM \"{{ $.Table }}\" ORDER BY $1 LIMIT $2 OFFSET $3",
 		hsql.BuildSelect("", ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
 	)
 	rows, err := db.QueryContext(ctx, query, orderBy, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	return scan{{ $.Plural }}(rows, mask)
+}
+
+func list{{ $.Plural }}Where(ctx context.Context, db hsql.DB, column string, value interface{}, mask {{ .FieldMaskType.FullName }}, orderBy string, limit, offset uint) ([]*{{ .EntityType.FullName }}, error) {
+	query := fmt.Sprintf(
+		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"%s\" = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
+		hsql.BuildSelect("", ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
+		column,
+	)
+	rows, err := db.QueryContext(ctx, query, value, orderBy, limit, offset)
 	if err != nil {
 		return nil, err
 	}
