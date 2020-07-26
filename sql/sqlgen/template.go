@@ -8,6 +8,7 @@ type Options struct {
 	ModelSuffix string
 	SetterTo    string
 	SetterFrom  string
+	Dialect     string
 	Columns     string
 	Pointers    string
 	Values      string
@@ -223,7 +224,7 @@ func create{{ .EntityType.Name }}(ctx context.Context, db hsql.DB, e *{{ .Entity
 	fields, values := ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask), model.Values(mask)
 	query := fmt.Sprintf(
 		"INSERT INTO \"{{ $.Table }}\" %s",
-		hsql.BuildInsert(fields...),
+		hsql.{{ $.Dialect }}.BuildInsert(fields...),
 	)
 	_, err := db.ExecContext(ctx, query, values...)
 	return err
@@ -236,7 +237,7 @@ func get{{ .EntityType.Name }}By{{ .IDField.Name }}(ctx context.Context, db hsql
 func get{{ .EntityType.Name }}Where(ctx context.Context, db hsql.DB, column string, value interface{}, mask {{ .FieldMaskType.FullName }}) (*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
 		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"%s\" = $1 LIMIT 1",
-		hsql.BuildSelect("", ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
+		hsql.{{ $.Dialect }}.BuildSelect(((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
 		column,
 	)
 	rows, err := db.QueryContext(ctx, query, value)
@@ -253,8 +254,8 @@ func get{{ .EntityType.Name }}Where(ctx context.Context, db hsql.DB, column stri
 func get{{ $.Plural }}By{{ .IDField.Name }}(ctx context.Context, db hsql.DB, {{ .IDField.Tag }}s []{{ .IDField.Type.FullName }}, mask {{ .FieldMaskType.FullName }}) ([]*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
 		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"{{ .IDField.Tag }}\" IN (%s)",
-		hsql.BuildSelect("", ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
-		hsql.BuildPlaceholders(1, len({{ .IDField.Tag }}s)),
+		hsql.{{ $.Dialect }}.BuildSelect(((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
+		hsql.{{ $.Dialect }}.BuildPlaceholders(1, len({{ .IDField.Tag }}s)),
 	)
 	args := make([]interface{}, len({{ .IDField.Tag }}s))
 	for i, {{ .IDField.Tag }} := range {{ .IDField.Tag }}s {
@@ -306,10 +307,11 @@ func count{{ $.Plural }}Where(ctx context.Context, db hsql.DB, column string, va
 
 func list{{ $.Plural }}(ctx context.Context, db hsql.DB, mask {{ .FieldMaskType.FullName }}, orderBy string, limit, offset uint) ([]*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
-		"SELECT %s FROM \"{{ $.Table }}\" ORDER BY $1 LIMIT $2 OFFSET $3",
-		hsql.BuildSelect("", ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
+		"SELECT %s FROM \"{{ $.Table }}\" ORDER BY \"%s\" LIMIT $1 OFFSET $2",
+		hsql.{{ $.Dialect }}.BuildSelect(((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
+		orderBy,
 	)
-	rows, err := db.QueryContext(ctx, query, orderBy, limit, offset)
+	rows, err := db.QueryContext(ctx, query, limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -318,11 +320,12 @@ func list{{ $.Plural }}(ctx context.Context, db hsql.DB, mask {{ .FieldMaskType.
 
 func list{{ $.Plural }}Where(ctx context.Context, db hsql.DB, column string, value interface{}, mask {{ .FieldMaskType.FullName }}, orderBy string, limit, offset uint) ([]*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
-		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"%s\" = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
-		hsql.BuildSelect("", ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
+		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"%s\" = $1 ORDER BY \"%s\" LIMIT $2 OFFSET $3",
+		hsql.{{ $.Dialect }}.BuildSelect(((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask)...),
 		column,
+		orderBy,
 	)
-	rows, err := db.QueryContext(ctx, query, value, orderBy, limit, offset)
+	rows, err := db.QueryContext(ctx, query, value, limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -335,7 +338,7 @@ func update{{ .EntityType.Name }}(ctx context.Context, db hsql.DB, e *{{ .Entity
 	fields, values := ((*{{ .EntityType.Name }})(nil)).{{ $.Columns }}(mask), model.Values(mask)
 	query := fmt.Sprintf(
 		"UPDATE \"{{ $.Table }}\" SET %s WHERE \"{{ .IDField.Tag }}\" = $%d",
-		hsql.BuildUpdate(fields...), len(fields)+1,
+		hsql.{{ $.Dialect }}.BuildUpdate(fields...), len(fields)+1,
 	)
 	_, err := db.ExecContext(ctx, query, append(values, e.{{ .IDField.Name }})...)
 	return err
