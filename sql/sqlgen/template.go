@@ -188,6 +188,7 @@ func (m *{{ .EntityType.Name }}{{ $.ModelSuffix }}) {{ $.Values }}(mask {{ .Fiel
 
 {{- if $.CRUD }}
 
+// scan{{ .EntityType.Name }} scans a row with the masked fields into a {{ .EntityType.Name }}.
 func scan{{ .EntityType.Name }}(row hsql.Row, mask {{ .FieldMaskType.FullName }}) (*{{ .EntityType.FullName }}, error) {
 	var model {{ .EntityType.Name }}{{ $.ModelSuffix }}
 	pointers := model.Pointers(mask)
@@ -199,6 +200,7 @@ func scan{{ .EntityType.Name }}(row hsql.Row, mask {{ .FieldMaskType.FullName }}
 	return &res, nil
 }
 
+// scan{{ $.Plural }} scans multiple rows with the masked fields into a slice of {{ $.Plural }}.
 func scan{{ $.Plural }}(rows hsql.Rows, mask {{ .FieldMaskType.FullName }}) ([]*{{ .EntityType.FullName }}, error) {
 	var model {{ .EntityType.Name }}{{ $.ModelSuffix }}
 	pointers := model.Pointers(mask)
@@ -218,6 +220,7 @@ func scan{{ $.Plural }}(rows hsql.Rows, mask {{ .FieldMaskType.FullName }}) ([]*
 	return res, nil
 }
 
+// create{{ .EntityType.Name }} creates the {{ .EntityType.Name }}.
 func create{{ .EntityType.Name }}(ctx context.Context, db hsql.DB, e *{{ .EntityType.FullName }}, mask {{ .FieldMaskType.FullName }}) error {
 	var model {{ .EntityType.Name }}{{ $.ModelSuffix }}
 	model.{{ $.SetterFrom }}(e, mask)
@@ -230,10 +233,13 @@ func create{{ .EntityType.Name }}(ctx context.Context, db hsql.DB, e *{{ .Entity
 	return err
 }
 
+// get{{ .EntityType.Name }}By{{ .IDField.Name }} gets the {{ .EntityType.Name }} by {{ .IDField.Name }}.
 func get{{ .EntityType.Name }}By{{ .IDField.Name }}(ctx context.Context, db hsql.DB, {{ .IDField.Tag }} {{ .IDField.Type.FullName }}, mask {{ .FieldMaskType.FullName }}) (*{{ .EntityType.FullName }}, error) {
 	return get{{ .EntityType.Name }}Where(ctx, db, "{{ .IDField.Tag }}", {{ .IDField.Tag }}, mask)
 }
 
+// get{{ .EntityType.Name }}Where gets the {{ .EntityType.Name }} where column equals value.
+// The column is expected to be safe. DO NOT pass it directly from user input.
 func get{{ .EntityType.Name }}Where(ctx context.Context, db hsql.DB, column string, value interface{}, mask {{ .FieldMaskType.FullName }}) (*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
 		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"%s\" = $1 LIMIT 1",
@@ -251,6 +257,7 @@ func get{{ .EntityType.Name }}Where(ctx context.Context, db hsql.DB, column stri
 	return scan{{ .EntityType.Name }}{{ $.ModelSuffix }}(rows, mask)
 }
 
+// get{{ $.Plural }}By{{ .IDField.Name }} gets multiple {{ $.Plural }} by their {{ .IDField.Name }}s.
 func get{{ $.Plural }}By{{ .IDField.Name }}(ctx context.Context, db hsql.DB, {{ .IDField.Tag }}s []{{ .IDField.Type.FullName }}, mask {{ .FieldMaskType.FullName }}) ([]*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
 		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"{{ .IDField.Tag }}\" IN (%s)",
@@ -268,6 +275,7 @@ func get{{ $.Plural }}By{{ .IDField.Name }}(ctx context.Context, db hsql.DB, {{ 
 	return scan{{ $.Plural }}(rows, mask)
 }
 
+// count{{ $.Plural }}Where counts all {{ $.Plural }} in the database.
 func count{{ $.Plural }}(ctx context.Context, db hsql.DB) (uint64, error) {
 	query := "SELECT COUNT(*) FROM \"{{ $.Table }}\""
 	rows, err := db.QueryContext(ctx, query)
@@ -285,6 +293,8 @@ func count{{ $.Plural }}(ctx context.Context, db hsql.DB) (uint64, error) {
 	return count, nil
 }
 
+// count{{ $.Plural }}Where counts {{ $.Plural }} where column equals value.
+// The column is expected to be safe. DO NOT pass it directly from user input.
 func count{{ $.Plural }}Where(ctx context.Context, db hsql.DB, column string, value interface{}) (uint64, error) {
 	query := fmt.Sprintf(
 		"SELECT COUNT(*) FROM \"{{ $.Table }}\" WHERE \"%s\" = $1",
@@ -305,6 +315,8 @@ func count{{ $.Plural }}Where(ctx context.Context, db hsql.DB, column string, va
 	return count, nil
 }
 
+// list{{ $.Plural }} lists all {{ $.Plural }} in the database.
+// The orderBy is expected to be safe. DO NOT pass it directly from user input.
 func list{{ $.Plural }}(ctx context.Context, db hsql.DB, mask {{ .FieldMaskType.FullName }}, orderBy string, limit, offset uint) ([]*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
 		"SELECT %s FROM \"{{ $.Table }}\" ORDER BY \"%s\" LIMIT $1 OFFSET $2",
@@ -318,6 +330,8 @@ func list{{ $.Plural }}(ctx context.Context, db hsql.DB, mask {{ .FieldMaskType.
 	return scan{{ $.Plural }}(rows, mask)
 }
 
+// list{{ $.Plural }}Where lists {{ $.Plural }} where column equals value.
+// The column and orderBy are expected to be safe. DO NOT pass those directly from user input.
 func list{{ $.Plural }}Where(ctx context.Context, db hsql.DB, column string, value interface{}, mask {{ .FieldMaskType.FullName }}, orderBy string, limit, offset uint) ([]*{{ .EntityType.FullName }}, error) {
 	query := fmt.Sprintf(
 		"SELECT %s FROM \"{{ $.Table }}\" WHERE \"%s\" = $1 ORDER BY \"%s\" LIMIT $2 OFFSET $3",
@@ -332,6 +346,8 @@ func list{{ $.Plural }}Where(ctx context.Context, db hsql.DB, column string, val
 	return scan{{ $.Plural }}(rows, mask)
 }
 
+// update{{ .EntityType.Name }} updates the masked fields of the {{ .EntityType.Name }}.
+// The {{ .EntityType.Name }} is looked up by {{ .IDField.Name }}.
 func update{{ .EntityType.Name }}(ctx context.Context, db hsql.DB, e *{{ .EntityType.FullName }}, mask {{ .FieldMaskType.FullName }}) error {
 	var model {{ .EntityType.Name }}{{ $.ModelSuffix }}
 	model.{{ $.SetterFrom }}(e, mask)
@@ -344,6 +360,7 @@ func update{{ .EntityType.Name }}(ctx context.Context, db hsql.DB, e *{{ .Entity
 	return err
 }
 
+// delete{{ .EntityType.Name }} deletes the {{ .EntityType.Name }} with the given {{ .IDField.Name }}.
 func delete{{ .EntityType.Name }}{{ $.ModelSuffix }}(ctx context.Context, db hsql.DB, {{ .IDField.Tag }} {{ .IDField.Type.FullName }}) error {
 	query := "DELETE FROM \"{{ $.Table }}\" WHERE \"{{ .IDField.Tag }}\" = $1"
 	_, err := db.ExecContext(ctx, query, {{ .IDField.Tag }})
