@@ -2,15 +2,15 @@ package backbone_test
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"os"
 
+	"github.com/spf13/pflag"
 	"htdvisser.dev/exp/backbone/server"
 	"htdvisser.dev/exp/backbone/server/recovery"
 	"htdvisser.dev/exp/backbone/server/reflection"
 	"htdvisser.dev/exp/clicontext"
-	"htdvisser.dev/exp/flagenv"
+	"htdvisser.dev/exp/pflagenv"
 )
 
 var config struct {
@@ -18,23 +18,20 @@ var config struct {
 }
 
 func init() {
-	flag.StringVar(&config.server.ListenHTTP, "http.listen", ":8080", "Listen address for the HTTP server")
-	flag.StringVar(&config.server.ListenGRPC, "grpc.listen", ":9090", "Listen address for the gRPC server")
-	flag.StringVar(&config.server.ListenInternalHTTP, "internal.http.listen", "localhost:18080", "Listen address for the internal HTTP server")
-	flag.StringVar(&config.server.ListenInternalGRPC, "internal.grpc.listen", "localhost:19090", "Listen address for the internal gRPC server")
+	pflag.CommandLine.AddFlagSet(config.server.Flags(""))
 }
 
 func Example() {
 	ctx, exit := clicontext.WithInterruptAndExit(context.Background())
 	defer exit()
 
-	if err := flagenv.NewParser(flagenv.Prefixes("backbone_")).ParseEnv(flag.CommandLine); err != nil {
-		fmt.Fprintln(flag.CommandLine.Output(), err)
-		flag.Usage()
+	if err := pflagenv.NewParser(pflagenv.Prefixes("backbone_")).ParseEnv(pflag.CommandLine); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		pflag.Usage()
 		os.Exit(2)
 	}
 
-	flag.Parse()
+	pflag.Parse()
 
 	server := server.New(config.server)
 
@@ -44,7 +41,7 @@ func Example() {
 	// TODO: Register services here.
 
 	if err := server.Run(ctx); err != nil {
-		fmt.Fprintln(flag.CommandLine.Output(), err)
+		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 }

@@ -19,6 +19,7 @@ require (
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/pires/go-proxyproto v0.1.3
 	github.com/rs/cors v1.7.0 // indirect
+	github.com/spf13/pflag v1.0.5
 	go.opentelemetry.io/otel v0.7.0
 	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
@@ -30,5 +31,5 @@ require (
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 	htdvisser.dev/exp/clicontext v0.0.0-20191208180355-231e02bfe473
-	htdvisser.dev/exp/flagenv v0.0.0-20191208180355-231e02bfe473
+	htdvisser.dev/exp/pflagenv v0.0.0-20200721183835-0b4fc4780033
 )

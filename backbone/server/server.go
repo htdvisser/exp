@@ -2,11 +2,12 @@ package server
 
 import (
 	"context"
+	_ "expvar" // Registers /debug/vars endpoint to DefaultServeMux (the internal HTTP server).
 	"fmt"
 	"log"
 	"net"
 	stdhttp "net/http"
-	_ "net/http/pprof" // Registers pprof endpoints to DefaultServeMux (the internal HTTP server).
+	_ "net/http/pprof" // Registers /debug/pprof endpoints to DefaultServeMux (the internal HTTP server).
 
 	"go.opentelemetry.io/otel/api/trace"
 	"golang.org/x/sync/errgroup"
@@ -14,14 +15,6 @@ import (
 	"htdvisser.dev/exp/backbone/server/http"
 	"htdvisser.dev/exp/backbone/server/internal/channelz"
 )
-
-// Config is the required configuration for the server.
-type Config struct {
-	ListenHTTP         string
-	ListenGRPC         string
-	ListenInternalHTTP string
-	ListenInternalGRPC string
-}
 
 // Server wraps gRPC and HTTP servers.
 type Server struct {
