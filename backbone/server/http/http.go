@@ -7,6 +7,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 )
 
 // Server wraps the HTTP server.
@@ -14,6 +16,7 @@ type Server struct {
 	ServeMux         *http.ServeMux
 	Router           *mux.Router
 	server           *http.Server
+	http2server      *http2.Server
 	contextExtenders []func(context.Context) context.Context
 	middleware       []Middleware
 }
@@ -32,7 +35,14 @@ func NewServer(opts ...Option) *Server {
 		middleware:       options.middleware,
 	}
 	s.ServeMux.Handle("/", s.Router)
-	s.server = &http.Server{Handler: s}
+	var handler http.Handler = s
+	if options.h2c {
+		s.http2server = &http2.Server{}
+		if s.http2server != nil {
+			handler = h2c.NewHandler(s, s.http2server)
+		}
+	}
+	s.server = &http.Server{Handler: handler}
 	return s
 }
 

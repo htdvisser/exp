@@ -21,7 +21,7 @@ require (
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	go.opentelemetry.io/otel v0.7.0
-	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
+	golang.org/x/net v0.0.0-20200707034311-ab3426394381
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
 	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae // indirect
 	golang.org/x/text v0.3.3 // indirect
