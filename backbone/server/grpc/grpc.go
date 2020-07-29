@@ -107,7 +107,7 @@ func (s *Server) Serve(lis net.Listener) error {
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	contentType := r.Header.Get("Content-Type")
 	switch {
-	case strings.HasPrefix(contentType, "application/grpc-web"):
+	case s.Web.IsGrpcWebRequest(r) || s.Web.IsAcceptableGrpcCorsRequest(r):
 		s.Web.ServeHTTP(w, r)
 	case strings.HasPrefix(contentType, "application/grpc"):
 		s.Server.ServeHTTP(w, r)
