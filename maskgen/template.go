@@ -5,8 +5,9 @@ import (
 )
 
 type Options struct {
-	PackageName string
-	Setter      string
+	PackageName   string
+	Setter        string
+	JSONMarshaler string
 }
 
 type Data struct {
@@ -34,7 +35,7 @@ import (
 // {{ .Name }}FieldMask masks the fields of {{ .Name }}.
 type {{ .Name }}FieldMask struct {
 	{{- range .Fields }}
-	{{ .Name }} {{ with .MaskType.Name }}*{{ . }}{{ else }}bool{{ end }} {{ with .JSONTag }}` + "`" + `{{ . }}` + "`" + `{{ end }}
+	{{ .Name }} {{ with .MaskType.Name }}*{{ . }}{{ else }}bool{{ end }} {{ if .JSONTag.Key }}` + "`" + `{{ .JSONTag.String }}` + "`" + `{{ end }}
 	{{- end}}
 }
 
@@ -163,7 +164,8 @@ func (m {{ .Name }}FieldMask) Fields() fieldpath.List {
 
 {{- if $.Setter }}
 
-func (dst *{{ .Name }}) Set(src *{{ .Name }}, mask {{ .Name }}FieldMask) {
+// {{ $.Setter }} sets the selected fields from src to e.
+func (e *{{ .Name }}) {{ $.Setter }}(src *{{ .Name }}, mask {{ .Name }}FieldMask) {
 	if src == nil {
 		src = &{{ .Name }}{}
 	}
@@ -171,20 +173,66 @@ func (dst *{{ .Name }}) Set(src *{{ .Name }}, mask {{ .Name }}FieldMask) {
 	{{- if .MaskType.Name }}
 	if mask.{{ .Name }} != nil {
 		if mask.IsAll() {
-			dst.{{ .Name }} = src.{{ .Name }}
+			e.{{ .Name }} = src.{{ .Name }}
 		} else {
-			if dst.{{ .Name }} == nil {
-				dst.{{ .Name }} = &{{ .Type.Name }}{}
+			if e.{{ .Name }} == nil {
+				e.{{ .Name }} = &{{ .Type.Name }}{}
 			}
-			dst.{{ .Name }}.Set(src.{{ .Name }}, *mask.{{ .Name }})
+			e.{{ .Name }}.Set(src.{{ .Name }}, *mask.{{ .Name }})
 		}
 	}
 	{{- else }}
 	if mask.{{ .Name }} {
-		dst.{{ .Name }} = src.{{ .Name }}
+		e.{{ .Name }} = src.{{ .Name }}
 	}
 	{{- end }}
 	{{- end }}
+}
+{{- end }}
+
+{{- if $.JSONMarshaler }}
+
+// {{ $.JSONMarshaler }} marshals the selected fields of e to JSON.
+// Any "omitempty" options in JSON struct tags of {{ .Name }} are ignored.
+func (e *{{ .Name }}) {{ $.JSONMarshaler }}(mask {{ .Name }}FieldMask) ([]byte, error) {
+	if e == nil {
+		return []byte{'n', 'u', 'l', 'l'}, nil
+	}
+	s := streamPool.BorrowStream(nil)
+	defer streamPool.ReturnStream(s)
+	s.WriteObjectStart()
+	var isNotFirst bool
+	{{- range .Fields }}
+	{{- if eq .JSONTag.Name "-" }}
+	// Omit {{ .Name }} from JSON.
+	{{- else }}
+	{{- if .MaskType.Name }}
+	if mask.{{ .Name }} != nil {
+		if isNotFirst {
+			s.WriteMore()
+		}
+		s.WriteObjectField("{{ with .JSONTag.Name }}{{ . }}{{ else }}{{ .Tag }}{{ end }}")
+		sub, err := e.{{ .Name }}.{{ $.JSONMarshaler }}(*mask.{{ .Name }})
+		if err != nil {
+			return nil, err
+		}
+		s.Write(sub)
+		isNotFirst = true
+	}
+	{{- else }}
+	if mask.{{ .Name }} {
+		if isNotFirst {
+			s.WriteMore()
+		}
+		s.WriteObjectField("{{ with .JSONTag.Name }}{{ . }}{{ else }}{{ .Tag }}{{ end }}")
+		s.WriteVal(e.{{ .Name }})
+		isNotFirst = true
+	}
+	{{- end }}
+	{{- end }}
+	{{- end }}
+	s.WriteObjectEnd()
+	return s.Buffer(), nil
 }
 {{- end }}
 

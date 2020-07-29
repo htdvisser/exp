@@ -32,7 +32,7 @@ func (t *Type) SetTo(obj types.Object) {
 type Field struct {
 	Name     string
 	Tag      string
-	JSONTag  string
+	JSONTag  structtag.Tag
 	Type     Type
 	MaskType Type
 }
@@ -107,7 +107,7 @@ func BuildStructType(pkg *packages.Package, typeName string) (StructType, error)
 			field.Tag = tag.Name
 		}
 		if tag, err := tags.Get("json"); err == nil {
-			field.JSONTag = tag.String()
+			field.JSONTag = *tag
 		}
 		if tag, err := tags.Get("mask"); err == nil {
 			if tag.Name == "-" {
