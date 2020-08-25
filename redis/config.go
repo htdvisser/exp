@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"bytes"
 	"context"
 	"crypto/tls"
 	"io/ioutil"
@@ -44,7 +45,7 @@ func (c Config) Connect(ctx context.Context) (redis.UniversalClient, error) {
 		if err != nil {
 			return nil, err
 		}
-		opts.Password = string(passwordBytes)
+		opts.Password = string(bytes.TrimSpace(passwordBytes))
 	}
 	cli := redis.NewUniversalClient(&opts)
 	if err := cli.Ping(ctx).Err(); err != nil {

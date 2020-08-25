@@ -1,6 +1,7 @@
 package nats
 
 import (
+	"bytes"
 	"context"
 	"crypto/tls"
 	"fmt"
@@ -128,7 +129,7 @@ func (c *Config) Connect(ctx context.Context) (*nats.Conn, error) {
 		if err != nil {
 			return nil, err
 		}
-		opts.Password = string(passwordBytes)
+		opts.Password = string(bytes.TrimSpace(passwordBytes))
 	}
 	if c.TLSConfig != nil {
 		opts.Secure = true
