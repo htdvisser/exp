@@ -222,7 +222,7 @@ func Run(ctx context.Context, args ...string) error {
 		}
 
 		if cursor == 0 {
-			logger.Println(ctx, "SCAN done")
+			logger.Println("SCAN done")
 			break
 		}
 	}
