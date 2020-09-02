@@ -7,7 +7,7 @@ import (
 	"syscall"
 )
 
-var defaultInterruptSignals = []os.Signal{os.Interrupt, os.Kill}
+var defaultInterruptSignals = []os.Signal{os.Interrupt}
 
 // WithInterrupt returns a copy of parent with a new Done channel, which is closed
 // when the process receives an interrupt signal or when the parent context's Done
