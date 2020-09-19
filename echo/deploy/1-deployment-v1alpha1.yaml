@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: htdvisser-echo
-        image: docker.io/htdvisser/echo-server:latest
+        image: ghcr.io/htdvisser/echo-server:latest
         imagePullPolicy: Always
         ports:
         - protocol: TCP

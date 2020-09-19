@@ -19,7 +19,7 @@ dist/echo-client-$(GOOS)-$(GOARCH): $(GO_FILES) go.mod go.sum
 
 build: dist/echo-server-$(GOOS)-$(GOARCH) dist/echo-client-$(GOOS)-$(GOARCH)
 
-DOCKER_IMAGE ?= htdvisser/echo-server
+DOCKER_IMAGE ?= ghcr.io/htdvisser/echo-server
 DOCKER_IMAGE_VERSION ?= latest
 
 # Docker Build
@@ -36,8 +36,9 @@ docker:
 docker-multiarch:
 	GOOS=linux GOARCH=arm $(MAKE) build
 	GOOS=linux GOARCH=arm64 $(MAKE) build
+	GOOS=linux GOARCH=386 $(MAKE) build
 	GOOS=linux GOARCH=amd64 $(MAKE) build
-	DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --platform linux/arm,linux/arm64,linux/amd64 -t $(DOCKER_IMAGE):$(DOCKER_IMAGE_VERSION) -f build/Dockerfile .
+	DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/386,linux/amd64 -t $(DOCKER_IMAGE):$(DOCKER_IMAGE_VERSION) -f build/Dockerfile .
 
 # Istio
 

@@ -15,7 +15,7 @@ services:
   echo:
     deploy:
       replicas: 4
-    image: docker.io/htdvisser/echo-server:latest
+    image: ghcr.io/htdvisser/echo-server:latest
 
 configs:
   envoy:
