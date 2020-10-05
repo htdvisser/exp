@@ -7,7 +7,7 @@ import (
 )
 
 // List is a list of field paths.
-type List []FieldPath
+type List []Path
 
 func (fps List) Len() int { return len(fps) }
 
@@ -36,7 +36,7 @@ func ParseList(s ...string) (List, error) {
 	out := make(List, len(fps))
 	var err error
 	for i, fp := range fps {
-		out[i], err = ParseFieldPath(fp)
+		out[i], err = Parse(fp)
 		if err != nil {
 			return nil, err
 		}
@@ -62,7 +62,7 @@ func (fps List) Sort() List {
 }
 
 // Filter filters the fieldpaths by predicate p.
-func (fps List) Filter(p func(FieldPath) bool) List {
+func (fps List) Filter(p func(Path) bool) List {
 	out := make(List, 0, len(fps))
 	for _, fp := range fps {
 		if p(fp) {
@@ -90,7 +90,7 @@ func (fps List) Unique(exact bool) List {
 }
 
 // MatchAny returns true if any element of the list matches predicate p.
-func (fps List) MatchAny(p func(FieldPath) bool) bool {
+func (fps List) MatchAny(p func(Path) bool) bool {
 	for _, fp := range fps {
 		if p(fp) {
 			return true
@@ -100,14 +100,14 @@ func (fps List) MatchAny(p func(FieldPath) bool) bool {
 }
 
 // Contains returns true if fps contains search or a prefix of search (if exact is false).
-func (fps List) Contains(search FieldPath, exact bool) bool {
-	return fps.MatchAny(func(fp FieldPath) bool {
+func (fps List) Contains(search Path, exact bool) bool {
+	return fps.MatchAny(func(fp Path) bool {
 		return fp.Equal(search) || (!exact && search.HasPrefix(fp))
 	})
 }
 
 // MatchAll returns true if all elements of the list match predicate p.
-func (fps List) MatchAll(p func(FieldPath) bool) bool {
+func (fps List) MatchAll(p func(Path) bool) bool {
 	for _, fp := range fps {
 		if !p(fp) {
 			return false
@@ -118,13 +118,13 @@ func (fps List) MatchAll(p func(FieldPath) bool) bool {
 
 // ContainsOnly returns true if the list contains only field paths present in search.
 func (fps List) ContainsOnly(search List) bool {
-	return fps.MatchAll(func(fp FieldPath) bool {
+	return fps.MatchAll(func(fp Path) bool {
 		return search.Contains(fp, true)
 	})
 }
 
 // Map returns a List containing the results of calling m on every element of fps.
-func (fps List) Map(m func(FieldPath) FieldPath) List {
+func (fps List) Map(m func(Path) Path) List {
 	out := make(List, len(fps))
 	for i, fp := range fps {
 		out[i] = m(fp)
@@ -133,48 +133,48 @@ func (fps List) Map(m func(FieldPath) FieldPath) List {
 }
 
 // AddPrefix returns a List with all elements of fps with the given prefix prepended.
-func (fps List) AddPrefix(prefix FieldPath) List {
-	return fps.Map(func(fp FieldPath) FieldPath { return prefix.Join(fp...) })
+func (fps List) AddPrefix(prefix Path) List {
+	return fps.Map(func(fp Path) Path { return prefix.Join(fp...) })
 }
 
 // RemovePrefix returns a List with all elements of fps that have the given prefix,
 // but without that prefix.
-func (fps List) RemovePrefix(prefix FieldPath) List {
-	return fps.Filter(func(fp FieldPath) bool {
+func (fps List) RemovePrefix(prefix Path) List {
+	return fps.Filter(func(fp Path) bool {
 		return fp.HasPrefix(prefix)
-	}).Map(func(fp FieldPath) FieldPath {
-		wp := make(FieldPath, len(fp)-len(prefix))
+	}).Map(func(fp Path) Path {
+		wp := make(Path, len(fp)-len(prefix))
 		copy(wp, fp[len(prefix):])
 		return wp
 	})
 }
 
-// FieldPath is the path to a field in a struct.
-type FieldPath []string
+// Path is the path to a field in a struct.
+type Path []string
 
-// ParseFieldPath parses a field path.
-func ParseFieldPath(s string) (FieldPath, error) {
+// Parse parses a field path.
+func Parse(s string) (Path, error) {
 	fp := strings.Split(s, ".")
 	for i, e := range fp {
-		if interned, ok := internedFieldPathElements[e]; ok {
+		if interned, ok := internedPathElements[e]; ok {
 			fp[i] = interned
 		}
 	}
 	return fp, nil
 }
 
-func (fp FieldPath) String() string {
+func (fp Path) String() string {
 	return strings.Join(fp, ".")
 }
 
-// Join returns a FieldPath that joins f together with the extra elements.
-func (fp FieldPath) Join(elements ...string) FieldPath {
-	newPath := make(FieldPath, len(fp)+len(elements))
+// Join returns a Path that joins f together with the extra elements.
+func (fp Path) Join(elements ...string) Path {
+	newPath := make(Path, len(fp)+len(elements))
 	if len(fp) > 0 {
 		copy(newPath[:len(fp)], fp)
 	}
 	for i, e := range elements {
-		if interned, ok := internedFieldPathElements[e]; ok {
+		if interned, ok := internedPathElements[e]; ok {
 			newPath[len(fp)+i] = interned
 		} else {
 			newPath[len(fp)+i] = e
@@ -184,7 +184,7 @@ func (fp FieldPath) Join(elements ...string) FieldPath {
 }
 
 // Equal returns whether f is equal to other.
-func (fp FieldPath) Equal(other FieldPath) bool {
+func (fp Path) Equal(other Path) bool {
 	if len(other) != len(fp) {
 		return false
 	}
@@ -197,7 +197,7 @@ func (fp FieldPath) Equal(other FieldPath) bool {
 }
 
 // HasPrefix returns whether f has other as a prefix.
-func (fp FieldPath) HasPrefix(other FieldPath) bool {
+func (fp Path) HasPrefix(other Path) bool {
 	if len(other) >= len(fp) {
 		return false
 	}
@@ -209,19 +209,19 @@ func (fp FieldPath) HasPrefix(other FieldPath) bool {
 	return true
 }
 
-var internedFieldPathElements = make(map[string]string)
+var internedPathElements = make(map[string]string)
 
-// InternFieldPathStrings interns the field path strings of t.
+// InternPathStrings interns the field path strings of t.
 // This func is typically called from init().
 // It is not safe for concurrent use.
-func InternFieldPathStrings(s ...string) error {
+func InternPathStrings(s ...string) error {
 	fps, err := ParseList(s...)
 	if err != nil {
 		return err
 	}
 	for _, fp := range fps {
 		for _, e := range fp {
-			internedFieldPathElements[e] = e
+			internedPathElements[e] = e
 		}
 	}
 	return nil

@@ -6,7 +6,7 @@ import (
 )
 
 func TestParseList(t *testing.T) {
-	InternFieldPathStrings("a", "b")
+	InternPathStrings("a", "b")
 	for _, tt := range []struct {
 		strs []string
 		fps  List
@@ -98,14 +98,14 @@ func TestContains(t *testing.T) {
 		{"c"},
 	}
 	for _, tt := range []struct {
-		search FieldPath
+		search Path
 		exact  bool
 		want   bool
 	}{
-		{FieldPath{"b"}, true, true},
-		{FieldPath{"a", "b", "c", "d"}, true, false},
-		{FieldPath{"a", "b", "c", "d"}, false, true},
-		{FieldPath{"d", "e", "f"}, false, false},
+		{Path{"b"}, true, true},
+		{Path{"a", "b", "c", "d"}, true, false},
+		{Path{"a", "b", "c", "d"}, false, true},
+		{Path{"d", "e", "f"}, false, false},
 	} {
 		if got := fps.Contains(tt.search, tt.exact); got != tt.want {
 			t.Errorf("fps.Contains(%s, %v) = %v, want %v", tt.search, tt.exact, got, tt.want)
@@ -141,7 +141,7 @@ func TestAddPrefix(t *testing.T) {
 		{"a", "b"},
 		{"a", "b", "c"},
 	}
-	if got := fps.AddPrefix(FieldPath{"a"}); !reflect.DeepEqual(got, want) {
+	if got := fps.AddPrefix(Path{"a"}); !reflect.DeepEqual(got, want) {
 		t.Errorf(`fps.AddPrefix("a") = %v, want %v`, got, want)
 	}
 }
@@ -158,7 +158,7 @@ func TestRemovePrefix(t *testing.T) {
 		{"b"},
 		{"b", "c"},
 	}
-	if got := fps.RemovePrefix(FieldPath{"a"}); !reflect.DeepEqual(got, want) {
+	if got := fps.RemovePrefix(Path{"a"}); !reflect.DeepEqual(got, want) {
 		t.Errorf(`fps.RemovePrefix("a") = %v, want %v`, got, want)
 	}
 }
