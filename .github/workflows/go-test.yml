@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: ["^1.14"] # TODO: Add "tip" when actions/setup-go supports it
+        go: ["^1.15"] # TODO: Add "tip" when actions/setup-go supports it
     name: Test on Go ${{ matrix.go }}
     steps:
       - name: Code Checkout
