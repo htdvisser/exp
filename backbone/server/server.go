@@ -9,7 +9,6 @@ import (
 	stdhttp "net/http"
 	_ "net/http/pprof" // Registers /debug/pprof endpoints to DefaultServeMux (the internal HTTP server).
 
-	"go.opentelemetry.io/otel/api/trace"
 	"golang.org/x/sync/errgroup"
 	"htdvisser.dev/exp/backbone/server/grpc"
 	"htdvisser.dev/exp/backbone/server/http"
@@ -19,8 +18,6 @@ import (
 // Server wraps gRPC and HTTP servers.
 type Server struct {
 	config Config
-
-	TraceProvider trace.Provider
 
 	GRPC *grpc.Server
 	HTTP *http.Server
@@ -44,12 +41,11 @@ func New(config Config, opts ...Option) *Server {
 	}
 	options.apply(opts...)
 	s := &Server{
-		config:        config,
-		TraceProvider: &trace.NoopProvider{},
-		GRPC:          grpc.NewServer(options.GRPCOptions...),
-		HTTP:          http.NewServer(options.HTTPOptions...),
-		InternalGRPC:  grpc.NewServer(options.InternalGRPCOptions...),
-		InternalHTTP:  http.NewServer(options.InternalHTTPOptions...),
+		config:       config,
+		GRPC:         grpc.NewServer(options.GRPCOptions...),
+		HTTP:         http.NewServer(options.HTTPOptions...),
+		InternalGRPC: grpc.NewServer(options.InternalGRPCOptions...),
+		InternalHTTP: http.NewServer(options.InternalHTTPOptions...),
 	}
 	channelz.Register(s.InternalGRPC)
 	s.RegisterTCPServer("gRPC", s.config.ListenGRPC, s.GRPC)
