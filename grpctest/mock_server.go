@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/connectivity"
 	testpb "google.golang.org/grpc/test/grpc_testing"
 )
@@ -31,9 +32,6 @@ type MockServer struct {
 	fullDuplexCall      func(testpb.TestService_FullDuplexCallServer) error
 	halfDuplexCall      func(testpb.TestService_HalfDuplexCallServer) error
 
-	// Fallback for unset call handlers.
-	testpb.UnimplementedTestServiceServer
-
 	// Set by Start().
 	lis    net.Listener
 	server *grpc.Server
@@ -58,7 +56,14 @@ func (ms *MockServer) Start(ctx context.Context) error {
 		ms.lis = nil
 	})
 	ms.server = grpc.NewServer(ms.serverOptions...)
-	testpb.RegisterTestServiceServer(ms.server, ms)
+	testpb.RegisterTestServiceService(ms.server, &testpb.TestServiceService{
+		EmptyCall:           ms.EmptyCall,
+		UnaryCall:           ms.UnaryCall,
+		StreamingOutputCall: ms.StreamingOutputCall,
+		StreamingInputCall:  ms.StreamingInputCall,
+		FullDuplexCall:      ms.FullDuplexCall,
+		HalfDuplexCall:      ms.HalfDuplexCall,
+	})
 	go ms.server.Serve(ms.lis)
 	ms.cleanups = append(ms.cleanups, func() {
 		ms.server.Stop()
@@ -97,6 +102,8 @@ func (ms *MockServer) ConnectTestClient(ctx context.Context) (*grpc.ClientConn, 
 	return clientConn, testpb.NewTestServiceClient(clientConn), nil
 }
 
+var errUnimplemented = grpc.Errorf(codes.Unimplemented, "Unimplemented")
+
 // SetEmptyCallHandler sets the handler for the EmptyCall RPC.
 func (ms *MockServer) SetEmptyCallHandler(handler func(context.Context, *testpb.Empty) (*testpb.Empty, error)) {
 	ms.emptyCall = handler
@@ -107,7 +114,7 @@ func (ms *MockServer) SetEmptyCallHandler(handler func(context.Context, *testpb.
 func (ms *MockServer) EmptyCall(ctx context.Context, req *testpb.Empty) (*testpb.Empty, error) {
 	handler := ms.emptyCall
 	if handler == nil {
-		handler = ms.UnimplementedTestServiceServer.EmptyCall
+		return nil, errUnimplemented
 	}
 	return handler(ctx, req)
 }
@@ -122,7 +129,7 @@ func (ms *MockServer) SetUnaryCallHandler(handler func(context.Context, *testpb.
 func (ms *MockServer) UnaryCall(ctx context.Context, req *testpb.SimpleRequest) (*testpb.SimpleResponse, error) {
 	handler := ms.unaryCall
 	if handler == nil {
-		handler = ms.UnimplementedTestServiceServer.UnaryCall
+		return nil, errUnimplemented
 	}
 	return handler(ctx, req)
 }
@@ -137,7 +144,7 @@ func (ms *MockServer) SetStreamingOutputCallHandler(handler func(*testpb.Streami
 func (ms *MockServer) StreamingOutputCall(req *testpb.StreamingOutputCallRequest, stream testpb.TestService_StreamingOutputCallServer) error {
 	handler := ms.streamingOutputCall
 	if handler == nil {
-		handler = ms.UnimplementedTestServiceServer.StreamingOutputCall
+		return errUnimplemented
 	}
 	return handler(req, stream)
 }
@@ -152,7 +159,7 @@ func (ms *MockServer) SetStreamingInputCallHandler(handler func(testpb.TestServi
 func (ms *MockServer) StreamingInputCall(stream testpb.TestService_StreamingInputCallServer) error {
 	handler := ms.streamingInputCall
 	if handler == nil {
-		handler = ms.UnimplementedTestServiceServer.StreamingInputCall
+		return errUnimplemented
 	}
 	return handler(stream)
 }
@@ -167,7 +174,7 @@ func (ms *MockServer) SetFullDuplexCallHandler(handler func(testpb.TestService_F
 func (ms *MockServer) FullDuplexCall(stream testpb.TestService_FullDuplexCallServer) error {
 	handler := ms.fullDuplexCall
 	if handler == nil {
-		handler = ms.UnimplementedTestServiceServer.FullDuplexCall
+		return errUnimplemented
 	}
 	return handler(stream)
 }
@@ -182,7 +189,7 @@ func (ms *MockServer) SetHalfDuplexCallHandler(handler func(testpb.TestService_H
 func (ms *MockServer) HalfDuplexCall(stream testpb.TestService_HalfDuplexCallServer) error {
 	handler := ms.halfDuplexCall
 	if handler == nil {
-		handler = ms.UnimplementedTestServiceServer.HalfDuplexCall
+		return errUnimplemented
 	}
 	return handler(stream)
 }
