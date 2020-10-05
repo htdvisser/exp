@@ -39,7 +39,7 @@ type {{ .Name }}FieldMask struct {
 	{{- end}}
 }
 
-func (m *{{ .Name }}FieldMask) set(selected bool, fields ...fieldpath.FieldPath) error {
+func (m *{{ .Name }}FieldMask) set(selected bool, fields ...fieldpath.Path) error {
 	for _, field := range fields {
 		if len(field) == 0 {
 			continue
@@ -83,7 +83,7 @@ func (m *{{ .Name }}FieldMask) setAll(selected bool) {
 }
 
 // Select selects the given fields in the field mask.
-func (m *{{ .Name }}FieldMask) Select(fields ...fieldpath.FieldPath) error {
+func (m *{{ .Name }}FieldMask) Select(fields ...fieldpath.Path) error {
 	return m.set(true, fields...)
 }
 
@@ -93,7 +93,7 @@ func (m *{{ .Name }}FieldMask) SelectAll() {
 }
 
 // Unselect unselects the given fields in the field mask.
-func (m *{{ .Name }}FieldMask) Unselect(fields ...fieldpath.FieldPath) error {
+func (m *{{ .Name }}FieldMask) Unselect(fields ...fieldpath.Path) error {
 	return m.set(false, fields...)
 }
 
@@ -147,15 +147,15 @@ func (m {{ .Name }}FieldMask) Fields() fieldpath.List {
 	{{- if .MaskType.Name }}
 	if m.{{ .Name }} != nil {
 		if m.{{ .Name }}.IsAll() {
-			fields = append(fields, fieldpath.FieldPath{"{{ .Tag }}"})
+			fields = append(fields, fieldpath.Path{"{{ .Tag }}"})
 		} else {
 			subFields := m.{{ .Name }}.Fields()
-			fields = append(fields, subFields.AddPrefix(fieldpath.FieldPath{"{{ .Tag }}"})...)
+			fields = append(fields, subFields.AddPrefix(fieldpath.Path{"{{ .Tag }}"})...)
 		}
 	}
 	{{- else }}
 	if m.{{ .Name }} {
-		fields = append(fields, fieldpath.FieldPath{"{{ .Tag }}"})
+		fields = append(fields, fieldpath.Path{"{{ .Tag }}"})
 	}
 	{{- end }}
 	{{- end }}
