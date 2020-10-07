@@ -28,6 +28,9 @@
       "path": "hex"
     },
     {
+      "path": "maskgen"
+    },
+    {
       "path": "nats"
     },
     {
@@ -40,7 +43,19 @@
       "path": "protoget"
     },
     {
+      "path": "redis"
+    },
+    {
+      "path": "rhmanage"
+    },
+    {
       "path": "ring"
+    },
+    {
+      "path": "sql"
+    },
+    {
+      "path": "sql/sqlgen"
     },
     {
       "path": "ssh"
@@ -52,11 +67,17 @@
       "path": "sum"
     },
     {
+      "path": "tls"
+    },
+    {
       "path": "tree"
     },
     {
       "path": "waitcontext"
     },
+    {
+      "path": "."
+    }
   ],
   "settings": {}
 }
