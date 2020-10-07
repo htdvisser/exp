@@ -2,17 +2,17 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"os"
 	"strings"
 
+	"github.com/spf13/pflag"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	bbgrpc "htdvisser.dev/exp/backbone/client/grpc"
 	"htdvisser.dev/exp/clicontext"
 	echo "htdvisser.dev/exp/echo/api/v1alpha1"
-	"htdvisser.dev/exp/flagenv"
+	"htdvisser.dev/exp/pflagenv"
 )
 
 var config struct {
@@ -23,23 +23,23 @@ var config struct {
 }
 
 func init() {
-	flag.StringVar(&config.server.GRPCAddress, "grpc.address", "localhost:9090", "Address of the gRPC server")
-	flag.BoolVar(&config.server.GRPCTLS, "grpc.tls", false, "Use TLS to connect to the gRPC server")
+	pflag.StringVar(&config.server.GRPCAddress, "grpc.address", "localhost:9090", "Address of the gRPC server")
+	pflag.BoolVar(&config.server.GRPCTLS, "grpc.tls", false, "Use TLS to connect to the gRPC server")
 }
 
 func main() {
 	ctx, exit := clicontext.WithInterruptAndExit(context.Background())
 	defer exit()
 
-	if err := flagenv.NewParser(flagenv.Prefixes("echo_")).ParseEnv(flag.CommandLine); err != nil {
-		fmt.Fprintln(flag.CommandLine.Output(), err)
-		flag.Usage()
+	if err := pflagenv.NewParser(pflagenv.Prefixes("echo_")).ParseEnv(pflag.CommandLine); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		pflag.Usage()
 		os.Exit(2)
 	}
 
-	flag.Parse()
+	pflag.Parse()
 
-	if err := Main(ctx, flag.Args()...); err != nil {
+	if err := Main(ctx, pflag.Args()...); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}

@@ -10,8 +10,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-
-	"htdvisser.dev/exp/stringslice"
 )
 
 func run(workdir, name string, args ...string) {
@@ -27,12 +25,6 @@ func run(workdir, name string, args ...string) {
 		os.Exit(1)
 	}
 }
-
-var gogoWKTArgs = stringslice.Map(
-	[]string{"any", "duration", "empty", "field_mask", "struct", "timestamp", "wrappers"},
-	stringslice.AddPrefix("Mgoogle/protobuf/"),
-	stringslice.AddSuffix(".proto=github.com/gogo/protobuf/types"),
-)
 
 func download(from, to string, mode os.FileMode) (err error) {
 	if info, err := os.Stat(to); err == nil && info.Mode() == mode {
@@ -69,7 +61,8 @@ func download(from, to string, mode os.FileMode) (err error) {
 func main() {
 	// Dependencies
 	run(".", "go", "install", "github.com/envoyproxy/protoc-gen-validate")
-	run(".", "go", "install", "github.com/gogo/protobuf/protoc-gen-gogofast")
+	run(".", "go", "install", "google.golang.org/protobuf/cmd/protoc-gen-go")
+	run(".", "go", "install", "google.golang.org/grpc/cmd/protoc-gen-go-grpc")
 	run(".", "go", "install", "github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway")
 	run(".", "go", "install", "github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger")
 	run(".", "go", "install", "github.com/mdempsky/unconvert")
@@ -106,17 +99,14 @@ func main() {
 		0644,
 	)
 
-	gogoProtoArgs := append([]string{"plugins=grpc"}, gogoWKTArgs...)
-	grpcGatewayArgs := []string{}
-	swaggerArgs := []string{}
-	validateArgs := []string{"lang=gogo"}
 	args := []string{
 		"-I.",
 		"-I../third_party",
-		fmt.Sprintf("--gogofast_out=%s:.", strings.Join(gogoProtoArgs, ",")),
-		fmt.Sprintf("--grpc-gateway_out=%s:.", strings.Join(grpcGatewayArgs, ",")),
-		fmt.Sprintf("--swagger_out=%s:.", strings.Join(swaggerArgs, ",")),
-		fmt.Sprintf("--validate_out=%s:.", strings.Join(validateArgs, ",")),
+		fmt.Sprintf("--go_out=."),
+		fmt.Sprintf("--go-grpc_out=."),
+		fmt.Sprintf("--grpc-gateway_out=."),
+		fmt.Sprintf("--swagger_out=."),
+		fmt.Sprintf("--validate_out=lang=go:."),
 		"--descriptor_set_out=echo.pb",
 	}
 
