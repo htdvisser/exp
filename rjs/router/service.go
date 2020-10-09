@@ -4,15 +4,15 @@ import (
 	"context"
 	"sort"
 
-	"htdvisser.dev/exp/rjs/client"
+	"htdvisser.dev/exp/rjs"
 )
 
-func NewRouterService(client *client.Client) *Service {
+func NewRouterService(client rjs.Client) *Service {
 	return &Service{client: client}
 }
 
 type Service struct {
-	client *client.Client
+	client rjs.Client
 }
 
 func (s *Service) Claim(ctx context.Context, req *ClaimRequest) (ClaimResponse, error) {

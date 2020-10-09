@@ -3,15 +3,15 @@ package signature
 import (
 	"context"
 
-	"htdvisser.dev/exp/rjs/client"
+	"htdvisser.dev/exp/rjs"
 )
 
-func NewSignatureService(client *client.Client) *Service {
+func NewSignatureService(client rjs.Client) *Service {
 	return &Service{client: client}
 }
 
 type Service struct {
-	client *client.Client
+	client rjs.Client
 }
 
 func (s *Service) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {

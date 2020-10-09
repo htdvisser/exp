@@ -3,15 +3,15 @@ package firmware
 import (
 	"context"
 
-	"htdvisser.dev/exp/rjs/client"
+	"htdvisser.dev/exp/rjs"
 )
 
-func NewFirmwareService(client *client.Client) *Service {
+func NewFirmwareService(client rjs.Client) *Service {
 	return &Service{client: client}
 }
 
 type Service struct {
-	client *client.Client
+	client rjs.Client
 }
 
 func (s *Service) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
