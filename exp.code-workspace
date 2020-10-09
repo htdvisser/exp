@@ -52,6 +52,9 @@
       "path": "ring"
     },
     {
+      "path": "rjs"
+    },
+    {
       "path": "sql"
     },
     {

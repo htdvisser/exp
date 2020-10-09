@@ -36,6 +36,8 @@ replace htdvisser.dev/exp/rhmanage => ./rhmanage
 
 replace htdvisser.dev/exp/ring => ./ring
 
+replace htdvisser.dev/exp/rjs => ./rjs
+
 replace htdvisser.dev/exp/sql => ./sql
 
 replace htdvisser.dev/exp/sql/sqlgen => ./sql/sqlgen
