@@ -1,8 +1,6 @@
 package firmware
 
-import (
-	"htdvisser.dev/exp/rjs/types"
-)
+import "htdvisser.dev/exp/rjs/types"
 
 const ListURI = "/api/v1/firmware/list"
 

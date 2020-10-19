@@ -1,8 +1,6 @@
 package router
 
-import (
-	"htdvisser.dev/exp/rjs/types"
-)
+import "htdvisser.dev/exp/rjs/types"
 
 const AddURI = "/api/v1/router/add"
 

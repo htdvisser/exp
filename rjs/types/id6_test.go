@@ -1,8 +1,6 @@
 package types
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestID6(t *testing.T) {
 	tt := []struct {

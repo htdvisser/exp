@@ -1,8 +1,6 @@
 package signature
 
-import (
-	"htdvisser.dev/exp/rjs/types"
-)
+import "htdvisser.dev/exp/rjs/types"
 
 const DeleteURI = "/api/v1/signature/delete"
 
