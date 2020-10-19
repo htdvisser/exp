@@ -8,6 +8,9 @@ import (
 	"net/http"
 )
 
+// NewMTLSClient returns a new Client that uses TLS Client Authentication to connect to the RJS server.
+// It loads the CA, certificate and certificate key from the given files.
+// Same as New it prepends the given base URL to API URIs, and sets the given Authorization header if not empty.
 func NewMTLSClient(baseURL, caFile, certFile, keyFile, authorization string) (*Client, error) {
 	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{},

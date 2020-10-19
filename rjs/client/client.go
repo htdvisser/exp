@@ -13,8 +13,12 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"htdvisser.dev/exp/rjs"
 )
 
+// New returns a new RJS Client on top of the given HTTP client.
+// It prepends the given base URL to API URIs, and sets the given Authorization header if not empty.
 func New(client *http.Client, baseURL, authorization string) (*Client, error) {
 	base, err := url.Parse(baseURL)
 	if err != nil {
@@ -29,6 +33,7 @@ func New(client *http.Client, baseURL, authorization string) (*Client, error) {
 	}, nil
 }
 
+// Client is an HTTP client that calls the RJS API.
 type Client struct {
 	client        *http.Client
 	baseURL       string
@@ -39,6 +44,7 @@ func (c *Client) url(uri string) string {
 	return c.baseURL + uri
 }
 
+// Call implements the rjs.Client interface.
 func (c *Client) Call(ctx context.Context, uri string, request interface{}, response interface{}) error {
 	var buf bytes.Buffer
 	err := json.NewEncoder(&buf).Encode(request)
@@ -71,21 +77,10 @@ func (c *Client) Call(ctx context.Context, uri string, request interface{}, resp
 		if err != nil {
 			return err
 		}
-		var errorResponse struct {
-			Error string `json:"error"`
+		return &rjs.Error{
+			StatusCode: res.StatusCode,
+			Body:       body,
 		}
-		err = json.Unmarshal(body, &errorResponse)
-		if err == nil {
-			return fmt.Errorf("upstream server returned error: %q", errorResponse.Error)
-		}
-		var errorResponseList []struct {
-			Error string `json:"error"`
-		}
-		err = json.Unmarshal(body, &errorResponseList)
-		if err == nil && len(errorResponseList) > 0 {
-			return fmt.Errorf("upstream server returned errors: %v", errorResponseList)
-		}
-		return fmt.Errorf("upstream server returned error: %q", string(body))
 	}
 	err = json.NewDecoder(res.Body).Decode(response)
 	if err != nil {
