@@ -2,6 +2,7 @@ package firmware
 
 import (
 	"context"
+	"sort"
 
 	"htdvisser.dev/exp/rjs"
 )
@@ -35,6 +36,6 @@ func (s *Service) List(ctx context.Context, req *ListRequest) (ListResponse, err
 	if err := s.client.Call(ctx, ListURI, req, &res); err != nil {
 		return nil, err
 	}
-	// TODO: sort.Sort(res)
+	sort.Sort(res)
 	return res, nil
 }

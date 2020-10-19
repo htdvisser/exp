@@ -15,3 +15,7 @@ type ListResponseItem struct {
 }
 
 type ListResponse []*ListResponseItem
+
+func (res ListResponse) Len() int           { return len(res) }
+func (res ListResponse) Swap(i, j int)      { res[i], res[j] = res[j], res[i] }
+func (res ListResponse) Less(i, j int) bool { return res[i].SigCRC < res[j].SigCRC }

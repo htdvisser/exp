@@ -15,3 +15,21 @@ type ListResponseItem struct {
 }
 
 type ListResponse []*ListResponseItem
+
+func (res ListResponse) Len() int      { return len(res) }
+func (res ListResponse) Swap(i, j int) { res[i], res[j] = res[j], res[i] }
+func (res ListResponse) Less(i, j int) bool {
+	if res[i].Model < res[j].Model {
+		return true
+	}
+	if res[i].Model > res[j].Model {
+		return false
+	}
+	if res[i].Version < res[j].Version {
+		return true
+	}
+	if res[i].Version > res[j].Version {
+		return false
+	}
+	return res[i].FWCRC < res[j].FWCRC
+}
