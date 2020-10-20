@@ -79,6 +79,14 @@ func (s *Service) SetupBulk(ctx context.Context, req *SetupBulkRequest) (SetupRe
 	return res, nil
 }
 
+func (s *Service) SetupMixed(ctx context.Context, req *SetupMixedRequest) (SetupResponse, error) {
+	var res SetupResponse
+	if err := s.client.Call(ctx, SetupURI, req, &res); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (s *Service) Info(ctx context.Context, req *InfoRequest) (InfoResponse, error) {
 	var res InfoResponse
 	if err := s.client.Call(ctx, InfoURI, req, &res); err != nil {
