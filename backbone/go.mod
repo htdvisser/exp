@@ -18,7 +18,7 @@ require (
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.6.1 // indirect
-	golang.org/x/net v0.0.0-20201016165138-7b1cca2348c0
+	golang.org/x/net v0.0.0-20201020065357-d65d470038a5
 	golang.org/x/sync v0.0.0-20201008141435-b3e1573b7520
 	golang.org/x/sys v0.0.0-20201018230417-eeed37f84f13 // indirect
 	google.golang.org/genproto v0.0.0-20201019141844-1ed22bb0c154 // indirect
