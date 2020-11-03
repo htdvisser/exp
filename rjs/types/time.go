@@ -4,7 +4,7 @@ import "time"
 
 type Time time.Time
 
-const TimeFormat = "2006-01-02T15:04:05.000000"
+const TimeFormat = "2006-01-02T15:04:05.999999"
 
 func (t Time) MarshalText() ([]byte, error) {
 	b := make([]byte, 0, len(TimeFormat))
