@@ -45,6 +45,7 @@ func ParseList(s ...string) (List, error) {
 	return out, nil
 }
 
+// String returns a comma-separated list of dot-separated field paths.
 func (fps List) String() string {
 	ps := make([]string, len(fps))
 	for i, fp := range fps {
@@ -163,6 +164,7 @@ func Parse(s string) (Path, error) {
 	return fp, nil
 }
 
+// String returns the field path as a dot-separated string.
 func (fp Path) String() string {
 	return strings.Join(fp, ".")
 }
