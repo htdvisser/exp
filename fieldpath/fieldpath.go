@@ -45,13 +45,18 @@ func ParseList(s ...string) (List, error) {
 	return out, nil
 }
 
-// String returns a comma-separated list of dot-separated field paths.
-func (fps List) String() string {
+// Strings returns a list of dot-separated field paths.
+func (fps List) Strings() []string {
 	ps := make([]string, len(fps))
 	for i, fp := range fps {
 		ps[i] = fp.String()
 	}
-	return strings.Join(ps, ",")
+	return ps
+}
+
+// String returns a comma-separated list of dot-separated field paths.
+func (fps List) String() string {
+	return strings.Join(fps.Strings(), ",")
 }
 
 // Sort returns a sorted copy of the List.
