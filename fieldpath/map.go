@@ -84,7 +84,7 @@ func fields(m map[string]interface{}, pos Path) List {
 	}
 	list := make(List, 0)
 	for k, v := range m {
-		fp := append(pos, k)
+		fp := pos.Join(k)
 		switch v := v.(type) {
 		case Map:
 			list = append(list, fields(v, fp)...)
@@ -109,7 +109,7 @@ func get(m map[string]interface{}, pos, fp Path) (interface{}, error) {
 	if len(fp) < 1 {
 		return nil, &ErrEmptyFieldPath{}
 	}
-	nextpos := append(pos, fp[0])
+	nextpos := pos.Join(fp[0])
 	mf, ok := m[fp[0]]
 	if !ok {
 		return nil, &ErrNoFieldAtPath{Path: nextpos}
@@ -143,7 +143,7 @@ func set(m map[string]interface{}, pos, fp Path, v interface{}) error {
 		m[fp[0]] = v
 		return nil
 	}
-	nextpos := append(pos, fp[0])
+	nextpos := pos.Join(fp[0])
 	mf, ok := m[fp[0]]
 	if !ok {
 		sub := make(map[string]interface{})
@@ -176,7 +176,7 @@ func unset(m map[string]interface{}, pos, fp Path) error {
 		delete(m, fp[0])
 		return nil
 	}
-	nextpos := append(pos, fp[0])
+	nextpos := pos.Join(fp[0])
 	mf, ok := m[fp[0]]
 	if !ok {
 		return nil
