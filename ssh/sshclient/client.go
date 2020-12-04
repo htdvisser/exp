@@ -144,6 +144,7 @@ func (c AuthMethodConfig) build() (ssh.AuthMethod, error) {
 // ConnectConfig is the configuration for connecting to an SSH server.
 type ConnectConfig struct {
 	Address       string             `json:"address" yaml:"address"`
+	Jump          string             `json:"jump" yaml:"jump"`
 	Timeout       time.Duration      `json:"timeout,omitempty" yaml:"timeout,omitempty"`
 	KeepAlive     time.Duration      `json:"keep_alive,omitempty" yaml:"keep_alive,omitempty"`
 	HostKey       HostKeyConfig      `json:"host_key,omitempty" yaml:"host_key,omitempty"`
@@ -176,33 +177,26 @@ func (c ConnectConfig) Validate() error {
 }
 
 // Dial dials the configured SSH server.
-func (c ConnectConfig) Dial(ctx context.Context) (*ssh.Client, error) {
-	var (
-		authMethods = make([]ssh.AuthMethod, len(c.AuthMethods))
-		err         error
-	)
+func (c ConnectConfig) Dial(ctx context.Context) (jump, dst *ssh.Client, err error) {
+	var authMethods = make([]ssh.AuthMethod, len(c.AuthMethods))
 	for i, amc := range c.AuthMethods {
 		if authMethods[i], err = amc.build(); err != nil {
-			return nil, fmt.Errorf("failed to build auth method %d: %w", i, err)
+			return nil, nil, fmt.Errorf("failed to build auth method %d: %w", i, err)
 		}
 	}
 	hostKeyCallback, err := c.HostKey.build()
 	if err != nil {
-		return nil, fmt.Errorf("failed to build host key callback: %w", err)
+		return nil, nil, fmt.Errorf("failed to build host key callback: %w", err)
 	}
 	bannerCallback, err := c.Banner.build()
 	if err != nil {
-		return nil, fmt.Errorf("failed to build banner callback: %w", err)
+		return nil, nil, fmt.Errorf("failed to build banner callback: %w", err)
 	}
 	d := net.Dialer{
 		Timeout:   durationFallback(c.Timeout, 10*time.Second),
 		KeepAlive: durationFallback(c.KeepAlive, 10*time.Second),
 	}
-	tcpConn, err := d.DialContext(ctx, "tcp", c.Address)
-	if err != nil {
-		return nil, fmt.Errorf("failed to dial %q: %w", c.Address, err)
-	}
-	sshConn, sshChannels, sshRequests, err := ssh.NewClientConn(tcpConn, c.Address, &ssh.ClientConfig{
+	clientConfig := &ssh.ClientConfig{
 		Config:          ssh.Config{},
 		Timeout:         durationFallback(c.Timeout, 10*time.Second),
 		HostKeyCallback: hostKeyCallback,
@@ -210,9 +204,31 @@ func (c ConnectConfig) Dial(ctx context.Context) (*ssh.Client, error) {
 		ClientVersion:   c.ClientVersion,
 		User:            c.Username,
 		Auth:            authMethods,
-	})
-	if err != nil {
-		return nil, fmt.Errorf("failed to establish SSH client connection: %w", err)
 	}
-	return ssh.NewClient(sshConn, sshChannels, sshRequests), nil
+	var dstConn net.Conn
+	if c.Jump != "" {
+		jumpConn, err := d.DialContext(ctx, "tcp", c.Jump)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to dial %q: %w", c.Jump, err)
+		}
+		sshConn, sshChannels, sshRequests, err := ssh.NewClientConn(jumpConn, c.Jump, clientConfig)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to establish SSH client connection: %w", err)
+		}
+		jump = ssh.NewClient(sshConn, sshChannels, sshRequests)
+		dstConn, err = jump.Dial("tcp", c.Address)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to dial %q: %w", c.Address, err)
+		}
+	} else {
+		dstConn, err = d.DialContext(ctx, "tcp", c.Address)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to dial %q: %w", c.Address, err)
+		}
+	}
+	sshConn, sshChannels, sshRequests, err := ssh.NewClientConn(dstConn, c.Address, clientConfig)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to establish SSH client connection: %w", err)
+	}
+	return jump, ssh.NewClient(sshConn, sshChannels, sshRequests), nil
 }

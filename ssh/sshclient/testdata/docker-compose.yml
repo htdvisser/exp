@@ -6,3 +6,7 @@ services:
     - "127.0.0.1:2222:22"
     volumes:
     - .:/root/test
+  second:
+    build: .
+    volumes:
+    - .:/root/test

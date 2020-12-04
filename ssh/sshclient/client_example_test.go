@@ -36,7 +36,7 @@ func Example() {
 		return
 	}
 
-	client, err := config.Dial(context.Background())
+	_, client, err := config.Dial(context.Background())
 	if err != nil {
 		// handle error
 		return

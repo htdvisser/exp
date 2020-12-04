@@ -45,7 +45,7 @@ func TestDial(t *testing.T) {
 		if err := c.Validate(); err != nil {
 			t.Errorf("Config failed to validate: %v", err)
 		}
-		cli, err := c.Dial(context.Background())
+		_, cli, err := c.Dial(context.Background())
 		if err != nil {
 			t.Fatalf("runssh_test: dial failed: %v", err)
 		}
@@ -57,7 +57,7 @@ func TestDial(t *testing.T) {
 		if err := c.Validate(); err != nil {
 			t.Errorf("Config failed to validate: %v", err)
 		}
-		cli, err := c.Dial(context.Background())
+		_, cli, err := c.Dial(context.Background())
 		if err != nil {
 			t.Fatalf("runssh_test: dial failed: %v", err)
 		}
@@ -79,7 +79,7 @@ func TestDial(t *testing.T) {
 				if err := c.Validate(); err != nil {
 					t.Errorf("Config failed to validate: %v", err)
 				}
-				cli, err := c.Dial(context.Background())
+				_, cli, err := c.Dial(context.Background())
 				if err != nil {
 					t.Fatalf("runssh_test: dial failed: %v", err)
 				}
@@ -113,10 +113,25 @@ func TestDial(t *testing.T) {
 		if err := c.Validate(); err != nil {
 			t.Errorf("Config failed to validate: %v", err)
 		}
-		cli, err := c.Dial(context.Background())
+		_, cli, err := c.Dial(context.Background())
 		if err != nil {
 			t.Fatalf("runssh_test: dial failed: %v", err)
 		}
 		defer cli.Close()
+	})
+
+	t.Run("Jump", func(t *testing.T) {
+		c := buildConnectConfig()
+		c.Jump = "localhost:2222"
+		c.Address = "second:22"
+		if err := c.Validate(); err != nil {
+			t.Errorf("Config failed to validate: %v", err)
+		}
+		jump, cli, err := c.Dial(context.Background())
+		if err != nil {
+			t.Fatalf("runssh_test: dial failed: %v", err)
+		}
+		defer cli.Close()
+		defer jump.Close()
 	})
 }
