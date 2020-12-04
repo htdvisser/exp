@@ -93,6 +93,7 @@ func TestDial(t *testing.T) {
 			awsRegion          = os.Getenv("AWS_REGION")
 			awsAccessKeyID     = os.Getenv("AWS_ACCESS_KEY_ID")
 			awsSecretAccessKey = os.Getenv("AWS_SECRET_ACCESS_KEY")
+			awsSessionToken    = os.Getenv("AWS_SESSION_TOKEN")
 			awsKMSKeyID        = os.Getenv("AWS_KMS_KEY_ID")
 		)
 		if awsKMSKeyID == "" {
@@ -106,6 +107,7 @@ func TestDial(t *testing.T) {
 					Region:          awsRegion,
 					AccessKeyID:     awsAccessKeyID,
 					SecretAccessKey: awsSecretAccessKey,
+					SessionToken:    awsSessionToken,
 					KeyID:           awsKMSKeyID,
 				},
 			},
