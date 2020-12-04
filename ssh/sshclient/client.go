@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"net"
-	"os"
 	"time"
 
 	"golang.org/x/crypto/ssh"
@@ -13,13 +12,6 @@ import (
 	hssh "htdvisser.dev/exp/ssh"
 	"htdvisser.dev/exp/ssh/aws"
 )
-
-func stringFallback(s, fallback string) string {
-	if s != "" {
-		return s
-	}
-	return fallback
-}
 
 func durationFallback(d, fallback time.Duration) time.Duration {
 	if d != 0 {
@@ -151,7 +143,6 @@ func (c AuthMethodConfig) build() (ssh.AuthMethod, error) {
 
 // ConnectConfig is the configuration for connecting to an SSH server.
 type ConnectConfig struct {
-	Network       string             `json:"network,omitempty" yaml:"network,omitempty"`
 	Address       string             `json:"address" yaml:"address"`
 	Timeout       time.Duration      `json:"timeout,omitempty" yaml:"timeout,omitempty"`
 	KeepAlive     time.Duration      `json:"keep_alive,omitempty" yaml:"keep_alive,omitempty"`
@@ -164,22 +155,6 @@ type ConnectConfig struct {
 
 // Validate validates the configuration and returns an error if it is not valid.
 func (c ConnectConfig) Validate() error {
-	switch c.Network {
-	case "", "tcp", "tcp4", "tcp6":
-		if _, err := net.ResolveTCPAddr(c.Network, c.Address); err != nil {
-			return fmt.Errorf("invalid address %q: %w", c.Address, err)
-		}
-	case "unix":
-		info, err := os.Stat(c.Address)
-		if err != nil {
-			return fmt.Errorf("invalid address %q: %w", c.Address, err)
-		}
-		if info.Mode()&os.ModeSocket != os.ModeSocket {
-			return fmt.Errorf("address %q does not seem to be a socket", c.Address)
-		}
-	default:
-		return fmt.Errorf("invalid network %q for ConnectConfig", c.Network)
-	}
 	if err := c.HostKey.Validate(); err != nil {
 		return fmt.Errorf("invalid host key in ConnectConfig: %w", err)
 	}
@@ -223,11 +198,7 @@ func (c ConnectConfig) Dial(ctx context.Context) (*ssh.Client, error) {
 		Timeout:   durationFallback(c.Timeout, 10*time.Second),
 		KeepAlive: durationFallback(c.KeepAlive, 10*time.Second),
 	}
-	tcpConn, err := d.DialContext(
-		ctx,
-		stringFallback(c.Network, "tcp"),
-		c.Address,
-	)
+	tcpConn, err := d.DialContext(ctx, "tcp", c.Address)
 	if err != nil {
 		return nil, fmt.Errorf("failed to dial %q: %w", c.Address, err)
 	}

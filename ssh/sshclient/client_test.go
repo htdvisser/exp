@@ -12,7 +12,6 @@ import (
 
 func buildConnectConfig() ConnectConfig {
 	return ConnectConfig{
-		Network: "tcp",
 		Address: "localhost:2222",
 		HostKey: HostKeyConfig{
 			Source: "insecure_ignore",
@@ -33,7 +32,7 @@ func TestDial(t *testing.T) {
 		t.Errorf("Config failed to validate: %v", err)
 	}
 
-	conn, err := net.Dial(c.Network, c.Address)
+	conn, err := net.Dial("tcp", c.Address)
 	if err != nil {
 		t.Skip("SSH Server not running")
 	}
