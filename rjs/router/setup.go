@@ -5,7 +5,7 @@ import "htdvisser.dev/exp/rjs/types"
 const SetupURI = "/api/v1/router/setup"
 
 type SetupRequestItem struct {
-	Router    types.ID6   `json:"router"`
+	Router    types.ID6   `json:"router,omitempty"`
 	CUPSURI   string      `json:"cupsUri,omitempty"`
 	CUPSKey   []byte      `json:"cupsKey,omitempty"`
 	CUPSCrt   []byte      `json:"cupsCrt,omitempty"`
