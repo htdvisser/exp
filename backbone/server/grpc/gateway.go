@@ -2,10 +2,12 @@ package grpc
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"net/textproto"
 
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc/status"
 )
 
 var defaultRequestHeaders = []string{
@@ -38,14 +40,14 @@ func (h runtimeHeaders) match(header string) (string, bool) {
 	return out, ok
 }
 
-func handleProtoError(ctx context.Context, mux *runtime.ServeMux, marshaler runtime.Marshaler, w http.ResponseWriter, r *http.Request, err error) {
-	if err == runtime.ErrUnknownURI {
+func handleError(ctx context.Context, mux *runtime.ServeMux, marshaler runtime.Marshaler, w http.ResponseWriter, r *http.Request, err error) {
+	if errors.Is(err, runtime.ErrNotMatch) {
 		http.NotFound(w, r)
 		return
 	}
-	runtime.DefaultHTTPProtoErrorHandler(ctx, mux, marshaler, w, r, err)
+	runtime.DefaultHTTPErrorHandler(ctx, mux, marshaler, w, r, err)
 }
 
-func handleStreamError(ctx context.Context, err error) *runtime.StreamError {
-	return runtime.DefaultHTTPStreamErrorHandler(ctx, err)
+func handleStreamError(ctx context.Context, err error) *status.Status {
+	return runtime.DefaultStreamErrorHandler(ctx, err)
 }

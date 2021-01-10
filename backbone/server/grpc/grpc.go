@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
@@ -38,7 +38,7 @@ type Server struct {
 func NewServer(opts ...Option) *Server {
 	options := &options{
 		runtimeServeMuxOptions: []runtime.ServeMuxOption{
-			runtime.WithProtoErrorHandler(handleProtoError),
+			runtime.WithErrorHandler(handleError),
 			runtime.WithStreamErrorHandler(handleStreamError),
 		},
 		runtimeIncomingHeaders: make(runtimeHeaders),
