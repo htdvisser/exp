@@ -24,6 +24,8 @@ type MockServer struct {
 	serverOptions []grpc.ServerOption
 	dialOptions   []grpc.DialOption
 
+	testpb.UnimplementedTestServiceServer
+
 	// Test call handlers.
 	emptyCall           func(context.Context, *testpb.Empty) (*testpb.Empty, error)
 	unaryCall           func(context.Context, *testpb.SimpleRequest) (*testpb.SimpleResponse, error)
@@ -56,14 +58,7 @@ func (ms *MockServer) Start(ctx context.Context) error {
 		ms.lis = nil
 	})
 	ms.server = grpc.NewServer(ms.serverOptions...)
-	testpb.RegisterTestServiceService(ms.server, &testpb.TestServiceService{
-		EmptyCall:           ms.EmptyCall,
-		UnaryCall:           ms.UnaryCall,
-		StreamingOutputCall: ms.StreamingOutputCall,
-		StreamingInputCall:  ms.StreamingInputCall,
-		FullDuplexCall:      ms.FullDuplexCall,
-		HalfDuplexCall:      ms.HalfDuplexCall,
-	})
+	testpb.RegisterTestServiceServer(ms.server, ms)
 	go ms.server.Serve(ms.lis)
 	ms.cleanups = append(ms.cleanups, func() {
 		ms.server.Stop()

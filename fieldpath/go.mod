@@ -1,5 +1,5 @@
 module htdvisser.dev/exp/fieldpath
 
-go 1.13
+go 1.15
 
-require github.com/google/go-cmp v0.5.3
+require github.com/google/go-cmp v0.5.4

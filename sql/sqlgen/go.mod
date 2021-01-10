@@ -1,6 +1,6 @@
 module htdvisser.dev/exp/sql/sqlgen
 
-go 1.14
+go 1.15
 
 require (
 	github.com/fatih/structtag v1.2.0

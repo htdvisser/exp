@@ -1,3 +1,3 @@
 module htdvisser.dev/exp/flagenv
 
-go 1.13
+go 1.15

@@ -1,6 +1,6 @@
 module htdvisser.dev/exp
 
-go 1.14
+go 1.15
 
 replace htdvisser.dev/exp/b32 => ./b32
 
