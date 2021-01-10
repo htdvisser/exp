@@ -8,10 +8,10 @@ replace htdvisser.dev/exp/stringslice => ../stringslice
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v0.4.1
-	github.com/gogo/gateway v1.1.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.4.3
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.1.0
 	github.com/iancoleman/strcase v0.1.2 // indirect
 	github.com/lyft/protoc-gen-star v0.5.2 // indirect
 	github.com/mdempsky/unconvert v0.0.0-20200228143138-95ecdbfc0b5f
@@ -25,7 +25,7 @@ require (
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.0.1
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	htdvisser.dev/exp/backbone v0.0.0-20201215110738-6786571a568e
+	htdvisser.dev/exp/backbone v0.0.0-20210110145356-197d1c32acba
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
 	mvdan.cc/gofumpt v0.1.0

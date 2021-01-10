@@ -63,8 +63,8 @@ func main() {
 	run(".", "go", "install", "github.com/envoyproxy/protoc-gen-validate")
 	run(".", "go", "install", "google.golang.org/protobuf/cmd/protoc-gen-go")
 	run(".", "go", "install", "google.golang.org/grpc/cmd/protoc-gen-go-grpc")
-	run(".", "go", "install", "github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway")
-	run(".", "go", "install", "github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger")
+	run(".", "go", "install", "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway")
+	run(".", "go", "install", "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2")
 	run(".", "go", "install", "github.com/mdempsky/unconvert")
 	run(".", "go", "install", "mvdan.cc/gofumpt")
 
@@ -89,13 +89,13 @@ func main() {
 		0644,
 	)
 	download(
-		"https://github.com/grpc-ecosystem/grpc-gateway/raw/master/protoc-gen-swagger/options/annotations.proto",
-		"third_party/protoc-gen-swagger/options/annotations.proto",
+		"https://github.com/grpc-ecosystem/grpc-gateway/raw/master/protoc-gen-openapiv2/options/annotations.proto",
+		"third_party/protoc-gen-openapiv2/options/annotations.proto",
 		0644,
 	)
 	download(
-		"https://github.com/grpc-ecosystem/grpc-gateway/raw/master/protoc-gen-swagger/options/openapiv2.proto",
-		"third_party/protoc-gen-swagger/options/openapiv2.proto",
+		"https://github.com/grpc-ecosystem/grpc-gateway/raw/master/protoc-gen-openapiv2/options/openapiv2.proto",
+		"third_party/protoc-gen-openapiv2/options/openapiv2.proto",
 		0644,
 	)
 

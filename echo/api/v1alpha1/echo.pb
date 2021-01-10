@@ -1,6 +1,6 @@
 
-„
-echo_service.protohtdvisser.echo.v1alpha1Agithub.com/envoyproxy/protoc-gen-validate/validate/validate.proto-github.com/gogo/protobuf/gogoproto/gogo.protogoogle/api/annotations.proto,protoc-gen-swagger/options/annotations.proto":
+†
+echo_service.protohtdvisser.echo.v1alpha1Agithub.com/envoyproxy/protoc-gen-validate/validate/validate.proto-github.com/gogo/protobuf/gogoproto/gogo.protogoogle/api/annotations.proto.protoc-gen-openapiv2/options/annotations.proto":
 EchoRequest+
 message (	BúBr ( ’Ax €Rmessage"(
 EchoResponse

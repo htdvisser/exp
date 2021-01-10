@@ -5,7 +5,7 @@ package htdvisser.echo.v1alpha1;
 import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "protoc-gen-swagger/options/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "htdvisser.dev/exp/echo/api/v1alpha1;echo";
 
@@ -16,7 +16,7 @@ message EchoRequest {
     (validate.rules).string = {
       min_bytes: 1, max_bytes: 32
     },
-    (grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
       min_length: 1, max_length: 32
     }
   ];

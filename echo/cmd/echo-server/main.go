@@ -8,9 +8,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/gogo/gateway"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/spf13/pflag"
+	"google.golang.org/protobuf/encoding/protojson"
 	bbserver "htdvisser.dev/exp/backbone/server"
 	"htdvisser.dev/exp/backbone/server/grpc"
 	"htdvisser.dev/exp/backbone/server/recovery"
@@ -50,10 +50,12 @@ func main() {
 
 	pflag.Parse()
 
-	jsonpb := &gateway.JSONPb{
-		EmitDefaults: true,
-		Indent:       "  ",
-		OrigName:     true,
+	jsonpb := &runtime.JSONPb{
+		MarshalOptions: protojson.MarshalOptions{
+			Multiline:     true,
+			Indent:        "  ",
+			UseProtoNames: true,
+		},
 	}
 
 	backbone := bbserver.New(

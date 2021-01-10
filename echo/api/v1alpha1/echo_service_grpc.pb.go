@@ -47,8 +47,7 @@ type EchoServiceServer interface {
 }
 
 // UnimplementedEchoServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedEchoServiceServer struct {
-}
+type UnimplementedEchoServiceServer struct{}
 
 func (UnimplementedEchoServiceServer) Echo(context.Context, *EchoRequest) (*EchoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Echo not implemented")
@@ -62,7 +61,7 @@ type UnsafeEchoServiceServer interface {
 	mustEmbedUnimplementedEchoServiceServer()
 }
 
-func RegisterEchoServiceServer(s *grpc.Server, srv EchoServiceServer) {
+func RegisterEchoServiceServer(s grpc.ServiceRegistrar, srv EchoServiceServer) {
 	s.RegisterService(&_EchoService_serviceDesc, srv)
 }
 
