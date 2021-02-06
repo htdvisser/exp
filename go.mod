@@ -32,6 +32,8 @@ replace htdvisser.dev/exp/protoget => ./protoget
 
 replace htdvisser.dev/exp/redis => ./redis
 
+replace htdvisser.dev/exp/redisconfig => ./redisconfig
+
 replace htdvisser.dev/exp/rhmanage => ./rhmanage
 
 replace htdvisser.dev/exp/ring => ./ring
