@@ -79,6 +79,9 @@
       "path": "tls"
     },
     {
+      "path": "tlsconfig"
+    },
+    {
       "path": "tree"
     },
     {
