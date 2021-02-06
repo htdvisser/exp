@@ -61,7 +61,7 @@ func init() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", bin)
 		flags.PrintDefaults()
 	}
-	flags.AddFlagSet(redisConfig.Flags("redis."))
+	flags.AddFlagSet(redisConfig.Flags("redis.", nil))
 	flags.StringVar(&config.Match, "key.match", "*", "MATCH the key")
 	flags.IntVar(&config.Batch, "batch", 1000, "Batch size")
 	flags.StringToStringVar(&config.Filter, "filter", nil, "Filter by hash contents")

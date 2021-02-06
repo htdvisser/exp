@@ -20,12 +20,24 @@ type Config struct {
 }
 
 // DefaultConfig is the default configuration for the sticky router service.
-func DefaultConfig() Config {
-	return Config{
+func DefaultConfig() *Config {
+	return &Config{
 		SubjectPattern: "sticky.route.{duration}.{hash}",
 		Queue:          "default",
 		Workers:        1,
 	}
+}
+
+// Flags returns a flagset that can be added to the command line.
+func (c *Config) Flags(prefix string, defaults *Config) *pflag.FlagSet {
+	var flags pflag.FlagSet
+	if defaults == nil {
+		defaults = DefaultConfig()
+	}
+	flags.StringVar(&c.SubjectPattern, prefix+"subject", defaults.SubjectPattern, "Subject pattern to subscribe to")
+	flags.StringVar(&c.Queue, prefix+"queue", defaults.Queue, "Queue to use when subscribing")
+	flags.IntVar(&c.Workers, prefix+"workers", defaults.Workers, "Number of workers")
+	return &flags
 }
 
 func (c *Config) parseSubjectPattern() error {
@@ -67,39 +79,4 @@ func (c *Config) parseSubjectPattern() error {
 	}
 	c.subject = strings.Join(subjectTokens, ".")
 	return nil
-}
-
-func (c *Config) load() (*Config, error) {
-	var (
-		defaultConfig = DefaultConfig()
-		clone         Config
-	)
-	if c == nil {
-		clone = defaultConfig
-	} else {
-		clone = *c
-		if clone.SubjectPattern == "" {
-			clone.SubjectPattern = defaultConfig.SubjectPattern
-		}
-		if clone.Queue == "" {
-			clone.Queue = defaultConfig.Queue
-		}
-		if clone.Workers == 0 {
-			clone.Workers = defaultConfig.Workers
-		}
-	}
-	if err := clone.parseSubjectPattern(); err != nil {
-		return nil, err
-	}
-	return &clone, nil
-}
-
-// Flags returns a flagset that can be added to the command line.
-func (c *Config) Flags(prefix string) *pflag.FlagSet {
-	var flags pflag.FlagSet
-	defaultConfig := DefaultConfig()
-	flags.StringVar(&c.SubjectPattern, prefix+"subject", defaultConfig.SubjectPattern, "Subject pattern to subscribe to")
-	flags.StringVar(&c.Queue, prefix+"queue", defaultConfig.Queue, "Queue to use when subscribing")
-	flags.IntVar(&c.Workers, prefix+"workers", defaultConfig.Workers, "Number of workers")
-	return &flags
 }

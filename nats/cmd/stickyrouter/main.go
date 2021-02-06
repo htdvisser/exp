@@ -70,9 +70,9 @@ func init() {
 		flags.PrintDefaults()
 	}
 	flags.AddFlagSet(tlsConfig.Flags("tls."))
-	flags.AddFlagSet(natsConfig.Flags("nats."))
-	flags.AddFlagSet(redisConfig.Flags("redis."))
-	flags.AddFlagSet(stickyrouterConfig.Flags("route."))
+	flags.AddFlagSet(natsConfig.Flags("nats.", nil))
+	flags.AddFlagSet(redisConfig.Flags("redis.", nil))
+	flags.AddFlagSet(stickyrouterConfig.Flags("route.", nil))
 }
 
 func main() {
@@ -157,7 +157,7 @@ func Run(ctx context.Context, args ...string) error {
 		return srv.Shutdown(ctx)
 	})
 
-	svc, err := stickyrouter.NewService(&stickyrouterConfig, natsConn, redisCli)
+	svc, err := stickyrouter.NewService(stickyrouterConfig, natsConn, redisCli)
 	if err != nil {
 		return err
 	}

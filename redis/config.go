@@ -20,14 +20,24 @@ type Config struct {
 	TLSConfig    *tls.Config
 }
 
+// DefaultConfig returns the default Redis configuration.
+func DefaultConfig() *Config {
+	return &Config{
+		Addresses: []string{"localhost:6379"},
+	}
+}
+
 // Flags returns a flagset that can be added to the command line.
-func (c *Config) Flags(prefix string) *pflag.FlagSet {
+func (c *Config) Flags(prefix string, defaults *Config) *pflag.FlagSet {
 	var flags pflag.FlagSet
-	flags.StringSliceVar(&c.Addresses, prefix+"addresses", []string{"localhost:6379"}, "Redis addresses")
-	flags.StringVar(&c.Username, prefix+"auth.username", "", "Redis username")
-	flags.StringVar(&c.Password, prefix+"auth.password", "", "Redis password")
-	flags.StringVar(&c.PasswordFile, prefix+"auth.password-file", "", "Redis password file")
-	flags.IntVar(&c.PoolSize, prefix+"pool.size", 0, "Redis connection pool size")
+	if defaults == nil {
+		defaults = DefaultConfig()
+	}
+	flags.StringSliceVar(&c.Addresses, prefix+"addresses", defaults.Addresses, "Redis addresses")
+	flags.StringVar(&c.Username, prefix+"auth.username", defaults.Username, "Redis username")
+	flags.StringVar(&c.Password, prefix+"auth.password", defaults.Password, "Redis password")
+	flags.StringVar(&c.PasswordFile, prefix+"auth.password-file", defaults.PasswordFile, "Redis password file")
+	flags.IntVar(&c.PoolSize, prefix+"pool.size", defaults.PoolSize, "Redis connection pool size")
 	return &flags
 }
 

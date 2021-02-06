@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/spf13/pflag"
@@ -26,16 +25,8 @@ var config struct {
 }
 
 func init() {
-	pflag.StringVar(&config.server.ListenHTTP, "http.listen", ":8080", "Listen address for the HTTP server")
-	pflag.StringVar(&config.server.ListenGRPC, "grpc.listen", ":9090", "Listen address for the gRPC server")
-	pflag.StringVar(&config.server.ListenInternalHTTP, "internal.http.listen", "localhost:18080", "Listen address for the internal HTTP server")
-	pflag.StringVar(&config.server.ListenInternalGRPC, "internal.grpc.listen", "localhost:19090", "Listen address for the internal gRPC server")
-	pflag.StringVar(&config.echo.Prefix, "prefix", "<echo>: ", "Prefix for the echo")
-	pflag.StringVar(&config.echo.ListenTCP, "tcp.listen", ":7070", "Listen address for the TCP server")
-	pflag.BoolVar(&config.echo.TCPProxy, "tcp.proxy", false, "Support PROXY protocol on the TCP server")
-	pflag.StringSliceVar(&config.echo.TCPProxyAllowedIPs, "tcp.proxy.allowed-ips", nil, "Optional list of IPs/CIDRs from which PROXY headers are read")
-	pflag.DurationVar(&config.echo.TCPTimeout, "tcp.timeout", time.Minute, "Connection timeout for the TCP server")
-	pflag.StringVar(&config.echo.ListenUDP, "udp.listen", ":6060", "Listen address for the UDP server")
+	pflag.CommandLine.AddFlagSet(config.server.Flags("", nil))
+	pflag.CommandLine.AddFlagSet(config.echo.Flags("", nil))
 }
 
 func main() {

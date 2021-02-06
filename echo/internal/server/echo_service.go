@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/pires/go-proxyproto"
+	"github.com/spf13/pflag"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"htdvisser.dev/exp/backbone/server"
@@ -15,14 +16,40 @@ import (
 	echo "htdvisser.dev/exp/echo/api/v1alpha1"
 )
 
+// Config is the configuration for the Echo service.
 type Config struct {
-	ListenTCP  string
-	TCPTimeout time.Duration
+	ListenTCP          string
+	TCPTimeout         time.Duration
 	TCPProxy           bool
 	TCPProxyAllowedIPs []string
 	tcpServerOptions   []stream.Option
-	ListenUDP  string
-	Prefix     string
+	ListenUDP          string
+	Prefix             string
+}
+
+// DefaultConfig returns the default configuration for the Echo service.
+func DefaultConfig() *Config {
+	return &Config{
+		ListenTCP:  ":7070",
+		TCPTimeout: time.Minute,
+		ListenUDP:  ":6060",
+		Prefix:     "<echo>: ",
+	}
+}
+
+// Flags returns a flagset that can be added to the command line.
+func (c *Config) Flags(prefix string, defaults *Config) *pflag.FlagSet {
+	var flags pflag.FlagSet
+	if defaults == nil {
+		defaults = DefaultConfig()
+	}
+	flags.StringVar(&c.ListenTCP, prefix+"tcp.listen", defaults.ListenTCP, "Listen address for the TCP server")
+	flags.DurationVar(&c.TCPTimeout, prefix+"tcp.timeout", defaults.TCPTimeout, "Connection timeout for the TCP server")
+	flags.BoolVar(&c.TCPProxy, prefix+"tcp.proxy", defaults.TCPProxy, "Support PROXY protocol on the TCP server")
+	flags.StringSliceVar(&c.TCPProxyAllowedIPs, prefix+"tcp.proxy.allowed-ips", defaults.TCPProxyAllowedIPs, "Optional list of IPs/CIDRs from which PROXY headers are read")
+	flags.StringVar(&c.ListenUDP, prefix+"udp.listen", defaults.ListenUDP, "Listen address for the UDP server")
+	flags.StringVar(&c.Prefix, prefix+"prefix", defaults.Prefix, "Prefix for the echo")
+	return &flags
 }
 
 func NewEchoService(config Config) (*EchoService, error) {

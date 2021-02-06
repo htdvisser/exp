@@ -13,16 +13,16 @@ import (
 )
 
 // NewService returns a new sticky router service.
-func NewService(config *Config, nats *nats.Conn, redis redis.UniversalClient) (*Service, error) {
-	processedConfig, err := config.load()
-	if err != nil {
-		return nil, err
-	}
-	return &Service{
+func NewService(config Config, nats *nats.Conn, redis redis.UniversalClient) (*Service, error) {
+	s := &Service{
 		nats:   nats,
 		redis:  redis,
-		config: processedConfig,
-	}, nil
+		config: &config,
+	}
+	if err := s.config.parseSubjectPattern(); err != nil {
+		return nil, err
+	}
+	return s, nil
 }
 
 // Service is the sticky router service.

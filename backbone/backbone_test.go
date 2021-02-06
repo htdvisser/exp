@@ -18,7 +18,7 @@ var config struct {
 }
 
 func init() {
-	pflag.CommandLine.AddFlagSet(config.server.Flags(""))
+	pflag.CommandLine.AddFlagSet(config.server.Flags("", nil))
 }
 
 func Example() {

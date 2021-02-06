@@ -93,18 +93,28 @@ type Config struct {
 	TLSConfig    *tls.Config
 }
 
+// DefaultConfig returns the default configuration for the NATS connection.
+func DefaultConfig() *Config {
+	return &Config{
+		Servers: []string{nats.DefaultURL},
+	}
+}
+
 // Flags returns a flagset that can be added to the command line.
-func (c *Config) Flags(prefix string) *pflag.FlagSet {
+func (c *Config) Flags(prefix string, defaults *Config) *pflag.FlagSet {
 	var flags pflag.FlagSet
-	flags.StringSliceVar(&c.Servers, prefix+"servers", []string{nats.DefaultURL}, "NATS servers")
-	flags.StringVar(&c.Name, prefix+"name", "", "Name to send to the NATS servers")
-	flags.StringVar(&c.Username, prefix+"auth.username", "", "NATS username")
-	flags.StringVar(&c.Password, prefix+"auth.password", "", "NATS password")
-	flags.StringVar(&c.PasswordFile, prefix+"auth.password-file", "", "NATS password file")
-	flags.StringVar(&c.Store, prefix+"store", "", "NATS credentials store")
-	flags.StringVar(&c.Credentials.CredsFile, prefix+"auth.credentials-file", "", "NATS credentials file")
-	flags.StringVar(&c.Credentials.JWTFile, prefix+"auth.jwt-file", "", "NATS JWT file")
-	flags.StringVar(&c.Credentials.SeedFile, prefix+"auth.seed-file", "", "NATS seed file")
+	if defaults == nil {
+		defaults = DefaultConfig()
+	}
+	flags.StringSliceVar(&c.Servers, prefix+"servers", defaults.Servers, "NATS servers")
+	flags.StringVar(&c.Name, prefix+"name", defaults.Name, "Name to send to the NATS servers")
+	flags.StringVar(&c.Username, prefix+"auth.username", defaults.Username, "NATS username")
+	flags.StringVar(&c.Password, prefix+"auth.password", defaults.Password, "NATS password")
+	flags.StringVar(&c.PasswordFile, prefix+"auth.password-file", defaults.PasswordFile, "NATS password file")
+	flags.StringVar(&c.Store, prefix+"store", defaults.Store, "NATS credentials store")
+	flags.StringVar(&c.Credentials.CredsFile, prefix+"auth.credentials-file", defaults.Credentials.CredsFile, "NATS credentials file")
+	flags.StringVar(&c.Credentials.JWTFile, prefix+"auth.jwt-file", defaults.Credentials.JWTFile, "NATS JWT file")
+	flags.StringVar(&c.Credentials.SeedFile, prefix+"auth.seed-file", defaults.Credentials.SeedFile, "NATS seed file")
 	return &flags
 }
 
