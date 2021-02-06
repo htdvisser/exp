@@ -28,6 +28,9 @@
       "path": "hex"
     },
     {
+      "path": "imago"
+    },
+    {
       "path": "maskgen"
     },
     {
@@ -44,6 +47,9 @@
     },
     {
       "path": "redis"
+    },
+    {
+      "path": "redisconfig"
     },
     {
       "path": "rhmanage"

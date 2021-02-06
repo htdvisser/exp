@@ -2,54 +2,33 @@ module htdvisser.dev/exp
 
 go 1.15
 
-replace htdvisser.dev/exp/b32 => ./b32
-
-replace htdvisser.dev/exp/b64 => ./b64
-
-replace htdvisser.dev/exp/backbone => ./backbone
-
-replace htdvisser.dev/exp/clicontext => ./clicontext
-
-replace htdvisser.dev/exp/echo => ./echo
-
-replace htdvisser.dev/exp/fieldpath => ./fieldpath
-
-replace htdvisser.dev/exp/flagenv => ./flagenv
-
-replace htdvisser.dev/exp/grpctest => ./grpctest
-
-replace htdvisser.dev/exp/hex => ./hex
-
-replace htdvisser.dev/exp/maskgen => ./maskgen
-
-replace htdvisser.dev/exp/nats => ./nats
-
-replace htdvisser.dev/exp/pflagenv => ./pflagenv
-
-replace htdvisser.dev/exp/protoc-gen-hugodata => ./protoc-gen-hugodata
-
-replace htdvisser.dev/exp/protoget => ./protoget
-
-replace htdvisser.dev/exp/redis => ./redis
-
-replace htdvisser.dev/exp/redisconfig => ./redisconfig
-
-replace htdvisser.dev/exp/rhmanage => ./rhmanage
-
-replace htdvisser.dev/exp/ring => ./ring
-
-replace htdvisser.dev/exp/rjs => ./rjs
-
-replace htdvisser.dev/exp/sql => ./sql
-
-replace htdvisser.dev/exp/sql/sqlgen => ./sql/sqlgen
-
-replace htdvisser.dev/exp/ssh => ./ssh
-
-replace htdvisser.dev/exp/stringslice => ./stringslice
-
-replace htdvisser.dev/exp/sum => ./sum
-
-replace htdvisser.dev/exp/tree => ./tree
-
-replace htdvisser.dev/exp/waitcontext => ./waitcontext
+replace (
+	htdvisser.dev/exp/b32 => ./b32
+	htdvisser.dev/exp/b64 => ./b64
+	htdvisser.dev/exp/backbone => ./backbone
+	htdvisser.dev/exp/clicontext => ./clicontext
+	htdvisser.dev/exp/echo => ./echo
+	htdvisser.dev/exp/fieldpath => ./fieldpath
+	htdvisser.dev/exp/flagenv => ./flagenv
+	htdvisser.dev/exp/grpctest => ./grpctest
+	htdvisser.dev/exp/hex => ./hex
+	htdvisser.dev/exp/imago => ./imago
+	htdvisser.dev/exp/maskgen => ./maskgen
+	htdvisser.dev/exp/nats => ./nats
+	htdvisser.dev/exp/pflagenv => ./pflagenv
+	htdvisser.dev/exp/protoc-gen-hugodata => ./protoc-gen-hugodata
+	htdvisser.dev/exp/protoget => ./protoget
+	htdvisser.dev/exp/redis => ./redis
+	htdvisser.dev/exp/redisconfig => ./redisconfig
+	htdvisser.dev/exp/rhmanage => ./rhmanage
+	htdvisser.dev/exp/ring => ./ring
+	htdvisser.dev/exp/rjs => ./rjs
+	htdvisser.dev/exp/sql => ./sql
+	htdvisser.dev/exp/sql/sqlgen => ./sql/sqlgen
+	htdvisser.dev/exp/ssh => ./ssh
+	htdvisser.dev/exp/stringslice => ./stringslice
+	htdvisser.dev/exp/sum => ./sum
+	htdvisser.dev/exp/tls => ./tls
+	htdvisser.dev/exp/tree => ./tree
+	htdvisser.dev/exp/waitcontext => ./waitcontext
+)
