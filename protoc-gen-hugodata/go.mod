@@ -10,7 +10,7 @@ require (
 	github.com/lyft/protoc-gen-star v0.5.2
 	github.com/spf13/afero v1.5.1 // indirect
 	golang.org/x/text v0.3.5 // indirect
-	google.golang.org/genproto v0.0.0-20210108203827-ffc7fda8c3d7
+	google.golang.org/genproto v0.0.0-20210204154452-deb828366460
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )

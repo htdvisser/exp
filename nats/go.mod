@@ -12,7 +12,7 @@ replace htdvisser.dev/exp/tls => ../tls
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/go-redis/redis/v8 v8.4.8
+	github.com/go-redis/redis/v8 v8.5.0
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/nats-io/jwt v1.2.2 // indirect
 	github.com/nats-io/nats-server/v2 v2.1.7 // indirect
@@ -25,6 +25,6 @@ require (
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
-	htdvisser.dev/exp/redis v0.0.0-20201215110738-6786571a568e
-	htdvisser.dev/exp/tls v0.0.0-20201215110738-6786571a568e
+	htdvisser.dev/exp/redis v0.0.0-20210110145821-20828ad46ee1
+	htdvisser.dev/exp/tls v0.0.0-20210110145821-20828ad46ee1
 )

@@ -11,5 +11,5 @@ require (
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
-	htdvisser.dev/exp/redis v0.0.0-20201215110738-6786571a568e
+	htdvisser.dev/exp/redis v0.0.0-20210110145821-20828ad46ee1
 )
