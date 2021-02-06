@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/pflag"
 	"htdvisser.dev/exp/clicontext"
 	"htdvisser.dev/exp/pflagenv"
-	"htdvisser.dev/exp/redis"
+	"htdvisser.dev/exp/redisconfig"
 )
 
 const bin = "rhmanage"
@@ -34,7 +34,7 @@ func init() {
 var (
 	flags       = pflag.NewFlagSet(bin, pflag.ContinueOnError)
 	versionFlag = flags.BoolP("version", "V", false, "Print version information")
-	redisConfig redis.Config
+	redisConfig redisconfig.Config
 	config      struct {
 		Match  string
 		Batch  int

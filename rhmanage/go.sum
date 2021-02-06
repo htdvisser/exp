@@ -106,3 +106,5 @@ htdvisser.dev/exp/clicontext v1.1.0 h1:R/0VPidzSTM5CiW8WgS6a4maWI+I8kjk7aZ57R0vZ
 htdvisser.dev/exp/clicontext v1.1.0/go.mod h1:ENk5Zc9tuQJ2QBPCdMg4XSHFuUwnDV1cEdOnva8z5MM=
 htdvisser.dev/exp/pflagenv v1.0.0 h1:K9wn/a5HQE8nLRZNYiJkUHjFn2UairD7+cuHoaJ046Y=
 htdvisser.dev/exp/pflagenv v1.0.0/go.mod h1:cPLNu1HEr6VWlA+g0h1Fr5uCb2IMKIOxW9OaUD+Ji1o=
+htdvisser.dev/exp/redisconfig v0.8.5 h1:oaJbYknXOuHoGC4FdKNG5DmYsaWs0wtHxZkInStw9nQ=
+htdvisser.dev/exp/redisconfig v0.8.5/go.mod h1:yN2qs4h49FEslUc3cyi5HSsZDUPOB2ZuFOxkUtDl46A=
