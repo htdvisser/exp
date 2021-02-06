@@ -16,8 +16,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        go: ["^1.15"]
+        go: ["^1.15", "^1.16"]
     name: Test on Go ${{ matrix.go }}
     steps:
       - name: Code Checkout
@@ -26,6 +27,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go }}
+          stable: '!contains(${{ matrix.go }}, "beta") && !contains(${{ matrix.go }}, "rc")'
       - name: Go Module Cache
         uses: actions/cache@v2.1.4
         with:
