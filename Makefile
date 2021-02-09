@@ -1,20 +1,36 @@
+TASK ?= tool/bin/task
+
+.PHONY: default
+
 default:
 
-modules = $(patsubst %/go.mod,%,$(shell find . -mindepth 2 -name "go.mod" | sort))
+$(TASK): tool/task/main.go $(wildcard tool/task/commands/*.go) go.mod go.sum
+	go build -o $@ $<
 
-%/coverage.out:
-	cd $(shell dirname $@); go test -covermode=atomic -coverprofile=coverage.out ./...
+.PHONY: deps.download
 
-coverfiles = $(patsubst %,%/coverage.out,$(modules))
+deps.download: | $(TASK)
+	$(TASK) go mod download
 
-coverage.out: $(coverfiles)
-	echo "mode: atomic" > $@
-	tail -qn+2 $(coverfiles) >> $@
+.PHONY: deps.update
 
-coverage.html: coverage.out
-	go tool cover -html=$< -o $@
+deps.update: | $(TASK)
+	$(TASK) go get -u -t ./...
+	$(TASK) go mod tidy
+
+.PHONY: test
+
+test: | $(TASK)
+	$(TASK) go test ./...
+
+.PHONY: cover
+
+cover: | $(TASK)
+	$(TASK) go test -covermode=atomic -coverprofile=coverage.out ./...
+	$(TASK) go tool cover -html=coverage.out -o coverage.html
+
+.PHONY: clean
 
 clean:
-	rm -f $(coverfiles)
-	rm -f coverage.out
-	rm -f coverage.html
+	find . -name coverage.out -delete
+	find . -name coverage.html -delete
