@@ -7,5 +7,6 @@ import (
 func All() []*cli.Command {
 	return []*cli.Command{
 		goCommand(),
+		genCommands(),
 	}
 }

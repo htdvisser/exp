@@ -38,3 +38,9 @@ cover: | $(TASK)
 clean:
 	find . -name coverage.out -delete
 	find . -name coverage.html -delete
+
+.github/dependabot.yml: tool/dependabot.yml.tmpl $(shell find . -name go.mod) | $(TASK)
+	$(TASK) gen dependabot
+
+exp.code-workspace: tool/code-workspace.json.tmpl $(shell find . -name go.mod) | $(TASK)
+	$(TASK) gen code-workspace

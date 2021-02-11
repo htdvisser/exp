@@ -1,0 +1,34 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "*:"
+  - package-ecosystem: gomod
+    directory: "/"
+    labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "*:"
+  {{- range .GoModules }}
+  - package-ecosystem: gomod
+    directory: "/{{ .Module }}"
+    labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "{{ .Prefix }}:"
+  {{- end }}

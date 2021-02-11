@@ -1,0 +1,16 @@
+{
+  "folders": [
+    {{- range .GoModules }}
+    {
+      "path": "{{ . }}"
+    },
+    {{- end }}
+    {
+      "path": "."
+    }
+  ],
+  "extensions": {
+    "recommendations": ["EditorConfig.EditorConfig", "golang.go"]
+  },
+  "settings": {}
+}
