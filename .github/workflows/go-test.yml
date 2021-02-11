@@ -11,6 +11,7 @@ on:
       - "**/go.sum"
 
 jobs:
+  name: Go Test
   test:
     runs-on: ubuntu-latest
     strategy:
