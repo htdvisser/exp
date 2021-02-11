@@ -7,7 +7,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "*"
+      prefix: "*:"
   - package-ecosystem: gomod
     directory: "/"
     labels: [dependencies]
@@ -15,7 +15,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "*"
+      prefix: "*:"
   - package-ecosystem: gomod
     directory: "/b32"
     labels: [dependencies]
@@ -23,7 +23,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "b32"
+      prefix: "b32:"
   - package-ecosystem: gomod
     directory: "/b64"
     labels: [dependencies]
@@ -31,7 +31,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "b64"
+      prefix: "b64:"
   - package-ecosystem: gomod
     directory: "/backbone"
     labels: [dependencies]
@@ -39,7 +39,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "backbone"
+      prefix: "backbone:"
   - package-ecosystem: gomod
     directory: "/clicontext"
     labels: [dependencies]
@@ -47,7 +47,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "clicontext"
+      prefix: "clicontext:"
   - package-ecosystem: gomod
     directory: "/echo"
     labels: [dependencies]
@@ -55,7 +55,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "echo"
+      prefix: "echo:"
   - package-ecosystem: gomod
     directory: "/fieldpath"
     labels: [dependencies]
@@ -63,7 +63,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "fieldpath"
+      prefix: "fieldpath:"
   - package-ecosystem: gomod
     directory: "/flagenv"
     labels: [dependencies]
@@ -71,7 +71,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "flagenv"
+      prefix: "flagenv:"
   - package-ecosystem: gomod
     directory: "/grpctest"
     labels: [dependencies]
@@ -79,7 +79,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "grpctest"
+      prefix: "grpctest:"
   - package-ecosystem: gomod
     directory: "/hex"
     labels: [dependencies]
@@ -87,7 +87,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "hex"
+      prefix: "hex:"
   - package-ecosystem: gomod
     directory: "/imago"
     labels: [dependencies]
@@ -95,7 +95,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "imago"
+      prefix: "imago:"
   - package-ecosystem: gomod
     directory: "/maskgen"
     labels: [dependencies]
@@ -103,7 +103,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "maskgen"
+      prefix: "maskgen:"
   - package-ecosystem: gomod
     directory: "/nats"
     labels: [dependencies]
@@ -111,7 +111,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "nats"
+      prefix: "nats:"
   - package-ecosystem: gomod
     directory: "/natsconfig"
     labels: [dependencies]
@@ -119,7 +119,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "natsconfig"
+      prefix: "natsconfig:"
   - package-ecosystem: gomod
     directory: "/pflagenv"
     labels: [dependencies]
@@ -127,7 +127,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "pflagenv"
+      prefix: "pflagenv:"
   - package-ecosystem: gomod
     directory: "/protoc-gen-hugodata"
     labels: [dependencies]
@@ -135,7 +135,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "pgh"
+      prefix: "pgh:"
   - package-ecosystem: gomod
     directory: "/protoget"
     labels: [dependencies]
@@ -143,7 +143,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "protoget"
+      prefix: "protoget:"
   - package-ecosystem: gomod
     directory: "/redis"
     labels: [dependencies]
@@ -151,7 +151,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "redis"
+      prefix: "redis:"
   - package-ecosystem: gomod
     directory: "/redisconfig"
     labels: [dependencies]
@@ -159,7 +159,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "redisconfig"
+      prefix: "redisconfig:"
   - package-ecosystem: gomod
     directory: "/rhmanage"
     labels: [dependencies]
@@ -167,7 +167,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "rhmanage"
+      prefix: "rhmanage:"
   - package-ecosystem: gomod
     directory: "/ring"
     labels: [dependencies]
@@ -175,7 +175,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "ring"
+      prefix: "ring:"
   - package-ecosystem: gomod
     directory: "/rjs"
     labels: [dependencies]
@@ -183,7 +183,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "rjs"
+      prefix: "rjs:"
   - package-ecosystem: gomod
     directory: "/sql"
     labels: [dependencies]
@@ -191,7 +191,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "sql"
+      prefix: "sql:"
   - package-ecosystem: gomod
     directory: "/sql/sqlgen"
     labels: [dependencies]
@@ -199,7 +199,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "sql/sqlgen"
+      prefix: "sql/sqlgen:"
   - package-ecosystem: gomod
     directory: "/ssh"
     labels: [dependencies]
@@ -207,7 +207,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "ssh"
+      prefix: "ssh:"
   - package-ecosystem: gomod
     directory: "/stringslice"
     labels: [dependencies]
@@ -215,7 +215,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "stringslice"
+      prefix: "stringslice:"
   - package-ecosystem: gomod
     directory: "/sum"
     labels: [dependencies]
@@ -223,7 +223,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "sum"
+      prefix: "sum:"
   - package-ecosystem: gomod
     directory: "/tls"
     labels: [dependencies]
@@ -231,7 +231,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "tls"
+      prefix: "tls:"
   - package-ecosystem: gomod
     directory: "/tlsconfig"
     labels: [dependencies]
@@ -239,7 +239,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "tlsconfig"
+      prefix: "tlsconfig:"
   - package-ecosystem: gomod
     directory: "/tree"
     labels: [dependencies]
@@ -247,7 +247,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "tree"
+      prefix: "tree:"
   - package-ecosystem: gomod
     directory: "/waitcontext"
     labels: [dependencies]
@@ -255,4 +255,4 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "waitcontext"
+      prefix: "waitcontext:"
