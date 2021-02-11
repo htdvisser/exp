@@ -3,6 +3,8 @@ updates:
   - package-ecosystem: github-actions
     directory: "/"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -11,6 +13,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -19,6 +23,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/b32"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -27,6 +33,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/b64"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -35,6 +43,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/backbone"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -43,6 +53,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/clicontext"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -51,6 +63,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/echo"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -59,6 +73,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/fieldpath"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -67,6 +83,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/flagenv"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -75,6 +93,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/grpctest"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -83,6 +103,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/hex"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -91,6 +113,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/imago"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -99,6 +123,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/maskgen"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -107,6 +133,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/nats"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -115,6 +143,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/natsconfig"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -123,6 +153,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/pflagenv"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -131,6 +163,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/protoc-gen-hugodata"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -139,6 +173,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/protoget"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -147,6 +183,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/redis"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -155,6 +193,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/redisconfig"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -163,6 +203,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/rhmanage"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -171,6 +213,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/ring"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -179,6 +223,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/rjs"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -187,6 +233,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/sql"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -195,6 +243,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/sql/sqlgen"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -203,6 +253,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/ssh"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -211,6 +263,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/stringslice"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -219,6 +273,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/sum"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -227,6 +283,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/tls"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -235,6 +293,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/tlsconfig"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -243,6 +303,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/tree"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
@@ -251,6 +313,8 @@ updates:
   - package-ecosystem: gomod
     directory: "/waitcontext"
     labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
     schedule:
       interval: weekly
       day: friday
