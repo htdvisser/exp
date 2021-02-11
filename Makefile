@@ -7,6 +7,10 @@ default:
 $(TASK): tool/task/main.go $(wildcard tool/task/commands/*.go) go.mod go.sum
 	go build -o $@ $<
 
+.PHONY: task
+
+task: $(TASK)
+
 .PHONY: deps.download
 
 deps.download: | $(TASK)
