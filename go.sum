@@ -13,5 +13,3 @@ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8
 gopkg.in/yaml.v2 v2.2.3/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
 htdvisser.dev/exp/clicontext v1.1.0 h1:R/0VPidzSTM5CiW8WgS6a4maWI+I8kjk7aZ57R0vZMk=
 htdvisser.dev/exp/clicontext v1.1.0/go.mod h1:ENk5Zc9tuQJ2QBPCdMg4XSHFuUwnDV1cEdOnva8z5MM=
-htdvisser.dev/exp/stringslice v1.0.0 h1:PJtNfBtMM5Ln45A6UyKp6gN4ioec41iHDwG5mLcNCnc=
-htdvisser.dev/exp/stringslice v1.0.0/go.mod h1:RMMslP7v+ulqn7hAi1ekNvn/HmLNjV6Ahv6KniKi2YA=

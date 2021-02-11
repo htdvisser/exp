@@ -9,15 +9,23 @@ import (
 	"strings"
 
 	"github.com/urfave/cli/v2"
-	"htdvisser.dev/exp/stringslice"
 )
 
 func moduleDirs() ([]string, error) {
-	modFiles, err := filepath.Glob("./**/*.mod")
+	var modDirs []string
+	err := filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
+		if path == "go.mod" {
+			return nil
+		}
+		if filepath.Base(path) == "go.mod" {
+			modDirs = append(modDirs, filepath.Dir(path))
+		}
+		return nil
+	})
 	if err != nil {
 		return nil, err
 	}
-	return stringslice.Map(modFiles, filepath.Dir), nil
+	return modDirs, nil
 }
 
 func execInModuleDirs(ctx *cli.Context, before, after string, cmd string, args ...string) error {
