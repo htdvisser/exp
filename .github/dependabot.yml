@@ -135,7 +135,7 @@ updates:
       interval: weekly
       day: friday
     commit-message:
-      prefix: "protoc-gen-hugodata"
+      prefix: "pgh"
   - package-ecosystem: gomod
     directory: "/protoget"
     labels: [dependencies]
