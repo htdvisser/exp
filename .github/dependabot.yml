@@ -1,0 +1,258 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "*"
+  - package-ecosystem: gomod
+    directory: "/"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "*"
+  - package-ecosystem: gomod
+    directory: "/b32"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "b32"
+  - package-ecosystem: gomod
+    directory: "/b64"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "b64"
+  - package-ecosystem: gomod
+    directory: "/backbone"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "backbone"
+  - package-ecosystem: gomod
+    directory: "/clicontext"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "clicontext"
+  - package-ecosystem: gomod
+    directory: "/echo"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "echo"
+  - package-ecosystem: gomod
+    directory: "/fieldpath"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "fieldpath"
+  - package-ecosystem: gomod
+    directory: "/flagenv"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "flagenv"
+  - package-ecosystem: gomod
+    directory: "/grpctest"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "grpctest"
+  - package-ecosystem: gomod
+    directory: "/hex"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "hex"
+  - package-ecosystem: gomod
+    directory: "/imago"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "imago"
+  - package-ecosystem: gomod
+    directory: "/maskgen"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "maskgen"
+  - package-ecosystem: gomod
+    directory: "/nats"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "nats"
+  - package-ecosystem: gomod
+    directory: "/natsconfig"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "natsconfig"
+  - package-ecosystem: gomod
+    directory: "/pflagenv"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "pflagenv"
+  - package-ecosystem: gomod
+    directory: "/protoc-gen-hugodata"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "protoc-gen-hugodata"
+  - package-ecosystem: gomod
+    directory: "/protoget"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "protoget"
+  - package-ecosystem: gomod
+    directory: "/redis"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "redis"
+  - package-ecosystem: gomod
+    directory: "/redisconfig"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "redisconfig"
+  - package-ecosystem: gomod
+    directory: "/rhmanage"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "rhmanage"
+  - package-ecosystem: gomod
+    directory: "/ring"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "ring"
+  - package-ecosystem: gomod
+    directory: "/rjs"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "rjs"
+  - package-ecosystem: gomod
+    directory: "/sql"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "sql"
+  - package-ecosystem: gomod
+    directory: "/sql/sqlgen"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "sql/sqlgen"
+  - package-ecosystem: gomod
+    directory: "/ssh"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "ssh"
+  - package-ecosystem: gomod
+    directory: "/stringslice"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "stringslice"
+  - package-ecosystem: gomod
+    directory: "/sum"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "sum"
+  - package-ecosystem: gomod
+    directory: "/tls"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "tls"
+  - package-ecosystem: gomod
+    directory: "/tlsconfig"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "tlsconfig"
+  - package-ecosystem: gomod
+    directory: "/tree"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "tree"
+  - package-ecosystem: gomod
+    directory: "/waitcontext"
+    labels: [dependencies]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "waitcontext"
