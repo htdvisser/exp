@@ -3,11 +3,13 @@ name: Go Test
 on:
   push:
     paths:
+      - ".github/workflows/go-test.yml"
       - "**.go"
       - "**/go.mod"
       - "**/go.sum"
   pull_request:
     paths:
+      - ".github/workflows/go-test.yml"
       - "**.go"
       - "**/go.mod"
       - "**/go.sum"
