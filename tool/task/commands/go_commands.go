@@ -2,13 +2,17 @@ package commands
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/urfave/cli/v2"
+	"golang.org/x/mod/modfile"
+	"golang.org/x/mod/semver"
 )
 
 func moduleDirs() ([]string, error) {
@@ -34,6 +38,24 @@ func execInModuleDirs(ctx *cli.Context, before, after string, cmd string, args .
 		return err
 	}
 	for _, moduleDir := range moduleDirs {
+		moduleFileName := filepath.Join(moduleDir, "go.mod")
+		moduleFileData, err := ioutil.ReadFile(moduleFileName)
+		if err != nil {
+			return err
+		}
+		moduleFile, err := modfile.Parse(moduleFileName, moduleFileData, nil)
+		if err != nil {
+			return err
+		}
+		if moduleFile.Go == nil {
+			return fmt.Errorf("--- %s: SKIP (no Go version in module file)", moduleDir)
+		}
+		moduleGoVersion := semver.MajorMinor("v" + moduleFile.Go.Version)
+		runtimeGoVersion := semver.MajorMinor("v" + strings.TrimPrefix(runtime.Version(), "go"))
+		if semver.Compare(runtimeGoVersion, moduleGoVersion) < 0 {
+			log.Printf("--- %s: SKIP (module needs Go %s, this is Go %s)", moduleDir, moduleGoVersion, runtimeGoVersion)
+			continue
+		}
 		log.Printf("--- %s: %s", moduleDir, before)
 		cmd := exec.CommandContext(ctx.Context, cmd, append(args, ctx.Args().Slice()...)...)
 		cmd.Dir = moduleDir
