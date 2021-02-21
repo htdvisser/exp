@@ -13,7 +13,7 @@ replace htdvisser.dev/exp/tls => ../tls
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/go-redis/redis/v8 v8.5.0
+	github.com/go-redis/redis/v8 v8.6.0
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/nats-io/jwt v1.2.2 // indirect
 	github.com/nats-io/nats-server/v2 v2.1.7 // indirect
