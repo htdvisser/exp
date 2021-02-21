@@ -5,7 +5,7 @@ go 1.16
 replace htdvisser.dev/exp/natsconfig => ../../../natsconfig
 
 require (
-	github.com/go-redis/redis/v8 v8.5.0
+	github.com/go-redis/redis/v8 v8.6.0
 	github.com/nats-io/nats.go v1.10.0
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
