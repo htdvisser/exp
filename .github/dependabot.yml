@@ -122,6 +122,16 @@ updates:
     commit-message:
       prefix: "imago:"
   - package-ecosystem: gomod
+    directory: "/inspectcert"
+    labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "inspectcert:"
+  - package-ecosystem: gomod
     directory: "/maskgen"
     labels: [dependencies]
     assignees: [htdvisser]
