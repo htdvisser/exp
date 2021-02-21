@@ -142,6 +142,16 @@ updates:
     commit-message:
       prefix: "maskgen:"
   - package-ecosystem: gomod
+    directory: "/nats/cmd/stickyrouter"
+    labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
+    schedule:
+      interval: weekly
+      day: friday
+    commit-message:
+      prefix: "nats:"
+  - package-ecosystem: gomod
     directory: "/nats"
     labels: [dependencies]
     assignees: [htdvisser]

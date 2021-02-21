@@ -38,6 +38,9 @@
       "path": "maskgen"
     },
     {
+      "path": "nats/cmd/stickyrouter"
+    },
+    {
       "path": "nats"
     },
     {

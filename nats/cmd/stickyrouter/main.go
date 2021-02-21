@@ -22,11 +22,9 @@ import (
 	"github.com/spf13/pflag"
 	"golang.org/x/sync/errgroup"
 	"htdvisser.dev/exp/clicontext"
-	"htdvisser.dev/exp/nats"
-	"htdvisser.dev/exp/nats/internal/stickyrouter"
+	"htdvisser.dev/exp/natsconfig"
 	"htdvisser.dev/exp/pflagenv"
-	"htdvisser.dev/exp/redis"
-	"htdvisser.dev/exp/tls"
+	"htdvisser.dev/exp/redisconfig"
 )
 
 const bin = "stickyrouter"
@@ -49,10 +47,9 @@ var (
 	flags              = pflag.NewFlagSet(bin, pflag.ContinueOnError)
 	versionFlag        = flags.BoolP("version", "V", false, "Print version information")
 	debugAddrFlag      = flags.String("debug.addr", "localhost:6060", "Address to listen on for debug endpoints")
-	tlsConfig          tls.Config
-	natsConfig         nats.Config
-	redisConfig        redis.Config
-	stickyrouterConfig stickyrouter.Config
+	natsConfig         natsconfig.Config
+	redisConfig        redisconfig.Config
+	stickyrouterConfig Config
 )
 
 func filterEnv(key string) bool {
@@ -69,7 +66,6 @@ func init() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", bin)
 		flags.PrintDefaults()
 	}
-	flags.AddFlagSet(tlsConfig.Flags("tls."))
 	flags.AddFlagSet(natsConfig.Flags("nats.", nil))
 	flags.AddFlagSet(redisConfig.Flags("redis.", nil))
 	flags.AddFlagSet(stickyrouterConfig.Flags("route.", nil))
@@ -157,7 +153,7 @@ func Run(ctx context.Context, args ...string) error {
 		return srv.Shutdown(ctx)
 	})
 
-	svc, err := stickyrouter.NewService(stickyrouterConfig, natsConn, redisCli)
+	svc, err := NewService(stickyrouterConfig, natsConn, redisCli)
 	if err != nil {
 		return err
 	}

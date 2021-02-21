@@ -1,4 +1,4 @@
-package stickyrouter
+package main
 
 import (
 	"context"
