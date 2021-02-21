@@ -3,8 +3,6 @@ module htdvisser.dev/exp/nats
 
 go 1.15
 
-replace htdvisser.dev/exp/pflagenv => ../pflagenv
-
 require (
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/google/go-cmp v0.5.4 // indirect
