@@ -82,12 +82,12 @@ func (app *App) url(arg string) string {
 	case strings.HasPrefix(arg, "github.com/"), strings.HasPrefix(arg, "gitlab.com/"), strings.HasPrefix(arg, "bitbucket.org/"):
 		parts := strings.SplitN(arg, "/", 4)
 		if len(parts) == 4 {
-			return fmt.Sprintf("https://%s/%s/%s/raw/master/%s", parts[0], parts[1], parts[2], parts[3])
+			return fmt.Sprintf("https://%s/%s/%s/raw/HEAD/%s", parts[0], parts[1], parts[2], parts[3])
 		}
 	case strings.HasPrefix(arg, "google/protobuf/"):
-		return fmt.Sprintf("https://github.com/protocolbuffers/protobuf/raw/master/src/%s", arg)
+		return fmt.Sprintf("https://github.com/protocolbuffers/protobuf/raw/HEAD/src/%s", arg)
 	case strings.HasPrefix(arg, "google/"):
-		return fmt.Sprintf("https://github.com/googleapis/googleapis/raw/master/%s", arg)
+		return fmt.Sprintf("https://github.com/googleapis/googleapis/raw/HEAD/%s", arg)
 	}
 	return "https://" + arg
 }
