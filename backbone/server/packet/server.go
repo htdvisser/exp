@@ -13,8 +13,9 @@ type Server struct {
 	extendContextWithPacketConn func(context.Context, net.PacketConn) context.Context
 	extendContextWithRemoteAddr func(context.Context, net.Addr) context.Context
 
-	middleware []Middleware
 	handler    Handler
+	middleware []Middleware
+	chain      Handler
 
 	mu       sync.Mutex
 	bindings map[net.PacketConn]struct{}
@@ -24,11 +25,13 @@ type Server struct {
 func NewServer(handler Handler, opts ...Option) *Server {
 	options := &options{}
 	options.apply(opts...)
-	return &Server{
-		middleware: options.middleware,
+	s := &Server{
 		handler:    handler,
+		middleware: options.middleware,
 		bindings:   make(map[net.PacketConn]struct{}),
 	}
+	s.chain = chain(s.handler, s.middleware...)
+	return s
 }
 
 func (s *Server) Serve(conn net.PacketConn) error {
@@ -45,7 +48,6 @@ func (s *Server) Serve(conn net.PacketConn) error {
 			panic("extendContextWithPacketConn returned a nil context")
 		}
 	}
-	handler := chain(s.handler, s.middleware...)
 	var buf [0xffff]byte
 	for {
 		n, addr, err := conn.ReadFrom(buf[:])
@@ -59,7 +61,7 @@ func (s *Server) Serve(conn net.PacketConn) error {
 					panic("extendContextWithRemoteAddr returned a nil context")
 				}
 			}
-			handler.HandlePacket(pktCtx, pkt, addr, func(res []byte) error {
+			s.chain.HandlePacket(pktCtx, pkt, addr, func(res []byte) error {
 				_, err := conn.WriteTo(res, addr)
 				return err
 			})

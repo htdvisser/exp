@@ -18,6 +18,7 @@ func WithMiddleware(middleware ...Middleware) Option {
 // AddMiddleware adds middleware.
 func (s *Server) AddMiddleware(middleware ...Middleware) {
 	s.middleware = append(s.middleware, middleware...)
+	s.chain = chain(s.handler, s.middleware...)
 }
 
 func chain(next Handler, m ...Middleware) Handler {

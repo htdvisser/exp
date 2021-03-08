@@ -16,8 +16,10 @@ type Server struct {
 	extendContextWithListener   func(context.Context, net.Listener) context.Context
 	extendContextWithConn       func(context.Context, net.Conn) context.Context
 	extendContextWithRemoteAddr func(context.Context, net.Addr) context.Context
-	middleware                  []Middleware
-	handler                     Handler
+
+	handler    Handler
+	middleware []Middleware
+	chain      Handler
 
 	mu        sync.Mutex
 	listeners map[net.Listener]struct{}
@@ -30,13 +32,15 @@ type Server struct {
 func NewServer(handler Handler, opts ...Option) *Server {
 	options := &options{}
 	options.apply(opts...)
-	return &Server{
-		middleware:    options.middleware,
+	s := &Server{
 		handler:       handler,
+		middleware:    options.middleware,
 		listeners:     make(map[net.Listener]struct{}),
 		proxyProtocol: options.proxyProtocol,
 		proxyPolicy:   options.proxyPolicy,
 	}
+	s.chain = chain(s.handler, s.middleware...)
+	return s
 }
 
 const (
@@ -59,7 +63,6 @@ func (s *Server) Serve(lis net.Listener) error {
 			panic("extendContextWithListener returned a nil context")
 		}
 	}
-	handler := chain(s.handler, s.middleware...)
 	var backoff time.Duration
 	for {
 		connCtx := lisCtx
@@ -101,7 +104,7 @@ func (s *Server) Serve(lis net.Listener) error {
 		}
 		go func(ctx context.Context) {
 			defer conn.Close()
-			handler.HandleStream(ctx, conn)
+			s.chain.HandleStream(ctx, conn)
 		}(connCtx)
 	}
 }

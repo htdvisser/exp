@@ -19,6 +19,7 @@ type Server struct {
 	http2server      *http2.Server
 	contextExtenders []func(context.Context) context.Context
 	middleware       []Middleware
+	chain            http.Handler
 }
 
 // NewServer instantiates a new HTTP server with the given options.
@@ -34,6 +35,7 @@ func NewServer(opts ...Option) *Server {
 		contextExtenders: options.contextExtenders,
 		middleware:       options.middleware,
 	}
+	s.chain = chain(s.ServeMux, s.middleware...)
 	s.ServeMux.Handle("/", s.Router)
 	var handler http.Handler = s
 	if options.h2c {
@@ -47,8 +49,7 @@ func NewServer(opts ...Option) *Server {
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	middleware := chain(s.ServeMux, s.middleware...)
-	middleware.ServeHTTP(w, s.extendContext(r))
+	s.chain.ServeHTTP(w, s.extendContext(r))
 }
 
 // Serve serves the HTTP server on lis.
