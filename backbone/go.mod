@@ -9,7 +9,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.3.0
 	github.com/improbable-eng/grpc-web v0.14.0
 	github.com/klauspost/compress v1.11.8 // indirect
-	github.com/pires/go-proxyproto v0.4.2
+	github.com/pires/go-proxyproto v0.5.0
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/net v0.0.0-20210224082022-3d97a244fca7

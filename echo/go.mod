@@ -15,7 +15,7 @@ require (
 	github.com/iancoleman/strcase v0.1.3 // indirect
 	github.com/lyft/protoc-gen-star v0.5.2 // indirect
 	github.com/mdempsky/unconvert v0.0.0-20200228143138-95ecdbfc0b5f
-	github.com/pires/go-proxyproto v0.4.2
+	github.com/pires/go-proxyproto v0.5.0
 	github.com/spf13/afero v1.5.1 // indirect
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5 // indirect
@@ -29,5 +29,5 @@ require (
 	htdvisser.dev/exp/backbone v0.0.0-20210222072022-ad7a9e56ebee
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
-	mvdan.cc/gofumpt v0.1.0
+	mvdan.cc/gofumpt v0.1.1
 )
