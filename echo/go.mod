@@ -7,7 +7,7 @@ replace htdvisser.dev/exp/backbone => ../backbone
 replace htdvisser.dev/exp/stringslice => ../stringslice
 
 require (
-	github.com/envoyproxy/protoc-gen-validate v0.4.1
+	github.com/envoyproxy/protoc-gen-validate v0.5.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
