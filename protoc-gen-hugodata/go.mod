@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v0.4.1
-	github.com/golang/protobuf v1.4.3
+	github.com/golang/protobuf v1.5.1
 	github.com/lyft/protoc-gen-star v0.5.2
 	github.com/spf13/afero v1.5.1 // indirect
 	golang.org/x/text v0.3.5 // indirect
