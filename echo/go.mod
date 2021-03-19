@@ -9,8 +9,7 @@ replace htdvisser.dev/exp/stringslice => ../stringslice
 require (
 	github.com/envoyproxy/protoc-gen-validate v0.4.1
 	github.com/gogo/protobuf v1.3.2
-	github.com/golang/protobuf v1.4.3
-	github.com/google/go-cmp v0.5.5 // indirect
+	github.com/golang/protobuf v1.5.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.3.0
 	github.com/iancoleman/strcase v0.1.3 // indirect
@@ -25,7 +24,7 @@ require (
 	google.golang.org/genproto v0.0.0-20210311153111-e2979279ddde
 	google.golang.org/grpc v1.36.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
-	google.golang.org/protobuf v1.25.1-0.20201208041424-160c7477e0e8
+	google.golang.org/protobuf v1.26.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	htdvisser.dev/exp/backbone v0.0.0-20210308204228-5aa3b2d0b996
 	htdvisser.dev/exp/clicontext v1.1.0
