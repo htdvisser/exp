@@ -21,12 +21,12 @@ require (
 	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5 // indirect
 	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/tools v0.1.0 // indirect
-	google.golang.org/genproto v0.0.0-20210311153111-e2979279ddde
+	google.golang.org/genproto v0.0.0-20210318145829-90b20ab00860
 	google.golang.org/grpc v1.36.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	htdvisser.dev/exp/backbone v0.0.0-20210308204228-5aa3b2d0b996
+	htdvisser.dev/exp/backbone v0.0.0-20210313135955-bcbc6359520f
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
 	mvdan.cc/gofumpt v0.1.1
