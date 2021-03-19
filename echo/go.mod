@@ -7,10 +7,9 @@ replace htdvisser.dev/exp/backbone => ../backbone
 replace htdvisser.dev/exp/stringslice => ../stringslice
 
 require (
-	github.com/envoyproxy/protoc-gen-validate v0.4.1
+	github.com/envoyproxy/protoc-gen-validate v0.5.0
 	github.com/gogo/protobuf v1.3.2
-	github.com/golang/protobuf v1.4.3
-	github.com/google/go-cmp v0.5.5 // indirect
+	github.com/golang/protobuf v1.5.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.3.0
 	github.com/iancoleman/strcase v0.1.3 // indirect
@@ -22,12 +21,12 @@ require (
 	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5 // indirect
 	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/tools v0.1.0 // indirect
-	google.golang.org/genproto v0.0.0-20210311153111-e2979279ddde
+	google.golang.org/genproto v0.0.0-20210318145829-90b20ab00860
 	google.golang.org/grpc v1.36.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
-	google.golang.org/protobuf v1.25.1-0.20201208041424-160c7477e0e8
+	google.golang.org/protobuf v1.26.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	htdvisser.dev/exp/backbone v0.0.0-20210308204228-5aa3b2d0b996
+	htdvisser.dev/exp/backbone v0.0.0-20210313135955-bcbc6359520f
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
 	mvdan.cc/gofumpt v0.1.1
