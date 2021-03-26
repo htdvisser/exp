@@ -4,6 +4,6 @@ go 1.15
 
 require (
 	github.com/aws/aws-sdk-go v1.38.6
-	golang.org/x/crypto v0.0.0-20210317152858-513c2a44f670
-	golang.org/x/sys v0.0.0-20210319071255-635bc2c9138d // indirect
+	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2
+	golang.org/x/sys v0.0.0-20210324051608-47abb6519492 // indirect
 )
