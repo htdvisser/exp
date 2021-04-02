@@ -6,8 +6,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "*:"
   - package-ecosystem: gomod
@@ -16,8 +15,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "*:"
   {{- range .GoModules }}
@@ -27,8 +25,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "{{ .Prefix }}:"
   {{- end }}

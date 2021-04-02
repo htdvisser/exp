@@ -7,8 +7,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "*:"
   - package-ecosystem: gomod
@@ -17,8 +16,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "*:"
   - package-ecosystem: gomod
@@ -27,8 +25,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "b32:"
   - package-ecosystem: gomod
@@ -37,8 +34,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "b64:"
   - package-ecosystem: gomod
@@ -47,8 +43,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "backbone:"
   - package-ecosystem: gomod
@@ -57,8 +52,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "clicontext:"
   - package-ecosystem: gomod
@@ -67,8 +61,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "echo:"
   - package-ecosystem: gomod
@@ -77,8 +70,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "fieldpath:"
   - package-ecosystem: gomod
@@ -87,8 +79,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "flagenv:"
   - package-ecosystem: gomod
@@ -97,8 +88,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "grpctest:"
   - package-ecosystem: gomod
@@ -107,8 +97,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "hex:"
   - package-ecosystem: gomod
@@ -117,8 +106,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "imago:"
   - package-ecosystem: gomod
@@ -127,8 +115,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "inspectcert:"
   - package-ecosystem: gomod
@@ -137,8 +124,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "maskgen:"
   - package-ecosystem: gomod
@@ -147,8 +133,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "nats:"
   - package-ecosystem: gomod
@@ -157,8 +142,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "nats:"
   - package-ecosystem: gomod
@@ -167,8 +151,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "natsconfig:"
   - package-ecosystem: gomod
@@ -177,8 +160,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "pflagenv:"
   - package-ecosystem: gomod
@@ -187,8 +169,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "pgh:"
   - package-ecosystem: gomod
@@ -197,8 +178,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "protoget:"
   - package-ecosystem: gomod
@@ -207,8 +187,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "redis:"
   - package-ecosystem: gomod
@@ -217,8 +196,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "redisconfig:"
   - package-ecosystem: gomod
@@ -227,8 +205,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "rhmanage:"
   - package-ecosystem: gomod
@@ -237,8 +214,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "ring:"
   - package-ecosystem: gomod
@@ -247,8 +223,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "rjs:"
   - package-ecosystem: gomod
@@ -257,8 +232,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "sql:"
   - package-ecosystem: gomod
@@ -267,8 +241,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "sql/sqlgen:"
   - package-ecosystem: gomod
@@ -277,8 +250,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "ssh:"
   - package-ecosystem: gomod
@@ -287,8 +259,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "stringslice:"
   - package-ecosystem: gomod
@@ -297,8 +268,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "sum:"
   - package-ecosystem: gomod
@@ -307,8 +277,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "tls:"
   - package-ecosystem: gomod
@@ -317,8 +286,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "tlsconfig:"
   - package-ecosystem: gomod
@@ -327,8 +295,7 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "tree:"
   - package-ecosystem: gomod
@@ -337,7 +304,6 @@ updates:
     assignees: [htdvisser]
     reviewers: [htdvisser]
     schedule:
-      interval: weekly
-      day: friday
+      interval: monthly
     commit-message:
       prefix: "waitcontext:"
