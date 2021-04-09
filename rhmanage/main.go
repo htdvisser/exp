@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"sort"
 	"strings"
 
 	"github.com/spf13/pflag"
@@ -36,13 +37,15 @@ var (
 	versionFlag = flags.BoolP("version", "V", false, "Print version information")
 	redisConfig redisconfig.Config
 	config      struct {
-		Match  string
-		Batch  int
-		Filter map[string]string
-		HSET   map[string]string
-		HDEL   []string
-		DEL    bool
-		DryRun bool
+		Match        string
+		Batch        int
+		Filter       map[string]string
+		FilterPrefix map[string]string
+		HSET         map[string]string
+		HDEL         []string
+		DEL          bool
+		GroupCount   string
+		DryRun       bool
 	}
 	logger = log.New(os.Stderr, "", log.LstdFlags)
 )
@@ -65,8 +68,10 @@ func init() {
 	flags.StringVar(&config.Match, "key.match", "*", "MATCH the key")
 	flags.IntVar(&config.Batch, "batch", 1000, "Batch size")
 	flags.StringToStringVar(&config.Filter, "filter", nil, "Filter by hash contents")
+	flags.StringToStringVar(&config.FilterPrefix, "filter-prefix", nil, "Filter by prefix in hash contents")
 	flags.StringToStringVar(&config.HSET, "hset", nil, "HMSET on filtered hashes")
 	flags.StringSliceVar(&config.HDEL, "hdel", nil, "HDEL on filtered hashes")
+	flags.StringVar(&config.GroupCount, "group-count", "", "Group by hash contents and count")
 	flags.BoolVar(&config.DEL, "del", false, "DEL the keys")
 	flags.BoolVar(&config.DryRun, "dry-run", false, "Don't actually perform the action")
 }
@@ -126,17 +131,32 @@ func Run(ctx context.Context, args ...string) error {
 	}
 	defer redisCli.Close()
 
+	var fieldsOfInterest []string
 	filterFields := make([]string, 0, len(config.Filter))
 	for field := range config.Filter {
 		filterFields = append(filterFields, field)
 	}
+	fieldsOfInterest = append(fieldsOfInterest, filterFields...)
+	filterPrefixFields := make([]string, 0, len(config.FilterPrefix))
+	for field := range config.FilterPrefix {
+		filterPrefixFields = append(filterPrefixFields, field)
+	}
+	fieldsOfInterest = append(fieldsOfInterest, filterPrefixFields...)
+	if config.GroupCount != "" {
+		fieldsOfInterest = append(fieldsOfInterest, config.GroupCount)
+	}
+
 	hmset := make(map[string]interface{}, len(config.HSET))
 	for k, v := range config.HSET {
 		hmset[k] = v
 	}
 
-	var keys []string
-	var cursor uint64
+	var (
+		keys       []string
+		cursor     uint64
+		count      int
+		groupCount = make(map[string]int)
+	)
 
 	for {
 		logger.Printf("SCAN %d keys MATCH %s", config.Batch, config.Match)
@@ -175,28 +195,56 @@ func Run(ctx context.Context, args ...string) error {
 				continue
 			}
 
-			if len(filterFields) > 0 {
-				fieldValues, err := redisCli.HMGet(ctx, key, filterFields...).Result()
+			if len(fieldsOfInterest) > 0 {
+				fieldValues, err := redisCli.HMGet(ctx, key, fieldsOfInterest...).Result()
 				if err != nil {
 					logger.Printf("HMGET error: %s", err)
 					continue
 				}
-				for i, value := range fieldValues {
+				hash := make(map[string]interface{})
+				for i, f := range fieldsOfInterest {
+					hash[f] = fieldValues[i]
+				}
+
+				for k, filter := range config.Filter {
 					var matches bool
-					switch value := value.(type) {
+					switch value := hash[k].(type) {
 					case nil:
-						matches = config.Filter[filterFields[i]] == ""
+						matches = filter == ""
 					case string:
-						matches = value == config.Filter[filterFields[i]]
+						matches = value == filter
 					default:
 						logger.Printf("Don't know how to match %T", value)
 					}
 					if !matches {
-						logger.Printf("%s does not match %s", key, filterFields[i])
 						continue NextKey
 					}
 				}
+				for k, filter := range config.FilterPrefix {
+					var matches bool
+					switch value := hash[k].(type) {
+					case nil:
+						matches = filter == ""
+					case string:
+						matches = strings.HasPrefix(value, filter)
+					default:
+						logger.Printf("Don't know how to match %T", value)
+					}
+					if !matches {
+						continue NextKey
+					}
+				}
+				if config.GroupCount != "" {
+					switch value := hash[config.GroupCount].(type) {
+					case string:
+						groupCount[value]++
+					default:
+						logger.Printf("Can't group-count %T", value)
+					}
+				}
 			}
+
+			count++
 
 			if len(hmset) > 0 {
 				if !config.DryRun {
@@ -224,6 +272,20 @@ func Run(ctx context.Context, args ...string) error {
 		if cursor == 0 {
 			logger.Println("SCAN done")
 			break
+		}
+	}
+
+	logger.Printf("Matched %d keys", count)
+
+	if len(groupCount) > 0 {
+		logger.Print("group count:")
+		keys := make([]string, 0, len(groupCount))
+		for k := range groupCount {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			fmt.Printf("%d\t%s\n", groupCount[k], k)
 		}
 	}
 
