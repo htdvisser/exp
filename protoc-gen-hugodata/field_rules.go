@@ -36,12 +36,13 @@ type FieldRules struct {
 	Address  bool   `yaml:"address,omitempty"`
 	UUID     bool   `yaml:"uuid,omitempty"`
 	// String and Bytes
-	Prefix   interface{} `yaml:"prefix,omitempty"`
-	Suffix   interface{} `yaml:"suffix,omitempty"`
-	Contains interface{} `yaml:"contains,omitempty"`
-	IP       bool        `yaml:"ip,omitempty"`
-	IPv4     bool        `yaml:"ipv4,omitempty"`
-	IPv6     bool        `yaml:"ipv6,omitempty"`
+	Prefix      interface{} `yaml:"prefix,omitempty"`
+	Suffix      interface{} `yaml:"suffix,omitempty"`
+	Contains    interface{} `yaml:"contains,omitempty"`
+	NotContains interface{} `yaml:"not_contains,omitempty"`
+	IP          bool        `yaml:"ip,omitempty"`
+	IPv4        bool        `yaml:"ipv4,omitempty"`
+	IPv6        bool        `yaml:"ipv6,omitempty"`
 	// Timestamp
 	LtNow  bool          `yaml:"lt_now,omitempty"`
 	GtNow  bool          `yaml:"gt_now,omitempty"`
@@ -390,6 +391,9 @@ func (f *FieldRules) addStringRules(src *validate.StringRules) {
 	}
 	if src.Contains != nil {
 		f.Contains = src.Contains
+	}
+	if src.NotContains != nil {
+		f.NotContains = src.NotContains
 	}
 	if src.In != nil {
 		f.In = src.In
