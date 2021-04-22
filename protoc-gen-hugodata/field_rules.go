@@ -55,6 +55,8 @@ type FieldRules struct {
 	Gte   interface{} `yaml:"gte,omitempty"`
 	In    interface{} `yaml:"in,omitempty"`
 	NotIn interface{} `yaml:"not_in,omitempty"`
+	// Ignore empty (skip validations on zero value)
+	IgnoreEmpty bool `yaml:"ignore_empty,omitempty"`
 }
 
 func (f *Field) AddFieldRules(src *validate.FieldRules) {
@@ -67,6 +69,7 @@ func (f *Field) AddFieldRules(src *validate.FieldRules) {
 		f.Rules.MaxItems = rules.GetMaxItems()
 		f.Rules.Unique = rules.GetUnique()
 		f.Repeated.Rules.AddFieldRules(rules.GetItems(), fieldType.Element())
+		f.Rules.IgnoreEmpty = rules.GetIgnoreEmpty()
 	}
 	if rules := src.GetMap(); rules != nil && f.MapKey != nil && f.MapValue != nil {
 		f.Rules.MinPairs = rules.GetMinPairs()
@@ -74,6 +77,7 @@ func (f *Field) AddFieldRules(src *validate.FieldRules) {
 		f.Rules.NoSparse = rules.GetNoSparse()
 		f.MapKey.Rules.AddFieldRules(rules.GetKeys(), fieldType.Key())
 		f.MapValue.Rules.AddFieldRules(rules.GetValues(), fieldType.Element())
+		f.Rules.IgnoreEmpty = rules.GetIgnoreEmpty()
 	}
 	f.Rules.AddFieldRules(src, fieldType)
 }
@@ -100,6 +104,7 @@ func (f *FieldRules) addFloatRules(src *validate.FloatRules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addDoubleRules(src *validate.DoubleRules) {
@@ -124,6 +129,7 @@ func (f *FieldRules) addDoubleRules(src *validate.DoubleRules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addInt32Rules(src *validate.Int32Rules) {
@@ -148,6 +154,7 @@ func (f *FieldRules) addInt32Rules(src *validate.Int32Rules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addInt64Rules(src *validate.Int64Rules) {
@@ -172,6 +179,7 @@ func (f *FieldRules) addInt64Rules(src *validate.Int64Rules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addUint32Rules(src *validate.UInt32Rules) {
@@ -196,6 +204,7 @@ func (f *FieldRules) addUint32Rules(src *validate.UInt32Rules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addUint64Rules(src *validate.UInt64Rules) {
@@ -220,6 +229,7 @@ func (f *FieldRules) addUint64Rules(src *validate.UInt64Rules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addSint32Rules(src *validate.SInt32Rules) {
@@ -244,6 +254,7 @@ func (f *FieldRules) addSint32Rules(src *validate.SInt32Rules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addSint64Rules(src *validate.SInt64Rules) {
@@ -268,6 +279,7 @@ func (f *FieldRules) addSint64Rules(src *validate.SInt64Rules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addFixed32Rules(src *validate.Fixed32Rules) {
@@ -292,6 +304,7 @@ func (f *FieldRules) addFixed32Rules(src *validate.Fixed32Rules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addFixed64Rules(src *validate.Fixed64Rules) {
@@ -316,6 +329,7 @@ func (f *FieldRules) addFixed64Rules(src *validate.Fixed64Rules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addSfixed32Rules(src *validate.SFixed32Rules) {
@@ -340,6 +354,7 @@ func (f *FieldRules) addSfixed32Rules(src *validate.SFixed32Rules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addSfixed64Rules(src *validate.SFixed64Rules) {
@@ -364,6 +379,7 @@ func (f *FieldRules) addSfixed64Rules(src *validate.SFixed64Rules) {
 	if src.NotIn != nil {
 		f.NotIn = src.NotIn
 	}
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addBoolRules(src *validate.BoolRules) {
@@ -410,6 +426,7 @@ func (f *FieldRules) addStringRules(src *validate.StringRules) {
 	f.URIRef = src.GetUriRef()
 	f.Address = src.GetAddress()
 	f.UUID = src.GetUuid()
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addBytesRules(src *validate.BytesRules) {
@@ -438,6 +455,7 @@ func (f *FieldRules) addBytesRules(src *validate.BytesRules) {
 	f.IP = src.GetIp()
 	f.IPv4 = src.GetIpv4()
 	f.IPv6 = src.GetIpv6()
+	f.IgnoreEmpty = src.GetIgnoreEmpty()
 }
 
 func (f *FieldRules) addEnumRules(src *validate.EnumRules) {
