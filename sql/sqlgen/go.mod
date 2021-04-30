@@ -6,7 +6,7 @@ require (
 	github.com/fatih/structtag v1.2.0
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/mod v0.4.2 // indirect
-	golang.org/x/sys v0.0.0-20210331175145-43e1dd70ce54 // indirect
+	golang.org/x/sys v0.0.0-20210426230700-d19ff857e887 // indirect
 	golang.org/x/tools v0.1.0
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/stringslice v1.0.0
