@@ -31,7 +31,7 @@ jobs:
           go-version: ${{ matrix.go }}
           stable: '!contains(${{ matrix.go }}, "beta") && !contains(${{ matrix.go }}, "rc")'
       - name: Go Module Cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
