@@ -21,8 +21,8 @@ require (
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/tools v0.1.1 // indirect
-	google.golang.org/genproto v0.0.0-20210510173355-fb37daa5cd7a
-	google.golang.org/grpc v1.37.1
+	google.golang.org/genproto v0.0.0-20210524171403-669157292da3
+	google.golang.org/grpc v1.38.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
