@@ -20,7 +20,7 @@ require (
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/sys v0.0.0-20210531225629-47163c9f4e4f // indirect
 	google.golang.org/genproto v0.0.0-20210524171403-669157292da3 // indirect
-	google.golang.org/grpc v1.38.0
+	google.golang.org/grpc v1.39.0
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
 	nhooyr.io/websocket v1.8.7 // indirect
