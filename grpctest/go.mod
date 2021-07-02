@@ -3,8 +3,8 @@ module htdvisser.dev/exp/grpctest
 go 1.15
 
 require (
-	golang.org/x/net v0.0.0-20210525063256-abc453219eb5 // indirect
-	golang.org/x/sys v0.0.0-20210531225629-47163c9f4e4f // indirect
-	google.golang.org/genproto v0.0.0-20210524171403-669157292da3 // indirect
-	google.golang.org/grpc v1.38.0
+	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
+	google.golang.org/genproto v0.0.0-20210701191553-46259e63a0a9 // indirect
+	google.golang.org/grpc v1.39.0
 )

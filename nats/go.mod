@@ -10,6 +10,6 @@ require (
 	github.com/nats-io/nats.go v1.11.0
 	github.com/nats-io/nkeys v0.3.0
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
+	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 )
