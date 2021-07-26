@@ -15,7 +15,7 @@ require (
 	github.com/iancoleman/strcase v0.1.3 // indirect
 	github.com/lyft/protoc-gen-star v0.5.3 // indirect
 	github.com/mdempsky/unconvert v0.0.0-20200228143138-95ecdbfc0b5f
-	github.com/pires/go-proxyproto v0.5.0
+	github.com/pires/go-proxyproto v0.6.0
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	google.golang.org/genproto v0.0.0-20210701191553-46259e63a0a9
