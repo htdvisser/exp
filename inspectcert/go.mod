@@ -10,5 +10,5 @@ require (
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	htdvisser.dev/exp/pflagenv v1.0.0
-	htdvisser.dev/exp/tlsconfig v0.0.0-20210702061008-1b051fdc2d00
+	htdvisser.dev/exp/tlsconfig v0.0.0-20210702062842-d41881d99e2f
 )
