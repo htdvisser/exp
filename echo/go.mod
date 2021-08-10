@@ -18,12 +18,12 @@ require (
 	github.com/pires/go-proxyproto v0.6.0
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5
-	google.golang.org/genproto v0.0.0-20210726200206-e7812ac95cc0
-	google.golang.org/grpc v1.39.0
+	google.golang.org/genproto v0.0.0-20210810185150-1984db3a839a
+	google.golang.org/grpc v1.39.1
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	htdvisser.dev/exp/backbone v0.0.0-20210702062842-d41881d99e2f
+	htdvisser.dev/exp/backbone v0.0.0-20210727055939-7cc9514c00d5
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
 	mvdan.cc/gofumpt v0.1.1
