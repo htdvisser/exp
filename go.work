@@ -25,6 +25,7 @@ use (
 	./redisconfig
 	./rhmanage
 	./ring
+	./ring/v2
 	./rjs
 	./sql
 	./sql/sqlgen
