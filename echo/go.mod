@@ -19,7 +19,7 @@ require (
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	google.golang.org/genproto v0.0.0-20210810185150-1984db3a839a
-	google.golang.org/grpc v1.39.1
+	google.golang.org/grpc v1.40.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v2 v2.4.0 // indirect
