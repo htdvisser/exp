@@ -25,7 +25,7 @@ require (
 	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20210810185150-1984db3a839a // indirect
-	google.golang.org/grpc v1.39.1
+	google.golang.org/grpc v1.40.0
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	htdvisser.dev/exp/clicontext v1.1.0
