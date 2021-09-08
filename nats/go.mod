@@ -1,7 +1,7 @@
 // Deprecated: This pre-1.0 module will be removed. Switch to htdvisser.dev/exp/natsconfig.
 module htdvisser.dev/exp/nats
 
-go 1.15
+go 1.16
 
 require (
 	github.com/golang/protobuf v1.4.3 // indirect

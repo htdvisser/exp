@@ -1,6 +1,6 @@
 module htdvisser.dev/exp/protoc-gen-hugodata
 
-go 1.15
+go 1.16
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v0.6.1

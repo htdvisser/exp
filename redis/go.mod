@@ -1,7 +1,7 @@
 // Deprecated: This pre-1.0 module will be removed. Switch to htdvisser.dev/exp/redisconfig.
 module htdvisser.dev/exp/redis
 
-go 1.15
+go 1.16
 
 require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect

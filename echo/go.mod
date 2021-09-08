@@ -1,6 +1,6 @@
 module htdvisser.dev/exp/echo
 
-go 1.15
+go 1.16
 
 replace htdvisser.dev/exp/backbone => ../backbone
 

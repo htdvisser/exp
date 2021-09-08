@@ -1,6 +1,6 @@
 module htdvisser.dev/exp/protoget
 
-go 1.15
+go 1.16
 
 require (
 	htdvisser.dev/exp/clicontext v1.1.0
