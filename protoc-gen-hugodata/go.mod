@@ -8,6 +8,6 @@ require (
 	github.com/lyft/protoc-gen-star v0.6.0
 	github.com/spf13/afero v1.6.0 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/genproto v0.0.0-20210903162649-d08c68adba83
+	google.golang.org/genproto v0.0.0-20210929214142-896c89f843d2
 	gopkg.in/yaml.v2 v2.4.0
 )
