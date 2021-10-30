@@ -14,13 +14,13 @@ require (
 	github.com/rs/cors v1.8.0 // indirect
 	github.com/segmentio/ksuid v1.0.4
 	github.com/spf13/pflag v1.0.5
-	go.opentelemetry.io/otel v1.0.0
-	go.opentelemetry.io/otel/trace v1.0.0
-	golang.org/x/net v0.0.0-20210929193557-e81a3d93ecf6
+	go.opentelemetry.io/otel v1.1.0
+	go.opentelemetry.io/otel/trace v1.1.0
+	golang.org/x/net v0.0.0-20211029224645-99673261e6eb
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	golang.org/x/sys v0.0.0-20210927094055-39ccf1dd6fa6 // indirect
+	golang.org/x/sys v0.0.0-20211029165221-6e7872819dc8 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/genproto v0.0.0-20210929214142-896c89f843d2 // indirect
+	google.golang.org/genproto v0.0.0-20211029142109-e255c875f7c7 // indirect
 	google.golang.org/grpc v1.41.0
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
