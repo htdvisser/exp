@@ -10,7 +10,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	htdvisser.dev/exp/clicontext v1.1.0
-	htdvisser.dev/exp/natsconfig v0.0.0-20210930055331-09e40ccb5157
+	htdvisser.dev/exp/natsconfig v0.0.0-20211030113544-8213ee4fc10e
 	htdvisser.dev/exp/pflagenv v1.0.0
 	htdvisser.dev/exp/redisconfig v0.8.11
 )
