@@ -15,8 +15,8 @@ require (
 	github.com/rs/cors v1.8.0 // indirect
 	github.com/segmentio/ksuid v1.0.4
 	github.com/spf13/pflag v1.0.5
-	go.opentelemetry.io/otel v1.2.0
-	go.opentelemetry.io/otel/trace v1.2.0
+	go.opentelemetry.io/otel v1.3.0
+	go.opentelemetry.io/otel/trace v1.3.0
 	golang.org/x/net v0.0.0-20211201190559-0a0e4e1bb54c
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/sys v0.0.0-20211124211545-fe61309f8881 // indirect
