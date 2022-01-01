@@ -23,5 +23,5 @@ require (
 	htdvisser.dev/exp/backbone v0.0.0-20211030113544-8213ee4fc10e
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
-	mvdan.cc/gofumpt v0.2.0
+	mvdan.cc/gofumpt v0.2.1
 )
