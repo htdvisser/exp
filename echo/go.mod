@@ -18,7 +18,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	google.golang.org/genproto v0.0.0-20211129164237-f09f9a12af12
 	google.golang.org/grpc v1.42.0
-	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
 	google.golang.org/protobuf v1.27.1
 	htdvisser.dev/exp/backbone v0.0.0-20211030113544-8213ee4fc10e
 	htdvisser.dev/exp/clicontext v1.1.0
