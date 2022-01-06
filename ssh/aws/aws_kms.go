@@ -67,15 +67,6 @@ func (c KMSConfig) Validate() error {
 	return nil
 }
 
-type typedPublicKey struct {
-	ssh.PublicKey
-	keyType string
-}
-
-func (pk typedPublicKey) Type() string {
-	return pk.keyType
-}
-
 func buildSigner(client *kms.KMS, keyID string) (*kmsSigner, error) {
 	pkRes, err := client.GetPublicKey(&kms.GetPublicKeyInput{
 		KeyId: &keyID,
@@ -110,9 +101,6 @@ func buildSigner(client *kms.KMS, keyID string) (*kmsSigner, error) {
 		return nil, fmt.Errorf("failed to convert public key to SSH public key: %w", err)
 	}
 	s := &kmsSigner{pubKey: sshPK, client: client, keyID: keyID}
-	if s.pubKey.Type() == ssh.KeyAlgoRSA {
-		s.pubKey = typedPublicKey{PublicKey: sshPK, keyType: ssh.SigAlgoRSASHA2256}
-	}
 	return s, nil
 }
 
@@ -150,8 +138,16 @@ func (s *kmsSigner) SignWithAlgorithm(_ io.Reader, data []byte, algorithm string
 		if algorithm == ssh.SigAlgoRSA {
 			algorithm = ssh.SigAlgoRSASHA2512
 		}
-	} else if algorithm != s.pubKey.Type() {
-		return nil, fmt.Errorf("unsupported signature algorithm %q for key of type %q", algorithm, pubKeyType)
+	}
+	switch algorithm {
+	case ssh.SigAlgoRSA, ssh.SigAlgoRSASHA2256, ssh.SigAlgoRSASHA2512:
+		if pubKeyType != ssh.KeyAlgoRSA {
+			return nil, fmt.Errorf("unsupported signature algorithm %q for key of type %q", algorithm, pubKeyType)
+		}
+	default:
+		if algorithm != pubKeyType {
+			return nil, fmt.Errorf("unsupported signature algorithm %q for key of type %q", algorithm, pubKeyType)
+		}
 	}
 	var (
 		hashFunc         crypto.Hash
