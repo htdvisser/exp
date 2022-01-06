@@ -104,11 +104,13 @@ func TestDial(t *testing.T) {
 			{
 				Method: "aws_kms",
 				AWSKMS: aws.KMSConfig{
-					Region:          awsRegion,
-					AccessKeyID:     awsAccessKeyID,
-					SecretAccessKey: awsSecretAccessKey,
-					SessionToken:    awsSessionToken,
-					KeyID:           awsKMSKeyID,
+					Config: aws.Config{
+						Region:          awsRegion,
+						AccessKeyID:     awsAccessKeyID,
+						SecretAccessKey: awsSecretAccessKey,
+						SessionToken:    awsSessionToken,
+					},
+					KeyID: awsKMSKeyID,
 				},
 			},
 		}

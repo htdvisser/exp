@@ -17,38 +17,18 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-// KMSConfig is the configuration for authentication with a keypair stored in AWS KMS.
-type KMSConfig struct {
-	Region          string `json:"region" yaml:"region"`
+// Config is the configuration for the AWS client.
+type Config struct {
+	Region          string `json:"region,omitempty" yaml:"region,omitempty"`
 	AccessKeyID     string `json:"access_key_id,omitempty" yaml:"access_key_id,omitempty"`
 	SecretAccessKey string `json:"secret_access_key,omitempty" yaml:"secret_access_key,omitempty"`
 	SessionToken    string `json:"session_token,omitempty" yaml:"session_token,omitempty"`
 	AssumeRoleARN   string `json:"assume_role_arn,omitempty" yaml:"assume_role_arn,omitempty"`
-	KeyID           string `json:"key_id" yaml:"key_id"`
 }
 
-// Validate validates the configuration and returns an error if it is not valid.
-func (c KMSConfig) Validate() error {
-	if c.KeyID == "" {
-		return fmt.Errorf("missing key id in AWSKMSConfig")
-	}
-	return nil
-}
-
-type typedPublicKey struct {
-	ssh.PublicKey
-	keyType string
-}
-
-func (pk typedPublicKey) Type() string {
-	return pk.keyType
-}
-
-// Build builds an ssh.Signer from the configuration.
-func (c KMSConfig) Build() (ssh.Signer, error) {
-	awsConfig := aws.NewConfig().WithCredentials(
-		credentials.NewSharedCredentials("", ""),
-	)
+// BuildKMSClient builds an AWS KMS client from the configuration.
+func (c Config) BuildKMSClient() (*kms.KMS, error) {
+	awsConfig := aws.NewConfig()
 	if c.Region != "" {
 		awsConfig = awsConfig.WithRegion(c.Region)
 	}
@@ -70,11 +50,41 @@ func (c KMSConfig) Build() (ssh.Signer, error) {
 		ses.Config.MergeIn(awsConfig)
 	}
 	client := kms.New(ses)
+	return client, nil
+}
+
+// KMSConfig is the configuration for authentication with a keypair stored in AWS KMS.
+type KMSConfig struct {
+	Config
+	KeyID string `json:"key_id" yaml:"key_id"`
+}
+
+// Validate validates the configuration and returns an error if it is not valid.
+func (c KMSConfig) Validate() error {
+	if c.KeyID == "" {
+		return fmt.Errorf("missing key id in AWS KMSConfig")
+	}
+	return nil
+}
+
+type typedPublicKey struct {
+	ssh.PublicKey
+	keyType string
+}
+
+func (pk typedPublicKey) Type() string {
+	return pk.keyType
+}
+
+func buildSigner(client *kms.KMS, keyID string) (*kmsSigner, error) {
 	pkRes, err := client.GetPublicKey(&kms.GetPublicKeyInput{
-		KeyId: &c.KeyID,
+		KeyId: &keyID,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get public key from AWS KMS: %w", err)
+	}
+	if pkRes.KeyId != nil {
+		keyID = *pkRes.KeyId
 	}
 	if pkRes.CustomerMasterKeySpec == nil {
 		return nil, fmt.Errorf("missing key type in public key returned from AWS KMS")
@@ -99,28 +109,41 @@ func (c KMSConfig) Build() (ssh.Signer, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert public key to SSH public key: %w", err)
 	}
-	s := &signer{pubKey: sshPK, client: client, keyID: c.KeyID}
+	s := &kmsSigner{pubKey: sshPK, client: client, keyID: keyID}
 	if s.pubKey.Type() == ssh.KeyAlgoRSA {
 		s.pubKey = typedPublicKey{PublicKey: sshPK, keyType: ssh.SigAlgoRSASHA2256}
 	}
 	return s, nil
 }
 
-type signer struct {
+// Build builds an ssh.Signer from the configuration.
+func (c KMSConfig) Build() (ssh.Signer, error) {
+	client, err := c.BuildKMSClient()
+	if err != nil {
+		return nil, fmt.Errorf("failed to set up AWS KMS client: %w", err)
+	}
+	signer, err := buildSigner(client, c.KeyID)
+	if err != nil {
+		return nil, err
+	}
+	return signer, nil
+}
+
+type kmsSigner struct {
 	pubKey ssh.PublicKey
 	client *kms.KMS
 	keyID  string
 }
 
-func (s *signer) PublicKey() ssh.PublicKey {
+func (s *kmsSigner) PublicKey() ssh.PublicKey {
 	return s.pubKey
 }
 
-func (s *signer) Sign(rand io.Reader, data []byte) (*ssh.Signature, error) {
+func (s *kmsSigner) Sign(rand io.Reader, data []byte) (*ssh.Signature, error) {
 	return s.SignWithAlgorithm(rand, data, "")
 }
 
-func (s *signer) SignWithAlgorithm(_ io.Reader, data []byte, algorithm string) (*ssh.Signature, error) {
+func (s *kmsSigner) SignWithAlgorithm(_ io.Reader, data []byte, algorithm string) (*ssh.Signature, error) {
 	pubKeyType := s.pubKey.Type()
 	if algorithm == "" {
 		algorithm = pubKeyType
