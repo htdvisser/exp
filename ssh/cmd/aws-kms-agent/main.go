@@ -21,6 +21,8 @@ import (
 var config aws.KMSAgentConfig
 
 func init() {
+	log.SetFlags(0)
+
 	flag.StringVar(&config.Region, "aws.region", "", "AWS region")
 	flag.StringVar(&config.AccessKeyID, "aws.access-key-id", "", "AWS Access Key ID")
 	flag.StringVar(&config.SecretAccessKey, "aws.secret-access-key", "", "AWS Secret Access Key")
@@ -93,16 +95,25 @@ func run(ctx context.Context) error {
 			absPath = *socketPath
 		}
 
-		fmt.Fprintln(os.Stdout, "# You can now use the agent by running:")
-		fmt.Fprintf(os.Stdout, "export SSH_AUTH_SOCK=%q", absPath)
-		fmt.Fprintln(os.Stdout)
-		fmt.Fprintln(os.Stdout, "# Press ctrl-c to exit")
-		fmt.Fprintln(os.Stdout)
+		log.Printf("The SSH Agent is now listening at %q.", absPath)
+		log.Println()
+		log.Print("💡 Usage in config file:")
+		log.Print("  Host *")
+		log.Printf("    IdentityAgent %s", absPath)
+		log.Print("💡 Usage with environment:")
+		log.Printf("  export SSH_AUTH_SOCK=%q", absPath)
+		log.Print("💡 Usage with CLI flags:")
+		log.Printf("  ssh -o \"IdentityAgent %s\" user@host", absPath)
+		log.Println()
+		log.Println("Press ctrl-c to exit")
 	}
 
 	for {
 		conn, err := lis.Accept()
 		if err != nil {
+			if ctx.Err() != nil {
+				return ctx.Err()
+			}
 			return fmt.Errorf("failed to accept connection: %w", err)
 		}
 		go func() {
