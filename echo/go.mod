@@ -18,7 +18,7 @@ require (
 	github.com/spf13/afero v1.7.1 // indirect
 	github.com/spf13/pflag v1.0.5
 	google.golang.org/genproto v0.0.0-20211223182754-3ac035c7e7cb
-	google.golang.org/grpc v1.43.0
+	google.golang.org/grpc v1.44.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
 	google.golang.org/protobuf v1.27.1
 	htdvisser.dev/exp/backbone v0.0.0-20211202070212-5f8f4790ea84
