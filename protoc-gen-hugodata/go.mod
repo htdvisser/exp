@@ -3,7 +3,7 @@ module htdvisser.dev/exp/protoc-gen-hugodata
 go 1.16
 
 require (
-	github.com/envoyproxy/protoc-gen-validate v0.6.2
+	github.com/envoyproxy/protoc-gen-validate v0.6.3
 	github.com/golang/protobuf v1.5.2
 	github.com/lyft/protoc-gen-star v0.6.0
 	github.com/spf13/afero v1.7.1 // indirect
