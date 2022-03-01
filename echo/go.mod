@@ -16,7 +16,6 @@ require (
 	github.com/pires/go-proxyproto v0.6.1
 	github.com/spf13/afero v1.8.1 // indirect
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/tools v0.1.9 // indirect
 	google.golang.org/genproto v0.0.0-20220211171837-173942840c17
 	google.golang.org/grpc v1.44.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
@@ -24,5 +23,5 @@ require (
 	htdvisser.dev/exp/backbone v0.0.0-20220106142016-6857a7f82179
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
-	mvdan.cc/gofumpt v0.2.1
+	mvdan.cc/gofumpt v0.3.0
 )
