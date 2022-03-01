@@ -20,8 +20,8 @@ require (
 	github.com/segmentio/ksuid v1.0.4
 	github.com/spf13/pflag v1.0.5
 	github.com/ugorji/go v1.2.6 // indirect
-	go.opentelemetry.io/otel v1.4.0
-	go.opentelemetry.io/otel/trace v1.4.0
+	go.opentelemetry.io/otel v1.4.1
+	go.opentelemetry.io/otel/trace v1.4.1
 	golang.org/x/crypto v0.0.0-20220210151621-f4118a5b28e2 // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
