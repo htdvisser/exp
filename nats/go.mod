@@ -11,7 +11,7 @@ require (
 	github.com/nats-io/nats.go v1.13.1-0.20220121202836-972a071d373d
 	github.com/nats-io/nkeys v0.3.0
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/crypto v0.0.0-20220210151621-f4118a5b28e2 // indirect
+	golang.org/x/crypto v0.0.0-20220214200702-86341886e292 // indirect
 	golang.org/x/sys v0.0.0-20220209214540-3681064d5158 // indirect
 	golang.org/x/time v0.0.0-20220210224613-90d013bbcef8 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
