@@ -7,4 +7,4 @@ require (
 	github.com/spf13/pflag v1.0.5
 )
 
-require golang.org/x/image v0.0.0-20220302094943-723b81ca9867 // indirect
+require golang.org/x/image v0.0.0-20220321031419-a8550c1d254a // indirect

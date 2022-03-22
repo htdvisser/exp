@@ -8,11 +8,11 @@ require (
 	github.com/fatih/color v1.13.0
 	github.com/spf13/pflag v1.0.5
 	htdvisser.dev/exp/pflagenv v1.0.0
-	htdvisser.dev/exp/tlsconfig v0.0.0-20220213111631-ce84b5198ac1
+	htdvisser.dev/exp/tlsconfig v0.0.0-20220306094043-f62cc73cf1da
 )
 
 require (
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
-	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
+	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
 )
