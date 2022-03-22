@@ -1,0 +1,37 @@
+go 1.18
+
+use (
+	.
+	./b32
+	./b64
+	./backbone
+	./clicontext
+	./echo
+	./fieldpath
+	./flagenv
+	./grpctest
+	./hex
+	./imago
+	./inspectcert
+	./maskgen
+	./nats
+	./nats/cmd/stickyrouter
+	./natsconfig
+	./pflagenv
+	./protoc-gen-hugodata
+	./protoget
+	./redis
+	./redisconfig
+	./rhmanage
+	./ring
+	./rjs
+	./sql
+	./sql/sqlgen
+	./ssh
+	./stringslice
+	./sum
+	./tls
+	./tlsconfig
+	./tree
+	./waitcontext
+)

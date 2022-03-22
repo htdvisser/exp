@@ -44,5 +44,5 @@ clean:
 .github/dependabot.yml: tool/dependabot.yml.tmpl $(shell find . -name go.mod) | $(TASK)
 	$(TASK) gen dependabot
 
-exp.code-workspace: tool/code-workspace.json.tmpl $(shell find . -name go.mod) | $(TASK)
-	$(TASK) gen code-workspace
+go.work: $(shell find . -name go.mod) | $(TASK)
+	$(TASK) gen go-workspace

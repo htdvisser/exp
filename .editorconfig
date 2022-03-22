@@ -9,7 +9,7 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 charset = utf-8
 
-[*.go]
+[{*.go,go.mod,go.sum,go.work,go.work.sum}]
 indent_style = tab
 indent_size = 4
 
