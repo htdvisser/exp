@@ -3,7 +3,7 @@ module htdvisser.dev/exp/ssh
 go 1.17
 
 require (
-	github.com/aws/aws-sdk-go v1.43.23
+	github.com/aws/aws-sdk-go v1.43.31
 	golang.org/x/crypto v0.0.0-20220321153916-2c7772ba3064
 )
 
