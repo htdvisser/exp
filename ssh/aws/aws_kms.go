@@ -2,18 +2,19 @@
 package aws
 
 import (
+	"context"
 	"crypto"
 	"crypto/x509"
 	"encoding/asn1"
 	"fmt"
 	"io"
 	"math/big"
+	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/kms"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/kms"
+	kmstypes "github.com/aws/aws-sdk-go-v2/service/kms/types"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -23,33 +24,28 @@ type Config struct {
 	AccessKeyID     string `json:"access_key_id,omitempty" yaml:"access_key_id,omitempty"`
 	SecretAccessKey string `json:"secret_access_key,omitempty" yaml:"secret_access_key,omitempty"`
 	SessionToken    string `json:"session_token,omitempty" yaml:"session_token,omitempty"`
-	AssumeRoleARN   string `json:"assume_role_arn,omitempty" yaml:"assume_role_arn,omitempty"`
 }
 
 // BuildKMSClient builds an AWS KMS client from the configuration.
-func (c Config) BuildKMSClient() (*kms.KMS, error) {
-	awsConfig := aws.NewConfig()
+func (c Config) BuildKMSClient(ctx context.Context) (*kms.Client, error) {
+	var opts []func(*config.LoadOptions) error
 	if c.Region != "" {
-		awsConfig = awsConfig.WithRegion(c.Region)
+		opts = append(opts, config.WithRegion(c.Region))
 	}
 	if c.AccessKeyID != "" {
-		awsConfig = awsConfig.WithCredentials(credentials.NewStaticCredentials(
-			c.AccessKeyID,
-			c.SecretAccessKey,
-			c.SessionToken,
+		opts = append(opts, config.WithCredentialsProvider(
+			credentials.NewStaticCredentialsProvider(
+				c.AccessKeyID,
+				c.SecretAccessKey,
+				c.SessionToken,
+			),
 		))
 	}
-	ses, err := session.NewSession(awsConfig)
+	cfg, err := config.LoadDefaultConfig(ctx, opts...)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create new AWS session: %w", err)
+		return nil, fmt.Errorf("failed to load AWS config: %w", err)
 	}
-	if c.AssumeRoleARN != "" {
-		awsConfig = awsConfig.WithCredentials(stscreds.NewCredentials(
-			ses, c.AssumeRoleARN,
-		))
-		ses.Config.MergeIn(awsConfig)
-	}
-	client := kms.New(ses)
+	client := kms.NewFromConfig(cfg)
 	return client, nil
 }
 
@@ -67,8 +63,8 @@ func (c KMSConfig) Validate() error {
 	return nil
 }
 
-func buildSigner(client *kms.KMS, keyID string) (*kmsSigner, error) {
-	pkRes, err := client.GetPublicKey(&kms.GetPublicKeyInput{
+func buildSigner(ctx context.Context, client *kms.Client, keyID string) (*kmsSigner, error) {
+	pkRes, err := client.GetPublicKey(ctx, &kms.GetPublicKeyInput{
 		KeyId: &keyID,
 	})
 	if err != nil {
@@ -77,20 +73,14 @@ func buildSigner(client *kms.KMS, keyID string) (*kmsSigner, error) {
 	if pkRes.KeyId != nil {
 		keyID = *pkRes.KeyId
 	}
-	if pkRes.CustomerMasterKeySpec == nil {
-		return nil, fmt.Errorf("missing key type in public key returned from AWS KMS")
-	}
-	switch *pkRes.CustomerMasterKeySpec {
-	case "RSA_2048", "RSA_3072", "RSA_4096":
-	case "ECC_NIST_P256", "ECC_NIST_P384", "ECC_NIST_P521":
+	switch pkRes.CustomerMasterKeySpec {
+	case kmstypes.CustomerMasterKeySpecRsa2048, kmstypes.CustomerMasterKeySpecRsa3072, kmstypes.CustomerMasterKeySpecRsa4096:
+	case kmstypes.CustomerMasterKeySpecEccNistP256, kmstypes.CustomerMasterKeySpecEccNistP384, kmstypes.CustomerMasterKeySpecEccNistP521:
 	default:
-		return nil, fmt.Errorf("unsupported key type %q in public key returned from AWS KMS", *pkRes.CustomerMasterKeySpec)
+		return nil, fmt.Errorf("unsupported key type %q in public key returned from AWS KMS", pkRes.CustomerMasterKeySpec)
 	}
-	if pkRes.KeyUsage == nil {
-		return nil, fmt.Errorf("missing key usage in public key returned from AWS KMS")
-	}
-	if *pkRes.KeyUsage != "SIGN_VERIFY" {
-		return nil, fmt.Errorf("key usage of public key returned from AWS KMS is %q, not \"SIGN_VERIFY\"", *pkRes.KeyUsage)
+	if pkRes.KeyUsage != kmstypes.KeyUsageTypeSignVerify {
+		return nil, fmt.Errorf("key usage of public key returned from AWS KMS is %q, not \"SIGN_VERIFY\"", pkRes.KeyUsage)
 	}
 	pk, err := x509.ParsePKIXPublicKey(pkRes.PublicKey)
 	if err != nil {
@@ -105,12 +95,12 @@ func buildSigner(client *kms.KMS, keyID string) (*kmsSigner, error) {
 }
 
 // Build builds an ssh.Signer from the configuration.
-func (c KMSConfig) Build() (ssh.Signer, error) {
-	client, err := c.BuildKMSClient()
+func (c KMSConfig) Build(ctx context.Context) (ssh.Signer, error) {
+	client, err := c.BuildKMSClient(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to set up AWS KMS client: %w", err)
 	}
-	signer, err := buildSigner(client, c.KeyID)
+	signer, err := buildSigner(ctx, client, c.KeyID)
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +109,7 @@ func (c KMSConfig) Build() (ssh.Signer, error) {
 
 type kmsSigner struct {
 	pubKey ssh.PublicKey
-	client *kms.KMS
+	client *kms.Client
 	keyID  string
 }
 
@@ -151,21 +141,21 @@ func (s *kmsSigner) SignWithAlgorithm(_ io.Reader, data []byte, algorithm string
 	}
 	var (
 		hashFunc         crypto.Hash
-		signingAlgorithm string
+		signingAlgorithm kmstypes.SigningAlgorithmSpec
 	)
 	switch algorithm {
 	case ssh.SigAlgoRSA:
 		return nil, fmt.Errorf("signature algorithm %q is not supported by AWS KMS", algorithm)
 	case ssh.SigAlgoRSASHA2256:
-		hashFunc, signingAlgorithm = crypto.SHA256, kms.SigningAlgorithmSpecRsassaPkcs1V15Sha256
+		hashFunc, signingAlgorithm = crypto.SHA256, kmstypes.SigningAlgorithmSpecRsassaPkcs1V15Sha256
 	case ssh.SigAlgoRSASHA2512:
-		hashFunc, signingAlgorithm = crypto.SHA512, kms.SigningAlgorithmSpecRsassaPkcs1V15Sha512
+		hashFunc, signingAlgorithm = crypto.SHA512, kmstypes.SigningAlgorithmSpecRsassaPkcs1V15Sha512
 	case ssh.KeyAlgoECDSA256:
-		hashFunc, signingAlgorithm = crypto.SHA256, kms.SigningAlgorithmSpecEcdsaSha256
+		hashFunc, signingAlgorithm = crypto.SHA256, kmstypes.SigningAlgorithmSpecEcdsaSha256
 	case ssh.KeyAlgoECDSA384:
-		hashFunc, signingAlgorithm = crypto.SHA384, kms.SigningAlgorithmSpecEcdsaSha384
+		hashFunc, signingAlgorithm = crypto.SHA384, kmstypes.SigningAlgorithmSpecEcdsaSha384
 	case ssh.KeyAlgoECDSA521:
-		hashFunc, signingAlgorithm = crypto.SHA512, kms.SigningAlgorithmSpecEcdsaSha512
+		hashFunc, signingAlgorithm = crypto.SHA512, kmstypes.SigningAlgorithmSpecEcdsaSha512
 	default:
 		return nil, fmt.Errorf("unsupported signature algorithm %q", algorithm)
 	}
@@ -174,11 +164,14 @@ func (s *kmsSigner) SignWithAlgorithm(_ io.Reader, data []byte, algorithm string
 	h.Write(data)
 	digest := h.Sum(nil)
 
-	sig, err := s.client.Sign(&kms.SignInput{
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	sig, err := s.client.Sign(ctx, &kms.SignInput{
 		KeyId:            &s.keyID,
 		Message:          digest,
-		MessageType:      aws.String("DIGEST"),
-		SigningAlgorithm: aws.String(signingAlgorithm),
+		MessageType:      kmstypes.MessageTypeDigest,
+		SigningAlgorithm: signingAlgorithm,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to sign data: %w", err)

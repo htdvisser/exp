@@ -2,6 +2,7 @@ package aws
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 
@@ -24,14 +25,14 @@ func (c KMSAgentConfig) Validate() error {
 }
 
 // Build builds an agent.Agent from the configuration.
-func (c KMSAgentConfig) Build() (agent.Agent, error) {
-	client, err := c.BuildKMSClient()
+func (c KMSAgentConfig) Build(ctx context.Context) (agent.Agent, error) {
+	client, err := c.BuildKMSClient(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to set up AWS KMS client: %w", err)
 	}
 	signers := make([]*kmsSigner, len(c.KeyIDs))
 	for i, keyID := range c.KeyIDs {
-		signer, err := buildSigner(client, keyID)
+		signer, err := buildSigner(ctx, client, keyID)
 		if err != nil {
 			return nil, fmt.Errorf("failed to set up key %q: %w", keyID, err)
 		}

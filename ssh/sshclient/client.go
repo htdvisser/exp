@@ -109,7 +109,7 @@ func (c AuthMethodConfig) Validate() error {
 	return nil
 }
 
-func (c AuthMethodConfig) build() (ssh.AuthMethod, error) {
+func (c AuthMethodConfig) build(ctx context.Context) (ssh.AuthMethod, error) {
 	switch c.Method {
 	case "password":
 		return ssh.PasswordCallback(func() (string, error) {
@@ -131,7 +131,7 @@ func (c AuthMethodConfig) build() (ssh.AuthMethod, error) {
 		}), nil
 	case "aws_kms":
 		return ssh.PublicKeysCallback(func() ([]ssh.Signer, error) {
-			signer, err := c.AWSKMS.Build()
+			signer, err := c.AWSKMS.Build(ctx)
 			if err != nil {
 				return nil, fmt.Errorf("failed to build AWS KMS signer: %w", err)
 			}
@@ -178,9 +178,9 @@ func (c ConnectConfig) Validate() error {
 
 // Dial dials the configured SSH server.
 func (c ConnectConfig) Dial(ctx context.Context) (jump, dst *ssh.Client, err error) {
-	var authMethods = make([]ssh.AuthMethod, len(c.AuthMethods))
+	authMethods := make([]ssh.AuthMethod, len(c.AuthMethods))
 	for i, amc := range c.AuthMethods {
-		if authMethods[i], err = amc.build(); err != nil {
+		if authMethods[i], err = amc.build(ctx); err != nil {
 			return nil, nil, fmt.Errorf("failed to build auth method %d: %w", i, err)
 		}
 	}

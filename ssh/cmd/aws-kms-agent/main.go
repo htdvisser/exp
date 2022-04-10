@@ -27,7 +27,6 @@ func init() {
 	flag.StringVar(&config.AccessKeyID, "aws.access-key-id", "", "AWS Access Key ID")
 	flag.StringVar(&config.SecretAccessKey, "aws.secret-access-key", "", "AWS Secret Access Key")
 	flag.StringVar(&config.SessionToken, "aws.session-token", "", "AWS Session Token")
-	flag.StringVar(&config.AssumeRoleARN, "aws.assume-role-arn", "", "AWS Role ARN to assume")
 	flag.Func("aws.kms.key-id", "AWS KMS Key ID (can be specified more than once)", func(keyID string) error {
 		config.KeyIDs = append(config.KeyIDs, keyID)
 		return nil
@@ -59,13 +58,13 @@ func main() {
 }
 
 func run(ctx context.Context) error {
-	kmsAgent, err := config.Build()
+	kmsAgent, err := config.Build(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to build agent: %w", err)
 	}
 
 	socketDir := filepath.Dir(*socketPath)
-	if err = os.MkdirAll(socketDir, 0777); err != nil {
+	if err = os.MkdirAll(socketDir, 0o777); err != nil {
 		return fmt.Errorf("failed to create folder %q for socket: %w", socketDir, err)
 	}
 	if stat, err := os.Stat(*socketPath); err == nil {
