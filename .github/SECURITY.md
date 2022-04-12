@@ -30,9 +30,8 @@ We ask security researchers to follow the guidelines listed below.
 - Please do not destruct any data.
 - Please do not take advantage of the vulnerability more than necessary to
   demonstrate the vulnerability.
-- Please report the issue to us privately to [`@htdvisser` on Keybase](https://keybase.io/htdvisser)
-  or by email: hi (at) htdvisser (dot) dev.  
-  You may encrypt your email with [PGP key `A115FF80DC8A2270`](https://keybase.io/htdvisser/pgp_keys.asc).
+- Please report the issue to us privately to hi (at) htdvisser (dot) dev.  
+  You may encrypt your email with [PGP key `A115FF80DC8A2270`](https://keys.openpgp.org/vks/v1/by-fingerprint/EFF41ECF2E76B276C622390EA115FF80DC8A2270).
 - Please provide sufficient information to reproduce the issue.
 - Please include your name and link for recognition, or indicate that you want
   to remain anonymous.
