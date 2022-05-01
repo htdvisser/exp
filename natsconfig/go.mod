@@ -3,7 +3,7 @@ module htdvisser.dev/exp/natsconfig
 go 1.17
 
 require (
-	github.com/google/go-cmp v0.5.7
+	github.com/google/go-cmp v0.5.8
 	github.com/nats-io/nats.go v1.14.0
 	github.com/nats-io/nkeys v0.3.0
 	github.com/spf13/pflag v1.0.5
