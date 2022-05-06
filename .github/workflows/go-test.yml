@@ -41,7 +41,7 @@ jobs:
       - name: Go Coverage
         run: make cover
       - name: Upload Coverage
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: coverage
           path: |
