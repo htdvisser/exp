@@ -307,3 +307,12 @@ updates:
       interval: monthly
     commit-message:
       prefix: "waitcontext:"
+  - package-ecosystem: gomod
+    directory: "/watcher"
+    labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "watcher:"
