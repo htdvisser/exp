@@ -21,8 +21,10 @@ deps.download: | $(TASK)
 deps.update: | $(TASK)
 	$(TASK) go get -u -t ./...
 	go get -u -t ./...
-	$(TASK) go mod tidy
+	$(TASK) go mod tidy -go=1.16
+	$(TASK) go mod tidy -go=1.17
 	go mod tidy
+	go work sync
 
 .PHONY: test
 
