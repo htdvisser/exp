@@ -13,11 +13,13 @@ import (
 func ExampleValue_WatchFunc() {
 	v := watcher.NewComparableValue(0)
 
-	v.WatchFunc(func(i int) {
+	stop := v.WatchFunc(func(i int) {
 		fmt.Printf("The value is now %d\n", i)
 	})
+	defer stop()
 
 	v.Set(1)
+	v.Set(2)
 	v.Set(2)
 	v.Set(3)
 
@@ -33,7 +35,7 @@ func TestWatch(t *testing.T) {
 	v.Set("foo")
 
 	ch := make(watcher.Channel[string], 2)
-	unwatch := v.Watch(ch)
+	stop := v.Watch(ch)
 
 	if len(ch) != 1 {
 		t.Error("Expected channel to contain one element")
@@ -62,7 +64,7 @@ func TestWatch(t *testing.T) {
 		t.Error("Expected channel to be empty")
 	}
 
-	unwatch()
+	stop()
 
 	v.Set("quux")
 
@@ -119,4 +121,39 @@ func TestWaitForChange(t *testing.T) {
 			t.Error("Expected context to be canceled")
 		}
 	})
+}
+
+func ExampleForward() {
+	v := watcher.NewComparableValue(0)
+
+	sv, stopForward := watcher.NewComparableForward(v, func(i int) string {
+		if i < 0 {
+			i = 0
+		}
+		if i > 4 {
+			i = 4
+		}
+		return []string{"zero", "one", "two", "three", "four"}[i]
+	})
+	defer stopForward()
+
+	stopWatch := sv.WatchFunc(func(i string) {
+		fmt.Printf("The value is now %s\n", i)
+	})
+	defer stopWatch()
+
+	v.Set(1)
+	v.Set(2)
+	v.Set(2)
+	v.Set(3)
+	v.Set(4)
+	v.Set(5)
+	v.Set(6)
+
+	// Output:
+	// The value is now zero
+	// The value is now one
+	// The value is now two
+	// The value is now three
+	// The value is now four
 }

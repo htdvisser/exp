@@ -65,9 +65,16 @@ func (v *Value[X]) Set(newValue X) {
 	}
 }
 
+// Get gets the current value of the Value[X].
+func (v *Value[X]) Get() X {
+	v.mu.Lock()
+	defer v.mu.Unlock()
+	return v.currentValue
+}
+
 // Watch adds a new watcher to the Value[X] and notifies the watcher with the current value.
 // It returns a function that can be used to remove the watcher.
-func (v *Value[X]) Watch(watcher Notifier[X]) (unwatch func()) {
+func (v *Value[X]) Watch(watcher Notifier[X]) (stop func()) {
 	v.mu.Lock()
 	defer v.mu.Unlock()
 	node := &list.Node[Notifier[X]]{Value: watcher}
@@ -81,7 +88,7 @@ func (v *Value[X]) Watch(watcher Notifier[X]) (unwatch func()) {
 }
 
 // WatchFunc adds a new watcher func to the Value[X] and calls the given function with the current value.
-func (v *Value[X]) WatchFunc(f func(X)) (unwatch func()) {
+func (v *Value[X]) WatchFunc(f func(X)) (stop func()) {
 	return v.Watch(Func[X](f))
 }
 
@@ -109,4 +116,23 @@ func (v *Value[X]) WaitForChange(ctx context.Context, sourceValue X) (X, error) 
 	case newValue := <-watcher:
 		return newValue, nil
 	}
+}
+
+// Forward updates the given Value[Y] when the value of the given Value[X] changes,
+// applying the convert func to each update.
+func Forward[X, Y any](x *Value[X], y *Value[Y], convert func(X) Y) (stop func()) {
+	return x.Watch(Func[X](func(x X) { y.Set(convert(x)) }))
+}
+
+// NewComparableForward creates a new Value[Y] that is updated when the value of the given Value[X] changes,
+// applying the convert func to each update.
+func NewComparableForward[X any, Y comparable](x *Value[X], convert func(X) Y) (y *Value[Y], stop func()) {
+	return NewForward(x, convert, func(a, b Y) bool { return a == b })
+}
+
+// NewForward creates a new Value[Y] that is updated when the value of the given Value[X] changes,
+// applying the convert func to each update.
+func NewForward[X, Y any](x *Value[X], convert func(X) Y, equal func(Y, Y) bool) (y *Value[Y], stop func()) {
+	y = NewValue(convert(x.Get()), equal)
+	return y, Forward(x, y, convert)
 }
