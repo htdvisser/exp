@@ -1,7 +1,7 @@
 // Deprecated: This pre-1.0 module will be removed. Switch to htdvisser.dev/exp/natsconfig.
 module htdvisser.dev/exp/nats
 
-go 1.17
+go 1.18
 
 require (
 	github.com/nats-io/nats.go v1.16.0

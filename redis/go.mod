@@ -1,7 +1,7 @@
 // Deprecated: This pre-1.0 module will be removed. Switch to htdvisser.dev/exp/redisconfig.
 module htdvisser.dev/exp/redis
 
-go 1.17
+go 1.18
 
 require (
 	github.com/go-redis/redis/v8 v8.11.5

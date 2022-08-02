@@ -1,6 +1,6 @@
 module htdvisser.dev/exp/imago
 
-go 1.17
+go 1.18
 
 require (
 	github.com/disintegration/imaging v1.6.2

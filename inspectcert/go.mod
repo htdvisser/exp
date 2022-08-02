@@ -1,6 +1,6 @@
 module htdvisser.dev/exp/inspectcert
 
-go 1.17
+go 1.18
 
 replace htdvisser.dev/exp/tlsconfig => ../tlsconfig
 
@@ -8,7 +8,7 @@ require (
 	github.com/fatih/color v1.13.0
 	github.com/spf13/pflag v1.0.5
 	htdvisser.dev/exp/pflagenv v1.0.0
-	htdvisser.dev/exp/tlsconfig v0.0.0-20220602072606-c615a5df9963
+	htdvisser.dev/exp/tlsconfig v0.0.0-20220802055912-e82e11eddb12
 )
 
 require (

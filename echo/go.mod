@@ -1,6 +1,6 @@
 module htdvisser.dev/exp/echo
 
-go 1.17
+go 1.18
 
 replace htdvisser.dev/exp/backbone => ../backbone
 
@@ -15,11 +15,11 @@ require (
 	github.com/mdempsky/unconvert v0.0.0-20200228143138-95ecdbfc0b5f
 	github.com/pires/go-proxyproto v0.6.2
 	github.com/spf13/pflag v1.0.5
-	google.golang.org/genproto v0.0.0-20220801145646-83ce21fca29f
+	google.golang.org/genproto v0.0.0-20220802133213-ce4fa296bf78
 	google.golang.org/grpc v1.48.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
 	google.golang.org/protobuf v1.28.1
-	htdvisser.dev/exp/backbone v0.0.0-20220602072606-c615a5df9963
+	htdvisser.dev/exp/backbone v0.0.0-20220802055912-e82e11eddb12
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
 	mvdan.cc/gofumpt v0.3.1
