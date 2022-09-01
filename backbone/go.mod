@@ -6,7 +6,7 @@ require (
 	github.com/benbjohnson/clock v1.3.0
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.1
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.3
 	github.com/improbable-eng/grpc-web v0.15.0
 	github.com/pires/go-proxyproto v0.6.2
 	github.com/segmentio/ksuid v1.0.4
@@ -35,7 +35,7 @@ require (
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
 	golang.org/x/sys v0.0.0-20220731174439-a90be440212d // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/genproto v0.0.0-20220802133213-ce4fa296bf78 // indirect
+	google.golang.org/genproto v0.0.0-20220822174746-9e6da59bd2fc // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	nhooyr.io/websocket v1.8.7 // indirect
