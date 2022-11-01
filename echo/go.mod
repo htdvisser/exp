@@ -11,7 +11,7 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.3
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.12.0
 	github.com/mdempsky/unconvert v0.0.0-20221005094106-27bfb232899d
 	github.com/pires/go-proxyproto v0.6.2
 	github.com/spf13/pflag v1.0.5
