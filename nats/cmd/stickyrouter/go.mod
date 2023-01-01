@@ -6,7 +6,7 @@ replace htdvisser.dev/exp/natsconfig => ../../../natsconfig
 
 require (
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/nats-io/nats.go v1.21.0
+	github.com/nats-io/nats.go v1.22.1
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/sync v0.1.0
 	htdvisser.dev/exp/clicontext v1.1.0
