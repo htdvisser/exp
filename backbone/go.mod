@@ -6,7 +6,7 @@ require (
 	github.com/benbjohnson/clock v1.3.0
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.14.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.0
 	github.com/improbable-eng/grpc-web v0.15.0
 	github.com/pires/go-proxyproto v0.6.2
 	github.com/segmentio/ksuid v1.0.4
