@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.18.5
 	github.com/aws/aws-sdk-go-v2/credentials v1.13.5
 	github.com/aws/aws-sdk-go-v2/service/kms v1.19.4
-	golang.org/x/crypto v0.4.0
+	golang.org/x/crypto v0.5.0
 )
 
 require (
@@ -21,6 +21,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.17.7 // indirect
 	github.com/aws/smithy-go v1.13.5 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
-	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/term v0.3.0 // indirect
+	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/term v0.4.0 // indirect
 )
