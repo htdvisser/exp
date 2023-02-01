@@ -11,8 +11,8 @@ require (
 	github.com/pires/go-proxyproto v0.6.2
 	github.com/segmentio/ksuid v1.0.4
 	github.com/spf13/pflag v1.0.5
-	go.opentelemetry.io/otel v1.11.2
-	go.opentelemetry.io/otel/trace v1.11.2
+	go.opentelemetry.io/otel v1.12.0
+	go.opentelemetry.io/otel/trace v1.12.0
 	golang.org/x/net v0.4.0
 	golang.org/x/sync v0.1.0
 	google.golang.org/grpc v1.51.0
