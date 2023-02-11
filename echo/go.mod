@@ -11,15 +11,15 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.14.0
-	github.com/mdempsky/unconvert v0.0.0-20221005094106-27bfb232899d
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.0
+	github.com/mdempsky/unconvert v0.0.0-20230125054757-2661c2c99a9b
 	github.com/pires/go-proxyproto v0.6.2
 	github.com/spf13/pflag v1.0.5
-	google.golang.org/genproto v0.0.0-20221207170731-23e4bf6bdc37
-	google.golang.org/grpc v1.51.0
+	google.golang.org/genproto v0.0.0-20230209215440-0dfe4f8abfcc
+	google.golang.org/grpc v1.53.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
 	google.golang.org/protobuf v1.28.1
-	htdvisser.dev/exp/backbone v0.0.0-20221015112545-7a572948318f
+	htdvisser.dev/exp/backbone v0.0.0-20221218100006-742bb9320ac2
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
 	mvdan.cc/gofumpt v0.4.0
@@ -36,20 +36,20 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
 	github.com/iancoleman/strcase v0.2.0 // indirect
 	github.com/improbable-eng/grpc-web v0.15.0 // indirect
-	github.com/klauspost/compress v1.15.13 // indirect
+	github.com/klauspost/compress v1.15.15 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lyft/protoc-gen-star v0.6.2 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/rs/cors v1.8.2 // indirect
+	github.com/rs/cors v1.8.3 // indirect
 	github.com/spf13/afero v1.9.3 // indirect
 	github.com/stretchr/testify v1.8.1 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
-	golang.org/x/mod v0.7.0 // indirect
-	golang.org/x/net v0.4.0 // indirect
+	golang.org/x/mod v0.8.0 // indirect
+	golang.org/x/net v0.6.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/text v0.5.0 // indirect
-	golang.org/x/tools v0.4.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
+	golang.org/x/tools v0.6.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	nhooyr.io/websocket v1.8.7 // indirect

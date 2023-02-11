@@ -6,7 +6,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.9.1
 	github.com/golang/protobuf v1.5.2
 	github.com/lyft/protoc-gen-star v0.6.2
-	google.golang.org/genproto v0.0.0-20221207170731-23e4bf6bdc37
+	google.golang.org/genproto v0.0.0-20230209215440-0dfe4f8abfcc
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -16,7 +16,7 @@ require (
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/spf13/afero v1.9.3 // indirect
 	github.com/stretchr/testify v1.8.1 // indirect
-	golang.org/x/text v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )
