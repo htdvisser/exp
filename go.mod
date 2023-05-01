@@ -3,7 +3,7 @@ module htdvisser.dev/exp
 go 1.18
 
 require (
-	github.com/urfave/cli/v2 v2.25.1
+	github.com/urfave/cli/v2 v2.25.3
 	golang.org/x/mod v0.9.0
 	htdvisser.dev/exp/clicontext v1.1.0
 )
