@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/urfave/cli/v2 v2.25.1
-	golang.org/x/mod v0.9.0
+	golang.org/x/mod v0.10.0
 	htdvisser.dev/exp/clicontext v1.1.0
 )
 
