@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/connectivity"
-	testpb "google.golang.org/grpc/test/grpc_testing"
+	testpb "google.golang.org/grpc/interop/grpc_testing"
 )
 
 // NewMockServer returns a new MockServer.
