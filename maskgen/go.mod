@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/fatih/structtag v1.2.0
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/tools v0.9.1
+	golang.org/x/tools v0.9.3
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/stringslice v1.0.0
 )
