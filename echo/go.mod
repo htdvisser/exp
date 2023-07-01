@@ -18,7 +18,7 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20230526203410-71b5a4ffd15e
 	google.golang.org/grpc v1.55.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
-	google.golang.org/protobuf v1.30.0
+	google.golang.org/protobuf v1.31.0
 	htdvisser.dev/exp/backbone v0.0.0-20230401152009-0799cd76c762
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
