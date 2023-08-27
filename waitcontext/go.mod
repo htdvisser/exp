@@ -1,3 +1,3 @@
 module htdvisser.dev/exp/waitcontext
 
-go 1.18
+go 1.20

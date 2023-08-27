@@ -1,10 +1,10 @@
 module htdvisser.dev/exp
 
-go 1.18
+go 1.20
 
 require (
-	github.com/urfave/cli/v2 v2.25.4
-	golang.org/x/mod v0.10.0
+	github.com/urfave/cli/v2 v2.25.7
+	golang.org/x/mod v0.12.0
 	htdvisser.dev/exp/clicontext v1.1.0
 )
 

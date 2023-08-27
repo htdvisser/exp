@@ -1,7 +1,7 @@
 // Deprecated: This pre-1.0 module will be removed. Switch to htdvisser.dev/exp/redisconfig.
 module htdvisser.dev/exp/redis
 
-go 1.18
+go 1.20
 
 require (
 	github.com/go-redis/redis/v8 v8.11.5
@@ -11,6 +11,6 @@ require (
 require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/net v0.14.0 // indirect
+	golang.org/x/sys v0.11.0 // indirect
 )
