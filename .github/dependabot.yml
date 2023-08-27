@@ -65,6 +65,15 @@ updates:
     commit-message:
       prefix: "echo:"
   - package-ecosystem: gomod
+    directory: "/envcrypto"
+    labels: [dependencies]
+    assignees: [htdvisser]
+    reviewers: [htdvisser]
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "envcrypto:"
+  - package-ecosystem: gomod
     directory: "/fieldpath"
     labels: [dependencies]
     assignees: [htdvisser]
