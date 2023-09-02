@@ -8,6 +8,7 @@ golang.org/x/sync v0.3.0 h1:ftCYgMx6zT/asHUrPw8BLLscYtGznsLAnjq5RH9P66E=
 golang.org/x/sys v0.11.0 h1:eG7RXZHdqOJ1i+0lgLgCpSXAp6M3LYlAo6osgSi0xOM=
 golang.org/x/sys v0.11.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/tools v0.12.1-0.20230815132531-74c255bcf846 h1:Vve/L0v7CXXuxUmaMGIEK/dEeq7uiqb5qBgQrZzIE7E=
+golang.org/x/tools v0.12.1-0.20230815132531-74c255bcf846/go.mod h1:Sc0INKfu04TlqNoRA1hgpFZbhYXHPr4V5DzpSBTPqQM=
 htdvisser.dev/exp/clicontext v1.1.0 h1:R/0VPidzSTM5CiW8WgS6a4maWI+I8kjk7aZ57R0vZMk=
 htdvisser.dev/exp/clicontext v1.1.0/go.mod h1:ENk5Zc9tuQJ2QBPCdMg4XSHFuUwnDV1cEdOnva8z5MM=
 htdvisser.dev/exp/stringslice v1.0.0 h1:PJtNfBtMM5Ln45A6UyKp6gN4ioec41iHDwG5mLcNCnc=

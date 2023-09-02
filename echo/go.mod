@@ -19,30 +19,36 @@ require (
 	google.golang.org/grpc v1.57.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
 	google.golang.org/protobuf v1.31.0
-	htdvisser.dev/exp/backbone v0.0.0-20230827094457-f80440ceb737
+	htdvisser.dev/exp/backbone v0.0.0-20230902111259-6e9e14bbf21b
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/pflagenv v1.0.0
 	mvdan.cc/gofumpt v0.5.0
 )
 
 require (
+	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/go-playground/universal-translator v0.18.0 // indirect
+	github.com/go-playground/validator/v10 v10.14.0 // indirect
+	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang/glog v1.1.2 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/improbable-eng/grpc-web v0.15.0 // indirect
+	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
-	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
 	github.com/lyft/protoc-gen-star/v2 v2.0.3 // indirect
-	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
+	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
 	github.com/rs/cors v1.9.0 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
+	github.com/ugorji/go/codec v1.2.11 // indirect
+	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/net v0.14.0 // indirect

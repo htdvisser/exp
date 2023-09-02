@@ -21,6 +21,7 @@ deps.download: | $(TASK)
 deps.update: | $(TASK)
 	$(TASK) go get -u -t ./...
 	go get -u -t ./...
+	$(TASK) go mod tidy
 	go mod tidy
 	go work sync
 
