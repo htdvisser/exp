@@ -16,6 +16,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "*:"
   {{- range .GoModules }}
@@ -26,6 +31,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "{{ .Prefix }}:"
   {{- end }}

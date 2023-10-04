@@ -17,6 +17,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "*:"
   - package-ecosystem: gomod
@@ -26,6 +31,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "b32:"
   - package-ecosystem: gomod
@@ -35,6 +45,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "b64:"
   - package-ecosystem: gomod
@@ -44,6 +59,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "backbone:"
   - package-ecosystem: gomod
@@ -53,6 +73,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "clicontext:"
   - package-ecosystem: gomod
@@ -62,6 +87,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "echo:"
   - package-ecosystem: gomod
@@ -71,6 +101,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "envcrypto:"
   - package-ecosystem: gomod
@@ -80,6 +115,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "fieldpath:"
   - package-ecosystem: gomod
@@ -89,6 +129,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "flagenv:"
   - package-ecosystem: gomod
@@ -98,6 +143,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "grpctest:"
   - package-ecosystem: gomod
@@ -107,6 +157,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "hex:"
   - package-ecosystem: gomod
@@ -116,6 +171,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "imago:"
   - package-ecosystem: gomod
@@ -125,6 +185,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "inspectcert:"
   - package-ecosystem: gomod
@@ -134,6 +199,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "maskgen:"
   - package-ecosystem: gomod
@@ -143,6 +213,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "nats:"
   - package-ecosystem: gomod
@@ -152,6 +227,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "nats:"
   - package-ecosystem: gomod
@@ -161,6 +241,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "natsconfig:"
   - package-ecosystem: gomod
@@ -170,6 +255,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "pflagenv:"
   - package-ecosystem: gomod
@@ -179,6 +269,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "pgh:"
   - package-ecosystem: gomod
@@ -188,6 +283,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "protoget:"
   - package-ecosystem: gomod
@@ -197,6 +297,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "redis:"
   - package-ecosystem: gomod
@@ -206,6 +311,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "redisconfig:"
   - package-ecosystem: gomod
@@ -215,6 +325,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "rhmanage:"
   - package-ecosystem: gomod
@@ -224,6 +339,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "ring:"
   - package-ecosystem: gomod
@@ -233,6 +353,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "rjs:"
   - package-ecosystem: gomod
@@ -242,6 +367,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "sql:"
   - package-ecosystem: gomod
@@ -251,6 +381,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "sql/sqlgen:"
   - package-ecosystem: gomod
@@ -260,6 +395,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "ssh:"
   - package-ecosystem: gomod
@@ -269,6 +409,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "stringslice:"
   - package-ecosystem: gomod
@@ -278,6 +423,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "sum:"
   - package-ecosystem: gomod
@@ -287,6 +437,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "tls:"
   - package-ecosystem: gomod
@@ -296,6 +451,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "tlsconfig:"
   - package-ecosystem: gomod
@@ -305,6 +465,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "tree:"
   - package-ecosystem: gomod
@@ -314,6 +479,11 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "waitcontext:"
   - package-ecosystem: gomod
@@ -323,5 +493,10 @@ updates:
     reviewers: [htdvisser]
     schedule:
       interval: monthly
+    groups:
+      minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
     commit-message:
       prefix: "watcher:"
