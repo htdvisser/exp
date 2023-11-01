@@ -8,7 +8,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/nats-io/nats.go v1.30.2
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/sync v0.3.0
+	golang.org/x/sync v0.4.0
 	htdvisser.dev/exp/clicontext v1.1.0
 	htdvisser.dev/exp/natsconfig v0.0.0-20231004203327-512bce5a3dac
 	htdvisser.dev/exp/pflagenv v1.0.0
