@@ -16,7 +16,7 @@ require (
 	github.com/pires/go-proxyproto v0.7.0
 	github.com/spf13/pflag v1.0.5
 	google.golang.org/genproto/googleapis/api v0.0.0-20231002182017-d307bd883b97
-	google.golang.org/grpc v1.58.2
+	google.golang.org/grpc v1.59.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
 	google.golang.org/protobuf v1.31.0
 	htdvisser.dev/exp/backbone v0.0.0-20231004203327-512bce5a3dac
