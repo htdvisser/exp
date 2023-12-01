@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/benbjohnson/clock v1.3.5
-	github.com/gorilla/mux v1.8.0
+	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.0
 	github.com/improbable-eng/grpc-web v0.15.0
