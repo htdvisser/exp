@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/joho/godotenv v1.5.1
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 	go.mozilla.org/sops/v3 v3.7.3
 	golang.org/x/crypto v0.13.0
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
