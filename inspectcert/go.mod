@@ -8,7 +8,7 @@ require (
 	github.com/fatih/color v1.16.0
 	github.com/spf13/pflag v1.0.5
 	htdvisser.dev/exp/pflagenv v1.0.0
-	htdvisser.dev/exp/tlsconfig v0.0.0-20231004204134-168f772d20cc
+	htdvisser.dev/exp/tlsconfig v0.0.0-20231206185358-cf15410f4841
 )
 
 require (
