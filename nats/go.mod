@@ -5,7 +5,7 @@ go 1.20
 
 require (
 	github.com/nats-io/nats.go v1.31.0
-	github.com/nats-io/nkeys v0.4.6
+	github.com/nats-io/nkeys v0.4.7
 	github.com/spf13/pflag v1.0.5
 )
 
