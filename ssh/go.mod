@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/aws/aws-sdk-go-v2/config v1.26.1
 	github.com/aws/aws-sdk-go-v2/credentials v1.16.12
-	github.com/aws/aws-sdk-go-v2/service/kms v1.27.6
+	github.com/aws/aws-sdk-go-v2/service/kms v1.27.7
 	golang.org/x/crypto v0.17.0
 )
 
